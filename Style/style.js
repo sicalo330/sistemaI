@@ -31,7 +31,8 @@ const titlePrice = StyleSheet.create({
     titleMain:{
         textAlign:'left',
         fontSize:20,
-        marginLeft:10
+        marginLeft:10,
+        color:'#66624f'
     },
     containerPrice:{
         justifyContent:'center',

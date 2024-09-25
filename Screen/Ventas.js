@@ -9,17 +9,17 @@ function Ventas(){
         <>
             <View style={styles.containerPrice}>
                 <View style={titlePrice.containerPrice}>
-                    <Text style={{fontSize:15, textAlign:'left', marginLeft:10}}>Ventas</Text>
+                    <Text style={{fontSize:15, textAlign:'left', marginLeft:10, color:'#66624f'}}>Ventas</Text>
                     <Text style={titlePrice.titleMain}>$4.500</Text>
                 </View>
                 <View style={titlePrice.containerPrice}>
-                    <Text style={{fontSize:15, textAlign:'left', marginLeft:10}}>Gastos</Text>
+                    <Text style={{fontSize:15, textAlign:'left', marginLeft:10,color:'#66624f'}}>Gastos</Text>
                     <Text style={titlePrice.titleMain}>$1.000</Text>
                 </View>
             </View>
             <View style={styles.containerPrice}>
                 <View style={styles.inventarioContainer}>
-                    <Text style={{fontSize:15, textAlign:'left', marginLeft:10}}>Inventario</Text>
+                    <Text style={{fontSize:15, textAlign:'left', marginLeft:10,color:'#66624f'}}>Inventario</Text>
                     <Text style={titlePrice.titleMain}>$5.000</Text>
                 </View>
             </View>

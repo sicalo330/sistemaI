@@ -8,6 +8,7 @@ import Ventas from './Screen/Ventas';
 import Ordenes from './Screen/Ordenes';
 import Inventario from './Screen/Inventario';
 import Cuenta from './Screen/Cuenta';
+import Configuration from './Screen/Configuration';
 
 export default function App() {
   const Tab = createBottomTabNavigator();
@@ -21,13 +22,22 @@ export default function App() {
     );
   }
 
+  function CuentaStack(){
+    return(
+    <Stack.Navigator screenOptions={{ headerShown: false }}>
+        <Stack.Screen name='Cuenta' component={Cuenta}></Stack.Screen>
+        <Stack.Screen name='Configuration' component={Configuration}></Stack.Screen>
+    </Stack.Navigator>
+    )
+  }
+
   return (
     <NavigationContainer>
       <Tab.Navigator>
         <Tab.Screen name='VentasStack' component={VentasStack}></Tab.Screen>
         <Tab.Screen name='Ordenes' component={Ordenes}></Tab.Screen>
         <Tab.Screen name='Inventario' component={Inventario}></Tab.Screen>
-        <Tab.Screen name='Cuenta' component={Cuenta}></Tab.Screen>
+        <Tab.Screen name='CuentaStack' component={CuentaStack}></Tab.Screen>
       </Tab.Navigator>
     </NavigationContainer>
   );
