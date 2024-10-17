@@ -6,7 +6,7 @@ const agregarProducto = async () => {
     console.log("Intentando agregar producto...");
     try {
         await addDoc(collection(FIRESTORE_DB, 'producto'), {
-            nombre: "Hemos agregado el platillo ala orden"
+            nombre: "Hemos agregado el platillo ala "
         });
         console.log("Producto agregado con éxito.");
     } catch (error) {
