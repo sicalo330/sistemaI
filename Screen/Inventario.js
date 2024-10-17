@@ -1,5 +1,6 @@
 import React from "react";
-import { Text, View, Image, StyleSheet, FlatList,TouchableOpacity } from "react-native";
+import { Text, View, Image, StyleSheet, FlatList,TouchableOpacity, Button } from "react-native";
+import agregarProducto from "../db/agregarProducto";
 
 // Datos simulados de inventario
 const inventarios = [
@@ -8,6 +9,10 @@ const inventarios = [
   { id: '3', nombre: 'Ensalada César', imagen: 'https://www.gourmet.cl/wp-content/uploads/2016/09/Ensalada_C%C3%A9sar-web.jpg   ' },
   { id: '4', nombre: 'Pizza Margarita', imagen: 'https://imag.bonviveur.com/pizza-margarita.jpg' },
 ];
+
+const agregar = () => {
+  agregarProducto()
+}
 
 function Inventario() {
   const renderItem = ({ item }) => (
@@ -21,6 +26,7 @@ function Inventario() {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Inventario de Platillos</Text>
+      <Button type="button" title="Agregar un producto" onPress={agregar} />
       <FlatList
         data={inventarios}
         renderItem={renderItem}
