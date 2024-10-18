@@ -1,5 +1,7 @@
 import React from "react";
-import { Text, View, Image, StyleSheet, FlatList,TouchableOpacity } from "react-native";
+import { Text, View, Image, StyleSheet, FlatList,TouchableOpacity, Button } from "react-native";
+import agregarProducto from "../db/agregarProducto";
+import { useNavigation } from "@react-navigation/native";
 
 // Datos simulados de inventario
 const inventarios = [
@@ -9,7 +11,15 @@ const inventarios = [
   { id: '4', nombre: 'Pizza Margarita', imagen: 'https://imag.bonviveur.com/pizza-margarita.jpg' },
 ];
 
+
 function Inventario() {
+  const navigation = useNavigation()
+
+  const agregar = () => {
+    navigation.navigate("FormularioProducto")
+    //agregarProducto()
+  }
+
   const renderItem = ({ item }) => (
     <TouchableOpacity style={styles.itemContainer}>
       {/* Espacio para agregar una imagen */}
@@ -21,6 +31,7 @@ function Inventario() {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Inventario de Platillos</Text>
+      <Button title="Agregar orden" onPress={agregar} />
       <FlatList
         data={inventarios}
         renderItem={renderItem}
