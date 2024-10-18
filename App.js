@@ -5,7 +5,8 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import AuthContextProvider, { AuthContext } from './context/auth-context.js';
+import AuthContextProvider,{AuthContext } from "./context/auth-context.js"
+
 
 import Ventas from './Screen/Ventas';
 import Ordenes from './Screen/Ordenes';

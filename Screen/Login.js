@@ -1,7 +1,6 @@
 import React, { useContext, useState } from "react";
 import { Text, Button, Alert, View, SafeAreaView, TextInput, StyleSheet, ActivityIndicator } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import { FIREBASE_AUTH } from "../firebase/firebase";
 import { AuthContext } from "../context/auth-context";
 import { login } from "../utils/auth";
 
