@@ -11,9 +11,12 @@ const inventarios = [
   { id: '4', nombre: 'Pizza Margarita', imagen: 'https://imag.bonviveur.com/pizza-margarita.jpg' },
 ];
 
+/*
+
 const agregar = () => {
   agregarProducto()
 }
+*/
 
 function Inventario() {
   const navigation = useNavigation()

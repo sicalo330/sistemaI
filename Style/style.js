@@ -51,9 +51,26 @@ const linkContainer = StyleSheet.create({
     }
 })
 
+const inputForm = StyleSheet.create({
+    inputContainer: {
+        height: 40,
+        width: '100%',
+        marginVertical: 12,
+        borderWidth: 1,
+        padding: 10,
+        borderRadius: 5,
+    },
+    containerForm: {
+        flex: 1,
+        justifyContent: 'center',
+        paddingHorizontal: 20,
+    },
+})
+
 
 module.exports = {
     general,
     titlePrice,
-    linkContainer
+    linkContainer,
+    inputForm
 }
