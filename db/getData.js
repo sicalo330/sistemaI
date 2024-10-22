@@ -3,7 +3,7 @@ import { FIRESTORE_DB } from "../firebase/firebase";
 import { collection, addDoc,getDocs } from "firebase/firestore";
 
 const getData = async (data) => {
-    console.log("Obteniendo ingredientes...")
+    console.log("Obteniendo datos...")
     try {
         const querySnapshot = await getDocs(collection(FIRESTORE_DB, data));
         
@@ -11,7 +11,7 @@ const getData = async (data) => {
           id: doc.id,
           ...doc.data()
         }));
-        console.log("Ingredientes obtenidos")
+        console.log("Datos obtenidos")
         return ingredientList
       } catch (err) {
         console.error("Error fetching documents:", err);
