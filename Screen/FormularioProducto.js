@@ -4,30 +4,20 @@ import {Picker} from '@react-native-picker/picker';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {general} from './../Style/style'
 import agregarProducto from '../db/agregarProducto';
-import { collection, getDocs } from "firebase/firestore";   
-import { FIRESTORE_DB } from '../firebase/firebase';
+import getIngrediente from '../db/getData';
 
 function FormularioProducto() {
 const [nombreProducto, setNombreProducto] = useState('');
 const [url, setUrl] = useState('');
+const [price, setPrice] = useState(0)
+const [stock, setStock] = useState(0)
 const [dropdowns, setDropdowns] = useState([{ id: 1, selectedValue: '' }]);
 const [options, setOption] = useState([])
 
 useEffect(() => {
     const fetchData = async () => {
-      try {
-        const querySnapshot = await getDocs(collection(FIRESTORE_DB, "Ingrediente"));
-        
-        const ingredientList = querySnapshot.docs.map(doc => ({
-          id: doc.id,
-          ...doc.data()
-        }));
-
-        setOption(ingredientList); // Guardar los productos en el estado
-      } catch (err) {
-        console.error("Error fetching documents:", err);
-        setError(err.message); // Guardar error si ocurre
-      }
+        const ingredientList = await getIngrediente("Ingrediente")
+        setOption(ingredientList)
     };
 
     fetchData();
@@ -57,7 +47,9 @@ useEffect(() => {
     let ingredients = [];
     let data = {
         nombreProducto: nombreProducto,
-        url: url
+        url: url,
+        price:price,
+        stock:stock
     };
     dropdowns.forEach(element => {
         ingredients.push({ "ingredient": element.selectedValue });
@@ -72,16 +64,30 @@ useEffect(() => {
       <View>
         <Text style={styles.h1}>Formulario para agregar productos</Text>
         <TextInput
-          onChangeText={setNombreProducto}
-          value={nombreProducto}
-          placeholder="Nombre del producto"
-          style={styles.inputContainer}
+            onChangeText={setNombreProducto}
+            value={nombreProducto}
+            placeholder="Nombre del producto"
+            style={styles.inputContainer}
         />
         <TextInput
-          onChangeText={setUrl}
-          value={url}
-          placeholder="URL del producto"
-          style={styles.inputContainer}
+            onChangeText={setUrl}
+            value={url}
+            placeholder="URL del producto"
+            style={styles.inputContainer}
+        />
+        <TextInput
+            onChangeText={setPrice}
+            value={price}
+            placeholder="Precio del producto"
+            keyboardType='numeric'
+            style={styles.inputContainer}
+        />
+        <TextInput
+            onChangeText={setStock}
+            value={stock}
+            placeholder="Cantidad de existencia del producto"
+            keyboardType='numeric'
+            style={styles.inputContainer}
         />
         <View>
             <Text>Selecciona los ingredientes</Text>

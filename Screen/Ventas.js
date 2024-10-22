@@ -9,17 +9,17 @@ function Ventas(){
         <>
             <View style={styles.containerPrice}>
                 <View style={titlePrice.containerPrice}>
-                    <Text style={{fontSize:15, textAlign:'left', marginLeft:10, color:'#66624f'}}>Ventas</Text>
+                    <Text style={styles.title}>Ventas</Text>
                     <Text style={titlePrice.titleMain}>$4.500</Text>
                 </View>
                 <View style={titlePrice.containerPrice}>
-                    <Text style={{fontSize:15, textAlign:'left', marginLeft:10,color:'#66624f'}}>Gastos</Text>
+                    <Text style={styles.title}>Gastos</Text>
                     <Text style={titlePrice.titleMain}>$1.000</Text>
                 </View>
             </View>
             <View style={styles.containerPrice}>
                 <View style={styles.inventarioContainer}>
-                    <Text style={{fontSize:15, textAlign:'left', marginLeft:10,color:'#66624f'}}>Inventario</Text>
+                    <Text style={styles.title}>Inventario</Text>
                     <Text style={titlePrice.titleMain}>$5.000</Text>
                 </View>
             </View>
@@ -28,7 +28,7 @@ function Ventas(){
                     <Text>Ver ventas</Text>
                     <Text>Revisar todas las transacciones</Text>
                 </View>
-                <View style={{alignContent:'center', alignSelf:'center'}}>
+                <View style={styles.iconContainer}>
                     <Icon name="arrow-right" size={25} color="black" />
                 </View>
             </TouchableOpacity>
@@ -37,7 +37,7 @@ function Ventas(){
                     <Text>Ver ventas</Text>
                     <Text>Revisar todas las transacciones</Text>
                 </View>
-                <View style={{alignContent:'center', alignSelf:'center'}}>
+                <View style={styles.iconContainer}>
                     <Icon name="arrow-right" size={25} color="black" />
                 </View>
             </TouchableOpacity>
@@ -46,7 +46,7 @@ function Ventas(){
                     <Text>Ver ventas</Text>
                     <Text>Revisar todas las transacciones</Text>
                 </View>
-                <View style={{alignContent:'center', alignSelf:'center'}}>
+                <View style={styles.iconContainer}>
                     <Icon name="arrow-right" size={25} color="black" />
                 </View>
             </TouchableOpacity>
@@ -67,6 +67,16 @@ const styles = StyleSheet.create({
         height:100,
         backgroundColor:'#ddd',
         borderRadius:10
+    },
+    title:{
+        fontSize:15,
+        textAlign:'left',
+        marginLeft:10,
+        color:'#66624f'
+    },
+    iconContainer:{
+        alignContent:'center',
+        alignSelf:'center'
     }
   });
 

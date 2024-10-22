@@ -9,6 +9,8 @@ const agregarProducto = async (ingredient) => {
             nombreProducto: ingredient.nombreProducto,
             urlProducto: ingredient.url,
             ingredients: ingredient.ingredients,
+            price:ingredient.price,
+            stock:ingredient.stock
         });
         console.log("Producto agregado con éxito.");
     } catch (error) {

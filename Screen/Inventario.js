@@ -1,36 +1,36 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Text, View, Image, StyleSheet, FlatList,TouchableOpacity, Button } from "react-native";
-import agregarProducto from "../db/agregarProducto";
 import { useNavigation } from "@react-navigation/native";
+import { collection, getDocs } from "firebase/firestore";   
+import { FIRESTORE_DB } from '../firebase/firebase';
+import getIngrediente from "../db/getData";
+import getData from "../db/getData";
 
 // Datos simulados de inventario
-const inventarios = [
-  { id: '1', nombre: 'Spaghetti', imagen: 'https://img.taste.com.au/sE-X5HqY/taste/2024/03/5-ingredient-turbo-charged-spaghetti-recipe-196959-1.jpg' },
-  { id: '2', nombre: 'Sancocho', imagen: 'https://i0.wp.com/www.pasionthermomix.co/wp-content/uploads/2018/11/sancocho2-1.jpg?fit=1280%2C800&ssl=1' },
-  { id: '3', nombre: 'Ensalada César', imagen: 'https://www.gourmet.cl/wp-content/uploads/2016/09/Ensalada_C%C3%A9sar-web.jpg   ' },
-  { id: '4', nombre: 'Pizza Margarita', imagen: 'https://imag.bonviveur.com/pizza-margarita.jpg' },
-];
-
-/*
-
-const agregar = () => {
-  agregarProducto()
-}
-*/
 
 function Inventario() {
+  const [inventarios, setInventario] = useState([]);
+
   const navigation = useNavigation()
+
+  useEffect(() => {
+    async function fetchData(params) {
+      const listData = await getData("producto")
+      setInventario(listData)
+      console.log("Estos son los productos",inventarios)
+    }
+    fetchData()
+  },[])
 
   const agregar = () => {
     navigation.navigate("FormularioProducto")
-    //agregarProducto()
   }
 
   const renderItem = ({ item }) => (
     <TouchableOpacity style={styles.itemContainer}>
       {/* Espacio para agregar una imagen */}
-      <Image source={{ uri: item.imagen }} style={styles.imagen} />
-      <Text style={styles.nombre}>{item.nombre}</Text>
+      <Image source={{ uri: item.urlProducto }} style={styles.imagen} />
+      <Text style={styles.nombre}>{item.nombreProducto}</Text>
     </TouchableOpacity>
   );
 

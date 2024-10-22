@@ -1,10 +1,10 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
-import { useNavigation } from '@react-navigation/native'; // Importar useNavigation
+import { useNavigation } from '@react-navigation/native'; 
 
 
 function Configuration() {
-  const navigation = useNavigation(); // Hook para acceder a la navegación
+
   return (
     <View>
       <TouchableOpacity>
@@ -14,7 +14,7 @@ function Configuration() {
         <Text style={styles.optionItem}>Seguridad</Text>
       </TouchableOpacity>
       <TouchableOpacity>
-        <Text style={styles.optionItem}>Cambiar tema</Text>{/*El plan es poner muchos temas*/}
+        <Text style={styles.optionItem}>Cambiar tema</Text>{/*El plan sería poner muchos temas*/}
       </TouchableOpacity>
     </View>
   );
