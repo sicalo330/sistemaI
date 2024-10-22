@@ -2,11 +2,13 @@ import react from "react";
 import { FIRESTORE_DB } from "../firebase/firebase";
 import { collection, addDoc } from "firebase/firestore";
 
-const agregarProducto = async () => {
-    console.log("Intentando agregar producto...");
+const agregarProducto = async (ingredient) => {
+    console.log("Agregando producto...")
     try {
         await addDoc(collection(FIRESTORE_DB, 'producto'), {
-            nombre: "Miguel es una loca"
+            nombreProducto: ingredient.nombreProducto,
+            urlProducto: ingredient.url,
+            ingredients: ingredient.ingredients,
         });
         console.log("Producto agregado con éxito.");
     } catch (error) {

@@ -1,20 +1,38 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {Text,SafeAreaView,TextInput,Button,StyleSheet,View,TouchableOpacity} from 'react-native';
 import {Picker} from '@react-native-picker/picker';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {general} from './../Style/style'
+import agregarProducto from '../db/agregarProducto';
+import { collection, getDocs } from "firebase/firestore";   
+import { FIRESTORE_DB } from '../firebase/firebase';
 
 function FormularioProducto() {
 const [nombreProducto, setNombreProducto] = useState('');
 const [url, setUrl] = useState('');
-const [selectedLanguage, setSelectedLanguage] = useState();
 const [dropdowns, setDropdowns] = useState([{ id: 1, selectedValue: '' }]);
+const [options, setOption] = useState([])
 
-const options = [
-    { label: 'Harina', value: 'Harina' },
-    { label: 'Carne de res', value: 'Carne de res' },
-    { label: 'Papa', value: 'Papa' },
-  ];
+useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const querySnapshot = await getDocs(collection(FIRESTORE_DB, "Ingrediente"));
+        
+        const ingredientList = querySnapshot.docs.map(doc => ({
+          id: doc.id,
+          ...doc.data()
+        }));
+
+        setOption(ingredientList); // Guardar los productos en el estado
+      } catch (err) {
+        console.error("Error fetching documents:", err);
+        setError(err.message); // Guardar error si ocurre
+      }
+    };
+
+    fetchData();
+  }, []); // [] para que el efecto se ejecute solo una vez al montar el componente
+
 
   const addDropdown = () => {
     const newDropdown = { id: dropdowns.length + 1, selectedValue: '' };
@@ -45,7 +63,7 @@ const options = [
         ingredients.push({ "ingredient": element.selectedValue });
     });
     data.ingredients = ingredients;
-    console.log(JSON.stringify(data));
+    agregarProducto(data)
 };
 
 
@@ -85,9 +103,9 @@ const options = [
                         <Picker.Item label="Selecciona un valor" value="" />
                         {options.map((option) => (
                         <Picker.Item
-                            key={option.value}
-                            label={option.label}
-                            value={option.value}
+                            key={option.id}
+                            label={option.nombre}
+                            value={option.nombre}
                         />
                         ))}
                     </Picker>
