@@ -7,18 +7,16 @@ import updateProducto from "../db/updateProducto";
 
 function Ordenes() {
     const [producto, setProducto] = useState([]);
-    const [proceso, setProceso] = useState([]);
-    const [completado, setCompletado] = useState([]);
     const [quantities, setQuantities] = useState([]);
     const [estado, setEstado] = useState([]);
-    const [currentTab, setCurrentTab] = useState('Pendiente'); // Estado para la subpestaña actual
+    const [currentTab, setCurrentTab] = useState('Pendiente');
 
     useEffect(() => {
         async function fetchData() {
             const listProducto = await getData("producto");
             setProducto(listProducto);
-            setQuantities(new Array(listProducto.length).fill(0)); // Inicializa las cantidades
-            setEstado(new Array(listProducto.length).fill(false));  // Inicializa los estados (false = no ordenado)
+            setQuantities(new Array(listProducto.length).fill(0));
+            setEstado(new Array(listProducto.length).fill(false));
         }
         fetchData();
     }, []);
@@ -48,10 +46,15 @@ function Ordenes() {
         setEstado(newEstado);
     };
     
-    const updateEstado = (item, estado) => {
-        //Aquí se actualizará el producto de un estado a otro
-        console.log(item.id)
-        updateProducto(item.id, { estado: estado });
+    const updateEstado = (item, estado, index) => {
+        //Aquí se actualizará tanto el estado como el stock del producto seleccionado
+        const stockInt = parseInt(item.stock)
+        const newStock = stockInt - quantities[index]
+        if(newStock <= 0){  
+            console.log("El producto ha sido agotado")
+            return
+        }
+        updateProducto(item.id, { estado: estado, stock:newStock });
     }
 
     const cambiarSubPestana = (pestana) => {
@@ -88,13 +91,13 @@ function Ordenes() {
                             }
 
                             {estado[index] ?
-                                <Button title="Ordenar" onPress={() => updateEstado(item,"proceso")} />
+                                <Button title="Ordenar" onPress={() => updateEstado(item,"proceso", index)} />
                                 :
                                 null
                             }
 
                             {currentTab == "proceso" ? 
-                                <Button title="Completar" onPress={() => updateEstado(item,"completado")} />
+                                <Button title="Completar" onPress={() => updateEstado(item,"completado", index)} />
                                 :
                                 null
                             }
