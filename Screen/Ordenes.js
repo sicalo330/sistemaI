@@ -3,12 +3,15 @@ import { Text, TouchableOpacity, View, StyleSheet, Button } from "react-native";
 import { general } from '../Style/style';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import getData from "../db/getData";
+import updateProducto from "../db/updateProducto";
 
 function Ordenes() {
     const [producto, setProducto] = useState([]);
+    const [proceso, setProceso] = useState([]);
+    const [completado, setCompletado] = useState([]);
     const [quantities, setQuantities] = useState([]);
     const [estado, setEstado] = useState([]);
-    const [currentTab, setCurrentTab] = useState('pendientes'); // Estado para la subpestaña actual
+    const [currentTab, setCurrentTab] = useState('Pendiente'); // Estado para la subpestaña actual
 
     useEffect(() => {
         async function fetchData() {
@@ -19,6 +22,11 @@ function Ordenes() {
         }
         fetchData();
     }, []);
+
+    useEffect(() => {
+        //Esto se ejecuta cada vez que cambia `currentTab`
+        console.log("Subpestaña actual:", currentTab);
+    }, [currentTab]); //Esto indica que está atento a cualquier cambio de currentTab
 
     const addQuantity = (index) => {
         const newQuantities = [...quantities];
@@ -39,69 +47,80 @@ function Ordenes() {
         newEstado[index] = !newEstado[index]; //Cambia el estado de true o false y viceversa
         setEstado(newEstado);
     };
+    
+    const updateEstado = (item, estado) => {
+        //Aquí se actualizará el producto de un estado a otro
+        console.log(item.id)
+        updateProducto(item.id, { estado: estado });
+    }
 
-    // Filtra los productos según la subpestaña actual
-    const filteredProducts = producto.filter((producto, index) => {
-        if (currentTab === 'pendientes') return !estado[index];  // Mostrar productos pendientes
-        if (currentTab === 'enProceso') return estado[index] && quantities[index] > 0;  // Mostrar productos en proceso
-        if (currentTab === 'completados') return estado[index] && quantities[index] === 0;  // Mostrar productos completados
-    });
+    const cambiarSubPestana = (pestana) => {
+        setCurrentTab(pestana);
+    };
 
     return (
         <>
-            <View style={{ flexDirection: 'row', justifyContent: 'center', justifyContent: 'space-evenly' }}>
-                <TouchableOpacity onPress={() => setCurrentTab('pendientes')}>
+            <View style={styles.header}>
+                <TouchableOpacity onPress={() => cambiarSubPestana('Pendiente')}>
                     <Text>Pendientes</Text>
                 </TouchableOpacity>
-                <TouchableOpacity onPress={() => setCurrentTab('enProceso')}>
+                <TouchableOpacity onPress={() => cambiarSubPestana('proceso')}>
                     <Text>En proceso</Text>
                 </TouchableOpacity>
-                <TouchableOpacity onPress={() => setCurrentTab('completados')}>
+                <TouchableOpacity onPress={() => cambiarSubPestana('completado')}>
                     <Text>Completados</Text>
                 </TouchableOpacity>
             </View>
             <View style={general.hr} />
-
-            {/* Para dada bloque se debe poner los bloques de jsx para mostrar datos de una subpestaña */}
-            {currentTab === 'pendientes' && (
-                <Text>Hola, esta es la pestaña de pendientes.</Text>
-            )}
-            {currentTab === 'enProceso' && (
-                <Text>Hola, esta es la pestaña de en proceso.</Text>
-            )}
-            {currentTab === 'completados' && (
-                <Text>Hola, esta es la pestaña de completados.</Text>
-            )}
-
-            {/* Renderiza los productos según la subpestaña seleccionada */}
-            {filteredProducts.map((producto, index) => (
-                <View key={index} style={general.ordenes}>
-                    <View>
-                        <Text>{producto.nombreProducto}</Text>
-                    </View>
-                    <View style={{ flexDirection: 'row' }}>
-                        <Button title="Preparar" onPress={() => cambiarEstado(index)} />
-                        <Button title="Ordenar" onPress={() => cambiarEstado(index)} />
-                    </View>
-                    {estado[index] ?  
-                    <View style={general.containerPlusMinus}>
-                        <TouchableOpacity style={general.plusMinus} onPress={() => downQuantity(index)}>
-                            <Icon name="minus" size={15} color="black" />
-                        </TouchableOpacity>
-                        <View style={styles.containerIcon}>
-                            <Text style={styles.textFontIcon}>{quantities[index]}</Text>
+            {/* Recorre los productos y renderiza cada uno */}
+            {producto.map((item, index) => (
+                item.estado == currentTab ? 
+                    <View key={index} style={general.ordenes}>
+                        <View>
+                            <Text>{item.nombreProducto}</Text>
+                            <Text>{item.estado}</Text>
                         </View>
-                        <TouchableOpacity style={general.plusMinus} onPress={() => addQuantity(index)}> 
-                            <Icon name="plus" size={15} color="black" />
-                        </TouchableOpacity>
+                        <View style={{ flexDirection: 'row' }}>
+                            {currentTab == "Pendiente" ? 
+                                <Button title="Preparar" onPress={() => cambiarEstado(index)} />
+                                :
+                                null    
+                            }
+
+                            {estado[index] ?
+                                <Button title="Ordenar" onPress={() => updateEstado(item,"proceso")} />
+                                :
+                                null
+                            }
+
+                            {currentTab == "proceso" ? 
+                                <Button title="Completar" onPress={() => updateEstado(item,"completado")} />
+                                :
+                                null
+                            }
+                        </View>
+                        {estado[index] ?  
+                        <View style={general.containerPlusMinus}>
+                            <TouchableOpacity style={general.plusMinus} onPress={() => downQuantity(index)}>
+                                <Icon name="minus" size={15} color="black" />
+                            </TouchableOpacity>
+                            <View style={styles.containerIcon}>
+                                <Text style={styles.textFontIcon}>{quantities[index]}</Text>
+                            </View>
+                            <TouchableOpacity style={general.plusMinus} onPress={() => addQuantity(index)}> 
+                                <Icon name="plus" size={15} color="black" />
+                            </TouchableOpacity>
+                        </View>
+                        :
+                        null     
+                        }
                     </View>
-                    :
-                    null     
-                    }
-                </View>
+                :
+                null
             ))}
         </>
     );
+    
 }
 
 const styles = StyleSheet.create({
@@ -110,6 +129,11 @@ const styles = StyleSheet.create({
     },
     containerIcon: {
         alignSelf: 'center'
+    },
+    header:{
+        flexDirection: 'row', 
+        justifyContent: 'center', 
+        justifyContent: 'space-evenly' 
     }
 });
 
