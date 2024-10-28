@@ -1,47 +1,70 @@
-import React from "react";
+import React,{useEffect, useState} from "react";
 import { Text, TouchableOpacity, View } from "react-native";
 import { StyleSheet } from "react-native";
 import {titlePrice, linkContainer} from "../Style/style";
 import Icon from 'react-native-vector-icons/FontAwesome';
+import getData from "../db/getData";
+import { useNavigation } from "@react-navigation/native";
 
 function Ventas(){
+    const [producto, setProducto] = useState([])
+    const [precio, setPrecio] = useState(0)
+    const [precioVendido, setPrecionVendido] = useState(0)
+
+    const navigation = useNavigation()
+
+    useEffect(() => {
+        async function fetchData() {
+            const listProducto = await getData("producto");
+            setProducto(listProducto);
+        }
+        fetchData();
+    }, []);
+
+    useEffect(() => {
+        async function loopPrecio() {
+            let precioTotal = 0;
+            let precioTotalVendido = 0;
+
+            producto.forEach((element) => {
+                if (element.estado === "Pendiente") {
+                    let precioInt = parseInt(element.price);
+                    precioTotal += precioInt;
+                } else {
+                    let precioIntVendido = parseInt(element.price);
+                    precioTotalVendido += precioIntVendido;
+                }
+            });
+
+            setPrecio(precioTotal);
+            setPrecionVendido(precioTotalVendido);
+        }
+
+        if (producto.length > 0) {
+            loopPrecio();
+        }
+    }, [producto]);
+
+    const navegarHistorial = () => {
+        navigation.navigate("Historial")
+    }
+    
+
     return(
         <>
             <View style={styles.containerPrice}>
-                <View style={titlePrice.containerPrice}>
+                <View style={styles.inventarioContainer}>
                     <Text style={styles.title}>Ventas</Text>
-                    <Text style={titlePrice.titleMain}>$4.500</Text>
-                </View>
-                <View style={titlePrice.containerPrice}>
-                    <Text style={styles.title}>Gastos</Text>
-                    <Text style={titlePrice.titleMain}>$1.000</Text>
+                    <Text style={titlePrice.titleMain}>${precioVendido}</Text>
                 </View>
             </View>
             <View style={styles.containerPrice}>
                 <View style={styles.inventarioContainer}>
                     <Text style={styles.title}>Inventario</Text>
-                    <Text style={titlePrice.titleMain}>$5.000</Text>
+                    <Text style={titlePrice.titleMain}>${precio}</Text>
                 </View>
             </View>
-            <TouchableOpacity style={linkContainer.linkArrow}>
-                <View>
-                    <Text>Ver ventas</Text>
-                    <Text>Revisar todas las transacciones</Text>
-                </View>
-                <View style={styles.iconContainer}>
-                    <Icon name="arrow-right" size={25} color="black" />
-                </View>
-            </TouchableOpacity>
-            <TouchableOpacity style={linkContainer.linkArrow}>
-                <View>
-                    <Text>Ver ventas</Text>
-                    <Text>Revisar todas las transacciones</Text>
-                </View>
-                <View style={styles.iconContainer}>
-                    <Icon name="arrow-right" size={25} color="black" />
-                </View>
-            </TouchableOpacity>
-            <TouchableOpacity style={linkContainer.linkArrow}>
+            <TouchableOpacity style={linkContainer.linkArrow} onPress={navegarHistorial}>
                 <View>
                     <Text>Ver ventas</Text>
                     <Text>Revisar todas las transacciones</Text>

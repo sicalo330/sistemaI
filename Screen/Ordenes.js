@@ -11,20 +11,17 @@ function Ordenes() {
     const [estado, setEstado] = useState([]);
     const [currentTab, setCurrentTab] = useState('Pendiente');
 
-    useEffect(() => {
-        async function fetchData() {
-            const listProducto = await getData("producto");
-            setProducto(listProducto);
-            setQuantities(new Array(listProducto.length).fill(0));
-            setEstado(new Array(listProducto.length).fill(false));
-        }
-        fetchData();
-    }, []);
+    // Función para obtener datos desde la base de datos
+    const fetchData = async () => {
+        const listProducto = await getData("producto");
+        setProducto(listProducto);
+        setQuantities(new Array(listProducto.length).fill(0));
+        setEstado(new Array(listProducto.length).fill(false));
+    };
 
     useEffect(() => {
-        //Esto se ejecuta cada vez que cambia `currentTab`
-        console.log("Subpestaña actual:", currentTab);
-    }, [currentTab]); //Esto indica que está atento a cualquier cambio de currentTab
+        fetchData();
+    }, []);
 
     const addQuantity = (index) => {
         const newQuantities = [...quantities];
@@ -42,20 +39,21 @@ function Ordenes() {
 
     const cambiarEstado = (index) => {
         const newEstado = [...estado];
-        newEstado[index] = !newEstado[index]; //Cambia el estado de true o false y viceversa
+        newEstado[index] = !newEstado[index]; // Cambia el estado de true o false y viceversa
         setEstado(newEstado);
     };
     
-    const updateEstado = (item, estado, index) => {
-        //Aquí se actualizará tanto el estado como el stock del producto seleccionado
-        const stockInt = parseInt(item.stock)
-        const newStock = stockInt - quantities[index]
+    const updateEstado = async (item, nuevoEstado, index) => {
+        const stockInt = parseInt(item.stock);
+        const newStock = stockInt - quantities[index];
+
         if(newStock <= 0){  
-            console.log("El producto ha sido agotado")
-            return
+            console.log("El producto ha sido agotado");
+            return;
         }
-        updateProducto(item.id, { estado: estado, stock:newStock });
-    }
+        await updateProducto(item.id, { estado: nuevoEstado, stock: newStock });
+        await fetchData();
+    };
 
     const cambiarSubPestana = (pestana) => {
         setCurrentTab(pestana);
@@ -123,7 +121,6 @@ function Ordenes() {
             ))}
         </>
     );
-    
 }
 
 const styles = StyleSheet.create({

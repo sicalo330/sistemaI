@@ -15,6 +15,7 @@ import Cuenta from './Screen/Cuenta';
 import Configuration from './Screen/Configuration';
 import Login from './Screen/Login.js'; // Importa tu pantalla de Login
 import FormularioProducto from './Screen/FormularioProducto.js';
+import Historial from './Screen/Historial.js';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -70,6 +71,7 @@ function VentasStack() {
   return (
     <Stack.Navigator initialRouteName='Ventas'>
       <Stack.Screen name='Ventas' component={Ventas}></Stack.Screen>
+      <Stack.Screen name='Historial' component={Historial}></Stack.Screen>
     </Stack.Navigator>
   );
 }
