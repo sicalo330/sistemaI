@@ -5,6 +5,7 @@ import { collection, getDocs } from "firebase/firestore";
 import { FIRESTORE_DB } from '../firebase/firebase';
 import getIngrediente from "../db/getData";
 import getData from "../db/getData";
+import useObtenerGastos from "../hook/useObtenerProducto";
 
 // Datos simulados de inventario
 
@@ -12,6 +13,7 @@ function Inventario() {
   const [inventarios, setInventario] = useState([]);
 
   const navigation = useNavigation()
+  const [lista] = useObtenerGastos()
 
   useEffect(() => {
     async function fetchData(params) {
@@ -20,7 +22,7 @@ function Inventario() {
       console.log("Estos son los productos",inventarios)
     }
     fetchData()
-  },[])
+  },[lista])
 
   const agregar = () => {
     navigation.navigate("FormularioProducto")

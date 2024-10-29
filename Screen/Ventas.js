@@ -5,12 +5,15 @@ import {titlePrice, linkContainer} from "../Style/style";
 import Icon from 'react-native-vector-icons/FontAwesome';
 import getData from "../db/getData";
 import { useNavigation } from "@react-navigation/native";
+import  useObtenerProducto  from "../hook/useObtenerProducto";
 
 function Ventas(){
     const [producto, setProducto] = useState([])
     const [precio, setPrecio] = useState(0)
     const [precioVendido, setPrecionVendido] = useState(0)
 
+    const [lista] = useObtenerProducto () 
+    console.log(lista)
     const navigation = useNavigation()
 
     useEffect(() => {
@@ -19,7 +22,7 @@ function Ventas(){
             setProducto(listProducto);
         }
         fetchData();
-    }, []);
+    }, [lista]);
 
     useEffect(() => {
         async function loopPrecio() {

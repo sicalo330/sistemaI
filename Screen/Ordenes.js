@@ -4,12 +4,14 @@ import { general } from '../Style/style';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import getData from "../db/getData";
 import updateProducto from "../db/updateProducto";
+import useObtenerGastos from "../hook/useObtenerProducto";
 
 function Ordenes() {
     const [producto, setProducto] = useState([]);
     const [quantities, setQuantities] = useState([]);
     const [estado, setEstado] = useState([]);
     const [currentTab, setCurrentTab] = useState('Pendiente');
+    const [lista] = useObtenerGastos();
 
     // Función para obtener datos desde la base de datos
     const fetchData = async () => {
@@ -21,7 +23,7 @@ function Ordenes() {
 
     useEffect(() => {
         fetchData();
-    }, []);
+    }, [lista]);
 
     const addQuantity = (index) => {
         const newQuantities = [...quantities];
@@ -47,7 +49,7 @@ function Ordenes() {
         const stockInt = parseInt(item.stock);
         const newStock = stockInt - quantities[index];
 
-        if(newStock <= 0){  
+        if(newStock < 0){  
             console.log("El producto ha sido agotado");
             return;
         }
