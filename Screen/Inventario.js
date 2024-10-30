@@ -30,7 +30,7 @@ function Inventario() {
 
   const handlePress = (item) => {
     console.log("Producto seleccionado:", item);
-    navigation.navigate('productDetail',{ product:item })
+    navigation.navigate('productDetail',{product:item})
   };
 
   const renderItem = ({ item }) => (
