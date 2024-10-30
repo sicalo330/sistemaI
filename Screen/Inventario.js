@@ -28,8 +28,13 @@ function Inventario() {
     navigation.navigate("FormularioProducto")
   }
 
+  const handlePress = (item) => {
+    console.log("Producto seleccionado:", item);
+    navigation.navigate('productDetail',{ product:item })
+  };
+
   const renderItem = ({ item }) => (
-    <TouchableOpacity style={styles.itemContainer}>
+    <TouchableOpacity style={styles.itemContainer} onPress={() => handlePress(item)}>
       {/* Espacio para agregar una imagen */}
       <Image source={{ uri: item.urlProducto }} style={styles.imagen} />
       <Text style={styles.nombre}>{item.nombreProducto}</Text>

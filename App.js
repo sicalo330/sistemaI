@@ -16,6 +16,7 @@ import Configuration from './Screen/Configuration';
 import Login from './Screen/Login.js'; // Importa tu pantalla de Login
 import FormularioProducto from './Screen/FormularioProducto.js';
 import Historial from './Screen/Historial.js';
+import productDetail from './Screen/productDetail.js';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -97,6 +98,7 @@ function InventarioStack() {
   return (
     <Stack.Navigator initialRouteName='Inventario'>
       <Stack.Screen name='Inventario' component={Inventario}></Stack.Screen>
+      <Stack.Screen name='productDetail' component={productDetail}></Stack.Screen>
       <Stack.Screen name='FormularioProducto' component={FormularioProducto}></Stack.Screen>
     </Stack.Navigator>
   );
