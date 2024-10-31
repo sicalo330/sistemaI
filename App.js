@@ -6,6 +6,7 @@ import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import AuthContextProvider,{AuthContext } from "./context/auth-context.js"
+import { ActivityIndicator } from "react-native";
 
 
 import Ventas from './Screen/Ventas';
@@ -104,23 +105,36 @@ function InventarioStack() {
   );
 }
 
-// Define tu Stack principal que incluirá el login y las tabs
-export default function App() {
+function AppContent() {
   const authCtx = useContext(AuthContext);
+  console.log(authCtx.isLogged)
+
+  if (authCtx.isLoading) {
+      // Muestra un indicador de carga mientras se verifica el token
+      return (
+          <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+              <ActivityIndicator size="large" color="#0000ff" />
+          </View>
+      );
+  }
+
   return (
-    <AuthContextProvider>
       <NavigationContainer>
-        <Stack.Navigator initialRouteName={authCtx.isLogged ? "Login":"Main"} screenOptions={{ headerShown: false }}>
-          {/* La pantalla de Login estará fuera de las tabs */}
-          <Stack.Screen name="Login" component={Login} />
-          {/* Las pestañas estarán disponibles después del login */}
-          <Stack.Screen name="Main" component={TabNavigator} />
-        </Stack.Navigator>
+          <Stack.Navigator initialRouteName={authCtx.isLogged ? "Main" : "Login"} screenOptions={{ headerShown: false }}>
+              <Stack.Screen name="Login" component={Login} />
+              <Stack.Screen name="Main" component={TabNavigator} />
+          </Stack.Navigator>
       </NavigationContainer>
-    </AuthContextProvider>
   );
 }
 
+export default function App() {
+  return (
+      <AuthContextProvider>
+          <AppContent />
+      </AuthContextProvider>
+  );
+}
 const styles = StyleSheet.create({
   container: {
     flex: 1,
