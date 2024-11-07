@@ -19,7 +19,6 @@ function Inventario() {
     async function fetchData(params) {
       const listData = await getData("producto")
       setInventario(listData)
-      console.log("Estos son los productos",inventarios)
     }
     fetchData()
   },[lista])
@@ -29,8 +28,7 @@ function Inventario() {
   }
 
   const handlePress = (item) => {
-    console.log("Producto seleccionado:", item);
-    navigation.navigate('productDetail',{product:item})
+    navigation.navigate('Detail',{product:item})
   };
 
   const renderItem = ({ item }) => (

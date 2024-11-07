@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Text, TouchableOpacity, View, StyleSheet, Button } from "react-native";
+//import CheckBox from "@react-native-community/checkbox";
 import { general } from '../Style/style';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import getData from "../db/getData";
@@ -11,6 +12,10 @@ function Ordenes() {
     const [quantities, setQuantities] = useState([]);
     const [estado, setEstado] = useState([]);
     const [currentTab, setCurrentTab] = useState('Pendiente');
+    const [listaProducto, setListaProducto] = useState([])
+
+    const [isSelected, setSelection] = useState(false);
+
     const [lista] = useObtenerGastos();
 
     // Función para obtener datos desde la base de datos
@@ -57,27 +62,19 @@ function Ordenes() {
         await fetchData();
     };
 
-    const cambiarSubPestana = (pestana) => {
-        setCurrentTab(pestana);
-    };
+    const actualizarEstado = (item) => {
+        setListaProducto(item)
+    }
+    
+    const verProductos = () => {
+        console.log(listaProducto);
+    }
 
     return (
         <>
-            <View style={styles.header}>
-                <TouchableOpacity onPress={() => cambiarSubPestana('Pendiente')}>
-                    <Text>Pendientes</Text>
-                </TouchableOpacity>
-                <TouchableOpacity onPress={() => cambiarSubPestana('proceso')}>
-                    <Text>En proceso</Text>
-                </TouchableOpacity>
-                <TouchableOpacity onPress={() => cambiarSubPestana('completado')}>
-                    <Text>Completados</Text>
-                </TouchableOpacity>
-            </View>
-            <View style={general.hr} />
-            {/* Recorre los productos y renderiza cada uno */}
+            <Button title="Enviar" onPress={verProductos}/>
+
             {producto.map((item, index) => (
-                item.estado == currentTab ? 
                     <View key={index} style={general.ordenes}>
                         <View>
                             <Text>{item.nombreProducto}</Text>
@@ -118,8 +115,6 @@ function Ordenes() {
                         null     
                         }
                     </View>
-                :
-                null
             ))}
         </>
     );

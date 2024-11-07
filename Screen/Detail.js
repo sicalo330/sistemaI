@@ -3,7 +3,7 @@ import { View, Text, Image, StyleSheet, FlatList } from "react-native";
 import getSingleData from "../db/getSingleData";
 
 
-function productDetail({route}){
+function Detail({route}){
     const { product } = route.params
     const [productDetail, setProductDetail] = useState([])
 
@@ -11,7 +11,6 @@ function productDetail({route}){
         async function fetchData(){
             const listData = await getSingleData("producto", product.id)
             setProductDetail(listData)
-            //getSingleData('producto',product.id)
         }
         fetchData()
     },[])
@@ -84,5 +83,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default productDetail
-
+export default Detail

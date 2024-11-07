@@ -17,7 +17,8 @@ import Configuration from './Screen/Configuration';
 import Login from './Screen/Login.js'; // Importa tu pantalla de Login
 import FormularioProducto from './Screen/FormularioProducto.js';
 import Historial from './Screen/Historial.js';
-import productDetail from './Screen/productDetail.js';
+import Detail from './Screen/Detail.js';
+import Pedidos from './Screen/Pedidos.js';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -63,6 +64,7 @@ function TabNavigator() {
       <Tab.Screen name='VentasStack' component={VentasStack}></Tab.Screen>
       <Tab.Screen name='OrdenesStack' component={OrdenesStack}></Tab.Screen>
       <Tab.Screen name='InventarioStack' component={InventarioStack}></Tab.Screen>
+      <Tab.Screen name='PedidosStack' component={PedidosStack}></Tab.Screen>
       <Tab.Screen name='CuentaStack' component={CuentaStack}></Tab.Screen>
     </Tab.Navigator>
   );
@@ -86,6 +88,14 @@ function OrdenesStack() {
   );
 }
 
+function PedidosStack() {
+  return (
+    <Stack.Navigator initialRouteName='Pedidos'>
+      <Stack.Screen name='Pedidos' component={Pedidos}></Stack.Screen>
+    </Stack.Navigator>
+  );
+}
+
 function CuentaStack() {
   return (
     <Stack.Navigator initialRouteName='Cuenta'>
@@ -99,7 +109,7 @@ function InventarioStack() {
   return (
     <Stack.Navigator initialRouteName='Inventario'>
       <Stack.Screen name='Inventario' component={Inventario}></Stack.Screen>
-      <Stack.Screen name='productDetail' component={productDetail}></Stack.Screen>
+      <Stack.Screen name='Detail' component={Detail}></Stack.Screen>
       <Stack.Screen name='FormularioProducto' component={FormularioProducto}></Stack.Screen>
     </Stack.Navigator>
   );
@@ -107,7 +117,6 @@ function InventarioStack() {
 
 function AppContent() {
   const authCtx = useContext(AuthContext);
-  console.log(authCtx.isLogged)
 
   if (authCtx.isLoading) {
       // Muestra un indicador de carga mientras se verifica el token

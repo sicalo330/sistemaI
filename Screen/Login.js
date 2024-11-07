@@ -12,7 +12,6 @@ function Login() {
   const authCtx = useContext(AuthContext);
 
   async function handleLogin() {
-    console.log("Login")
     if (!email || !password) {
       Alert.alert('Error', 'Please enter both email and password', [{ text: 'OK' }]);
       return;

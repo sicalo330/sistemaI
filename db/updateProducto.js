@@ -13,7 +13,6 @@ const updateProducto = async (productoId, newData) => {
 
         // Actualizamos el campo con los datos que pasamos
         await updateDoc(productoRef, sanitizedData);
-        console.log('Producto actualizado con éxito');
     } catch (error) {
         console.error('Error actualizando el producto:', error);
     }

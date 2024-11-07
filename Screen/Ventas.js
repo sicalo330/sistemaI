@@ -13,7 +13,6 @@ function Ventas(){
     const [precioVendido, setPrecionVendido] = useState(0)
 
     const [lista] = useObtenerProducto () 
-    console.log(lista)
     const navigation = useNavigation()
 
     useEffect(() => {

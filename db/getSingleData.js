@@ -2,7 +2,6 @@ import { doc, getDoc } from "firebase/firestore";
 import { FIRESTORE_DB } from "../firebase/firebase";
 
 const getSingleData = async (collectionName, documentId) => {
-    console.log("Obteniendo un único registro...");
     try {
         // Referencia al documento específico en la colección
         const docRef = doc(FIRESTORE_DB, collectionName, documentId);
@@ -11,11 +10,9 @@ const getSingleData = async (collectionName, documentId) => {
         const docSnap = await getDoc(docRef);
 
         if (docSnap.exists()) {
-            console.log("Documento obtenido:", docSnap.data());
             // Retorna el objeto del documento, junto con su ID
             return { id: docSnap.id, ...docSnap.data() };
         } else {
-            console.log("No existe un documento con ese ID");
             return null;
         }
     } catch (err) {
