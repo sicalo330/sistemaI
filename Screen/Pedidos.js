@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { Text, TouchableOpacity, View, StyleSheet, Button } from "react-native";
-//import CheckBox from "@react-native-community/checkbox";
+import BouncyCheckbox from "react-native-bouncy-checkbox";
 import { general } from '../Style/style';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import getData from "../db/getData";
 import updateProducto from "../db/updateProducto";
 import useObtenerGastos from "../hook/useObtenerProducto";
+import { CheckBox } from "react-native-web";
 
 function Ordenes() {
     const [producto, setProducto] = useState([]);
@@ -14,7 +15,7 @@ function Ordenes() {
     const [currentTab, setCurrentTab] = useState('Pendiente');
     const [listaProducto, setListaProducto] = useState([])
 
-    const [isSelected, setSelection] = useState(false);
+    const [isChecked, setIsChecked] = useState(false);
 
     const [lista] = useObtenerGastos();
 
@@ -73,12 +74,21 @@ function Ordenes() {
     return (
         <>
             <Button title="Enviar" onPress={verProductos}/>
-
             {producto.map((item, index) => (
                     <View key={index} style={general.ordenes}>
-                        <View>
-                            <Text>{item.nombreProducto}</Text>
-                            <Text>{item.estado}</Text>
+                        <View style={styles.checkboxContainer}>
+                            <BouncyCheckbox
+                                size={15}
+                                fillColor="blue"
+                                unfillColor="#FFFFFF"
+                                text={item.nombreProducto}
+                                iconStyle={{ borderColor: "blue" }}
+                                innerIconStyle={{ borderWidth: 10 }}
+                                isChecked={isChecked}
+                                onPress={(isSelected) => setIsChecked(isSelected)}
+                                textStyle={{ textDecorationLine: "none" }} // Elimina la línea de tachado
+                            />
+                                <Text>{item.estado}</Text>
                         </View>
                         <View style={{ flexDirection: 'row' }}>
                             {currentTab == "Pendiente" ? 
@@ -126,6 +136,9 @@ const styles = StyleSheet.create({
     },
     containerIcon: {
         alignSelf: 'center'
+    },
+    checkboxContainer:{
+        width:100
     },
     header:{
         flexDirection: 'row', 
