@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Text, TouchableOpacity, View, StyleSheet, Button } from "react-native";
+import { Text, TouchableOpacity, View, StyleSheet, Button, Alert } from "react-native";
 import BouncyCheckbox from "react-native-bouncy-checkbox";
 import { general } from '../Style/style';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -24,7 +24,7 @@ function Ordenes() {
         setProducto(listProducto);
         setQuantities(new Array(listProducto.length).fill(0));
         setEstado(new Array(listProducto.length).fill(false));
-        setListaChecked(new Array(listProducto.length).fill(this))
+        //setListaChecked(new Array(listProducto.length).fill(this))
     };
 
     useEffect(() => {
@@ -45,67 +45,61 @@ function Ordenes() {
         setQuantities(newQuantities);
     };
 
-    const cambiarEstado = (index,item) => {
-        console.log("----------------------")
+    const cambiarEstado = (index, item) => {
         const newEstado = [...estado];
-        console.log(newEstado)
-        
         newEstado[index] = !newEstado[index];
         setEstado(newEstado);
-
-        const newPedido = [...listaChecked]
-        newPedido[index] = item
-        setListaChecked(newPedido)
-        console.log(newEstado[index])
-        if(!newEstado[index]){
-            listaChecked.splice(index,1)
-        }
-
-        console.log(newPedido)
-        //Agregar animaciones
+    
+        // Filtra los elementos que están en estado `true`
+        const newPedido = producto.filter((_, i) => newEstado[i]);
+        setListaChecked(newPedido);
     };
     
-    const updateEstado = async (item, nuevoEstado, index) => {
-        const stockInt = parseInt(item.stock);
-        const newStock = stockInt - quantities[index];
-
-        if(newStock < 0){  
-            Alert.Alert("El producto está agotado")
-            return;
+    const updateEstado = async (nuevoEstado) => {
+        if(listaChecked.length <= 0){
+            return
         }
-        await updateProducto(item.id, { estado: nuevoEstado, stock: newStock });
-        await fetchData();
+
+        listaChecked.forEach(async (item, index) => {
+            const stockInt = parseInt(item.stock);
+            const newStock = stockInt - quantities[index]
+
+            if(newStock < 0){  
+                Alert.alert("El producto ha sido agotado")
+                return;
+            }
+            await updateProducto(item.id, { estado: nuevoEstado, stock: newStock });
+            await fetchData();
+        })
+        // const stockInt = parseInt(item.stock);
+        // const newStock = stockInt - quantities[index];
     };
 
     const actualizarEstado = (item) => {
         setListaProducto(item)
     }
-    
-    const verProductos = () => {
-        console.log(listaProducto);
-    }
 
     return (
         <>
-            <Button title="Enviar" onPress={verProductos}/>
+            <Button title="Enviar" onPress={() => {updateEstado("proceso")}}/>
             {producto.map((item, index) => (
                     <View key={index} style={general.ordenes}>
                         <View style={styles.checkboxContainer}>
                                 <Text>{item.nombreProducto}</Text>
                                 <Text>{item.estado}</Text>
                         </View>
-                        <View style={{ flexDirection: 'row' }}>
+                        <View style={styles.containerProcess}>
                             {currentTab == "Pendiente" ? 
                                 <Button title="Preparar" onPress={() => cambiarEstado(index, item)} />
                                 :
                                 null    
                             }
 
-                            {estado[index] ?
-                                <Button title="Ordenar" onPress={() => updateEstado(item,"proceso", index)} />
+                            {/* {estado[index] ?
+                                <Button title="Ordenar" onPress={() => updateEstado("proceso", index)} />
                                 :
                                 null
-                            }
+                            } */}
 
                             {currentTab == "proceso" ? 
                                 <Button title="Completar" onPress={() => updateEstado(item,"completado", index)} />
@@ -143,6 +137,9 @@ const styles = StyleSheet.create({
     },
     checkboxContainer:{
         width:100
+    },
+    containerProcess:{
+        flexDirection:'row'
     },
     header:{
         flexDirection: 'row', 
