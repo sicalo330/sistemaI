@@ -12,10 +12,9 @@ function Ordenes() {
     const [producto, setProducto] = useState([]);
     const [quantities, setQuantities] = useState([]);
     const [estado, setEstado] = useState([]);
-    const [currentTab, setCurrentTab] = useState('Pendiente');
+    const [currentTab, setCurrentTab] = useState('Pendiente')
     const [listaProducto, setListaProducto] = useState([])
-
-    const [isChecked, setIsChecked] = useState(false);
+    const [listaChecked, setListaChecked] = useState([])
 
     const [lista] = useObtenerGastos();
 
@@ -25,6 +24,7 @@ function Ordenes() {
         setProducto(listProducto);
         setQuantities(new Array(listProducto.length).fill(0));
         setEstado(new Array(listProducto.length).fill(false));
+        setListaChecked(new Array(listProducto.length).fill(this))
     };
 
     useEffect(() => {
@@ -45,10 +45,24 @@ function Ordenes() {
         setQuantities(newQuantities);
     };
 
-    const cambiarEstado = (index) => {
+    const cambiarEstado = (index,item) => {
+        console.log("----------------------")
         const newEstado = [...estado];
-        newEstado[index] = !newEstado[index]; // Cambia el estado de true o false y viceversa
+        console.log(newEstado)
+        
+        newEstado[index] = !newEstado[index];
         setEstado(newEstado);
+
+        const newPedido = [...listaChecked]
+        newPedido[index] = item
+        setListaChecked(newPedido)
+        console.log(newEstado[index])
+        if(!newEstado[index]){
+            listaChecked.splice(index,1)
+        }
+
+        console.log(newPedido)
+        //Agregar animaciones
     };
     
     const updateEstado = async (item, nuevoEstado, index) => {
@@ -77,22 +91,12 @@ function Ordenes() {
             {producto.map((item, index) => (
                     <View key={index} style={general.ordenes}>
                         <View style={styles.checkboxContainer}>
-                            <BouncyCheckbox
-                                size={15}
-                                fillColor="blue"
-                                unfillColor="#FFFFFF"
-                                text={item.nombreProducto}
-                                iconStyle={{ borderColor: "blue" }}
-                                innerIconStyle={{ borderWidth: 10 }}
-                                isChecked={isChecked}
-                                onPress={(isSelected) => setIsChecked(isSelected)}
-                                textStyle={{ textDecorationLine: "none" }} // Elimina la línea de tachado
-                            />
+                                <Text>{item.nombreProducto}</Text>
                                 <Text>{item.estado}</Text>
                         </View>
                         <View style={{ flexDirection: 'row' }}>
                             {currentTab == "Pendiente" ? 
-                                <Button title="Preparar" onPress={() => cambiarEstado(index)} />
+                                <Button title="Preparar" onPress={() => cambiarEstado(index, item)} />
                                 :
                                 null    
                             }
