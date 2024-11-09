@@ -73,31 +73,41 @@ function Ordenes() {
     
     
     const updateEstado = async (nuevoEstado) => {
-        if(listaChecked.length <= 0){
-            return
+        if (listaChecked.length <= 0) {
+            return;
         }
-
-        listaChecked.forEach(async (item, index) => {
-            //console.log(item)
-            const stockInt = parseInt(item.stock)
-            const newStock = stockInt - quantities[index]
-            if(item != 0){
-                item.stock = quantities[index];
-            }
-            if(newStock < 0){  
-                Alert.alert("El producto ha sido agotado")
+    
+        for (let index = 0; index < listaChecked.length; index++) {
+            const item = listaChecked[index];
+    
+            // Verificar si la cantidad es 0, pero el producto está seleccionado en `listaChecked` o `estado` es `true`
+            if (quantities[index] === 0 && (item !== 0 || estado[index])) {
+                Alert.alert("Error", `La cantidad para el producto ${item.nombreProducto} es 0, pero está seleccionado.`);
                 return;
             }
-            if(item.stock == NaN){
-                return
+    
+            if (item !== 0) {
+                const stockInt = parseInt(item.stock);
+                const newStock = stockInt - quantities[index];
+    
+                if (newStock < 0) {  
+                    Alert.alert("El producto ha sido agotado");
+                    return;
+                }
+    
+                item.stock = quantities[index];
+                item.estado = nuevoEstado;
+    
+                //Actualización del producto (se pueden habilitar las siguientes líneas según lo necesites)
+                await updateProducto(item.id, { estado: nuevoEstado, stock: newStock });
+                await fetchData();
             }
-            await updateProducto(item.id, { estado: nuevoEstado, stock: newStock });
-            await fetchData();
-        })
-
-        const elementosSeleccionados = listaChecked.filter(item => item != 0)
-        await agregarPedido(elementosSeleccionados,'pedido')
+        }
+    
+        const elementosSeleccionados = listaChecked.filter(item => item !== 0);
+        await agregarPedido(elementosSeleccionados, 'pedido'); // Llamada a agregarPedido si es necesario
     };
+    
 
     const actualizarEstado = (item) => {
         setListaProducto(item)
