@@ -50,7 +50,7 @@ useEffect(() => {
     let ingredients = [];
     let data = {
         nombreProducto: nombreProducto,
-        url: url,
+        urlProducto: url,
         price:price,
         stock:stock
     };
@@ -58,7 +58,8 @@ useEffect(() => {
         ingredients.push({ "ingredient": element.selectedValue });
     });
     data.ingredients = ingredients;
-    await agregarProducto(data)
+    await agregarProducto(data,'producto')
+    navigation.navigate("Inventario")
 };
 
 

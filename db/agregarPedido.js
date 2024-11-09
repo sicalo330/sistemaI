@@ -3,15 +3,11 @@ import { FIRESTORE_DB } from "../firebase/firebase";
 import { collection, addDoc } from "firebase/firestore";
 import { Alert } from "react-native";
 
-const agregarProducto = async (item, tabla) => {
+const agregarPedido = async (item, tabla) => {
     try {
         await addDoc(collection(FIRESTORE_DB, tabla), {
-            nombreProducto: item.nombreProducto,
-            urlProducto: item.urlProducto,
-            ingredients: item.ingredients,
-            price:item.price,
-            stock:item.stock,
-            //estado:"Pendiente"
+            pedido:item,
+            estado:"proceso"
         });
     } catch (error) {
         console.error("Error al agregar el producto: ", error);
@@ -19,4 +15,4 @@ const agregarProducto = async (item, tabla) => {
     }
 };
 
-export default agregarProducto
+export default agregarPedido

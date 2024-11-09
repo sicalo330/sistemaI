@@ -2,6 +2,9 @@ import { doc, updateDoc } from "firebase/firestore";
 import { FIRESTORE_DB } from "../firebase/firebase";
 
 const updateProducto = async (productoId, newData) => {
+    if(productoId == undefined){
+        return
+    }
     try {
         // Filtramos valores undefined antes de la actualización (opcional pero recomendable)
         const sanitizedData = Object.fromEntries(

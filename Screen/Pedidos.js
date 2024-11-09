@@ -7,6 +7,8 @@ import getData from "../db/getData";
 import updateProducto from "../db/updateProducto";
 import useObtenerGastos from "../hook/useObtenerProducto";
 import { CheckBox } from "react-native-web";
+import agregarProducto from "../db/agregarProducto";
+import agregarPedido from "../db/agregarPedido";
 
 function Ordenes() {
     const [producto, setProducto] = useState([]);
@@ -24,7 +26,7 @@ function Ordenes() {
         setProducto(listProducto);
         setQuantities(new Array(listProducto.length).fill(0));
         setEstado(new Array(listProducto.length).fill(false));
-        //setListaChecked(new Array(listProducto.length).fill(this))
+        setListaChecked(new Array(listProducto.length).fill(0))
     };
 
     useEffect(() => {
@@ -41,19 +43,34 @@ function Ordenes() {
         const newQuantities = [...quantities];
         if (newQuantities[index] > 0) {
             newQuantities[index] -= 1;
+            setQuantities(newQuantities);
         }
-        setQuantities(newQuantities);
     };
 
     const cambiarEstado = (index, item) => {
+        // Copiar el estado actual y alternar el valor en el índice seleccionado
         const newEstado = [...estado];
         newEstado[index] = !newEstado[index];
         setEstado(newEstado);
     
-        // Filtra los elementos que están en estado `true`
-        const newPedido = producto.filter((_, i) => newEstado[i]);
+        // Crear una copia de `listaChecked` manteniendo los índices
+        const newPedido = [...listaChecked];
+        const newQuantities = [...quantities];
+    
+        if (newEstado[index]) {
+            // Si `estado[index]` es `true`, asigna el objeto completo en esa posición
+            newPedido[index] = item;
+        } else {
+            // Si `estado[index]` es `false`, asigna `null` en esa posición y reinicia la cantidad a 0
+            newPedido[index] = 0;
+            newQuantities[index] = 0;
+        }
+    
         setListaChecked(newPedido);
+        setQuantities(newQuantities);
     };
+    
+    
     
     const updateEstado = async (nuevoEstado) => {
         if(listaChecked.length <= 0){
@@ -61,18 +78,25 @@ function Ordenes() {
         }
 
         listaChecked.forEach(async (item, index) => {
-            const stockInt = parseInt(item.stock);
+            //console.log(item)
+            const stockInt = parseInt(item.stock)
             const newStock = stockInt - quantities[index]
-
+            if(item != 0){
+                item.stock = quantities[index];
+            }
             if(newStock < 0){  
                 Alert.alert("El producto ha sido agotado")
                 return;
             }
+            if(item.stock == NaN){
+                return
+            }
             await updateProducto(item.id, { estado: nuevoEstado, stock: newStock });
             await fetchData();
         })
-        // const stockInt = parseInt(item.stock);
-        // const newStock = stockInt - quantities[index];
+
+        const elementosSeleccionados = listaChecked.filter(item => item != 0)
+        await agregarPedido(elementosSeleccionados,'pedido')
     };
 
     const actualizarEstado = (item) => {

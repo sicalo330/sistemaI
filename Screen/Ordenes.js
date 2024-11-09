@@ -5,6 +5,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import getData from "../db/getData";
 import updateProducto from "../db/updateProducto";
 import useObtenerGastos from "../hook/useObtenerProducto";
+import agregarProducto from "../db/agregarProducto";
 
 function Ordenes() {
     const [producto, setProducto] = useState([]);
@@ -17,6 +18,7 @@ function Ordenes() {
     const fetchData = async () => {
         const listProducto = await getData("producto");
         setProducto(listProducto);
+        console.log(producto)
         setQuantities(new Array(listProducto.length).fill(0));
         setEstado(new Array(listProducto.length).fill(false));
     };
@@ -48,13 +50,13 @@ function Ordenes() {
     const updateEstado = async (item, nuevoEstado, index) => {
         const stockInt = parseInt(item.stock);
         const newStock = stockInt - quantities[index];
-
         if(newStock < 0){  
             Alert.Alert("El producto está agotado")
             return;
         }
-        await updateProducto(item.id, { estado: nuevoEstado, stock: newStock });
-        await fetchData();
+        // await agregarProducto(item,'pedido')
+        // await updateProducto(item.id, { estado: nuevoEstado, stock: newStock });
+        // await fetchData();
     };
 
     const cambiarSubPestana = (pestana) => {
