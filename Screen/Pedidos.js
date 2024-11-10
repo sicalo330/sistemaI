@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Text, TouchableOpacity, View, StyleSheet, Button, Alert } from "react-native";
+import { Text, TouchableOpacity, View, StyleSheet, Button, Alert,ScrollView } from "react-native";
 import BouncyCheckbox from "react-native-bouncy-checkbox";
 import { general } from '../Style/style';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -99,7 +99,7 @@ function Ordenes() {
                 item.estado = nuevoEstado;
     
                 //Actualización del producto (se pueden habilitar las siguientes líneas según lo necesites)
-                await updateProducto(item.id, { estado: nuevoEstado, stock: newStock });
+                await updateProducto('producto',item.id, { estado: nuevoEstado, stock: newStock });
                 await fetchData();
             }
         }

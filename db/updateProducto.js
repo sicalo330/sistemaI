@@ -1,7 +1,7 @@
 import { doc, updateDoc } from "firebase/firestore"; 
 import { FIRESTORE_DB } from "../firebase/firebase";
 
-const updateProducto = async (productoId, newData) => {
+const updateProducto = async (tabla,productoId, newData) => {
     if(productoId == undefined){
         return
     }
@@ -12,7 +12,7 @@ const updateProducto = async (productoId, newData) => {
         );
 
         // Referencia al documento que deseas actualizar
-        const productoRef = doc(FIRESTORE_DB, 'producto', productoId);
+        const productoRef = doc(FIRESTORE_DB, tabla, productoId);
 
         // Actualizamos el campo con los datos que pasamos
         await updateDoc(productoRef, sanitizedData);

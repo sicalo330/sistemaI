@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Text, TouchableOpacity, View, StyleSheet, Button } from "react-native";
-import { general } from '../Style/style';
+import { Text, TouchableOpacity, View, StyleSheet, Button, ScrollView } from "react-native";
 import Icon from 'react-native-vector-icons/FontAwesome';
 import getData from "../db/getData";
 import updateProducto from "../db/updateProducto";
@@ -9,16 +8,13 @@ import agregarProducto from "../db/agregarProducto";
 
 function Ordenes() {
     const [producto, setProducto] = useState([]);
-    //const [quantities, setQuantities] = useState([]);
     const [estado, setEstado] = useState([]);
     const [currentTab, setCurrentTab] = useState('proceso');
     const [lista] = useObtenerPedido();
 
-    // Función para obtener datos desde la base de datos
     const fetchData = async () => {
         const listPedido = await getData("pedido");
-        setProducto(listPedido)
-        //etQuantities(new Array(listPedido.length).fill(0));
+        setProducto(listPedido);
         setEstado(new Array(listPedido.length).fill(false));
     };
 
@@ -26,36 +22,9 @@ function Ordenes() {
         fetchData();
     }, [lista]);
 
-    const addQuantity = (index) => {
-        const newQuantities = [...quantities];
-        newQuantities[index] += 1;
-        setQuantities(newQuantities);
-    };
-
-    const downQuantity = (index) => {
-        const newQuantities = [...quantities];
-        if (newQuantities[index] > 0) {
-            newQuantities[index] -= 1;
-        }
-        setQuantities(newQuantities);
-    };
-
-    const cambiarEstado = (index) => {
-        const newEstado = [...estado];
-        newEstado[index] = !newEstado[index]; // Cambia el estado de true o false y viceversa
-        setEstado(newEstado);
-    };
-    
-    const updateEstado = async (item, nuevoEstado, index) => {
-        const stockInt = parseInt(item.stock);
-        const newStock = stockInt - quantities[index];
-        if(newStock < 0){  
-            Alert.Alert("El producto está agotado")
-            return;
-        }
-        // await agregarProducto(item,'pedido')
-        // await updateProducto(item.id, { estado: nuevoEstado, stock: newStock });
-        // await fetchData();
+    const updateEstado = async (item, nuevoEstado) => {
+        await updateProducto('pedido', item.id, { estado: nuevoEstado });
+        await fetchData();
     };
 
     const cambiarSubPestana = (pestana) => {
@@ -63,44 +32,130 @@ function Ordenes() {
     };
 
     return (
-        <>
+        <View style={styles.container}>
             <View style={styles.header}>
-                <TouchableOpacity onPress={() => cambiarSubPestana('proceso')}>
-                    <Text>En proceso</Text>
+                <TouchableOpacity
+                    style={[
+                        styles.tab,
+                        currentTab === 'proceso' && styles.activeTab,
+                    ]}
+                    onPress={() => cambiarSubPestana('proceso')}
+                >
+                    <Text style={styles.tabText}>En proceso</Text>
                 </TouchableOpacity>
-                <TouchableOpacity onPress={() => cambiarSubPestana('completado')}>
-                    <Text>Completados</Text>
+                <TouchableOpacity
+                    style={[
+                        styles.tab,
+                        currentTab === 'completado' && styles.activeTab,
+                    ]}
+                    onPress={() => cambiarSubPestana('completado')}
+                >
+                    <Text style={styles.tabText}>Completados</Text>
                 </TouchableOpacity>
             </View>
-            <View style={general.hr} />
-            {/* Recorre los productos y renderiza cada uno */}
 
-            {producto.map((pedido, index) => (
-                <View key={index}>
-                    {pedido.pedido.map((producto, index) => (
-                        <View key={index}>
-                            <Text>{producto.nombreProducto}</Text>
+            <ScrollView style={styles.scrollView}>
+                {producto.map((pedido, index) => (
+                    pedido.estado === currentTab ? (
+                        <View key={index} style={styles.pedidoContainer}>
+                            {pedido.pedido.map((producto, index) => (
+                                <View key={index} style={styles.productoContainer}>
+                                    <Text style={styles.productText}>
+                                        {producto.nombreProducto}
+                                    </Text>
+                                    <Text style={styles.productText}>Cantidad: {producto.stock}</Text>
+                                </View>
+                            ))}
+                            <View style={styles.divider} />
+                            <View style={styles.buttonContainer}>
+                                {currentTab === "proceso" && (
+                                    <TouchableOpacity
+                                        style={styles.completarButton}
+                                        onPress={() => updateEstado(pedido, "completado")}
+                                    >
+                                        <Icon name="check" size={16} color="#fff" />
+                                        <Text style={styles.completarButtonText}>Completar</Text>
+                                    </TouchableOpacity>
+                                )}
+                            </View>
                         </View>
-                    ))}
-                    <Text>-----------------------------</Text>
-                </View>
-            ))}
-        </>
+                    ) : null
+                ))}
+            </ScrollView>
+        </View>
     );
 }
 
 const styles = StyleSheet.create({
-    textFontIcon: {
-        fontSize: 20
+    container: {
+        flex: 1,
+        backgroundColor: "#f5f5f5",
+        paddingHorizontal: 16,
     },
-    containerIcon: {
-        alignSelf: 'center'
+    header: {
+        flexDirection: "row",
+        justifyContent: "space-around",
+        paddingVertical: 16,
+        backgroundColor: "#ddd",
+        borderRadius: 10,
+        marginVertical: 8,
     },
-    header:{
-        flexDirection: 'row', 
-        justifyContent: 'center', 
-        justifyContent: 'space-evenly' 
-    }
+    tab: {
+        paddingVertical: 8,
+        paddingHorizontal: 16,
+        borderRadius: 5,
+    },
+    activeTab: {
+        backgroundColor: "#FFA726",
+    },
+    tabText: {
+        fontSize: 16,
+        color: "#616161"
+    },
+    scrollView: {
+        marginVertical: 10,
+    },
+    pedidoContainer: {
+        backgroundColor: "#ddd",
+        borderRadius: 8,
+        padding: 16,
+        marginBottom: 12,
+        shadowColor: "#000",
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.1,
+        shadowRadius: 5,
+    },
+    productoContainer: {
+        flexDirection: "row",
+        alignItems: "center",
+        marginBottom: 8,
+        justifyContent:'space-around'
+    },
+    productText: {
+        fontSize: 16,
+        color: "#616161",
+    },
+    divider: {
+        height: 1,
+        backgroundColor: "#ddd",
+        marginVertical: 8,
+    },
+    buttonContainer: {
+        alignItems: "center",
+        marginTop: 8,
+    },
+    completarButton: {
+        flexDirection: "row",
+        alignItems: "center",
+        backgroundColor: "orange",
+        paddingHorizontal: 12,
+        paddingVertical: 8,
+        borderRadius: 5,
+    },
+    completarButtonText: {
+        color: "#fff",
+        marginLeft: 5,
+    },
 });
 
 export default Ordenes;
