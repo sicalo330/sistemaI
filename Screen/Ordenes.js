@@ -4,23 +4,22 @@ import { general } from '../Style/style';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import getData from "../db/getData";
 import updateProducto from "../db/updateProducto";
-import useObtenerGastos from "../hook/useObtenerProducto";
+import useObtenerPedido from "../hook/useObtenerPedido";
 import agregarProducto from "../db/agregarProducto";
 
 function Ordenes() {
     const [producto, setProducto] = useState([]);
-    const [quantities, setQuantities] = useState([]);
+    //const [quantities, setQuantities] = useState([]);
     const [estado, setEstado] = useState([]);
-    const [currentTab, setCurrentTab] = useState('Pendiente');
-    const [lista] = useObtenerGastos();
+    const [currentTab, setCurrentTab] = useState('proceso');
+    const [lista] = useObtenerPedido();
 
     // Función para obtener datos desde la base de datos
     const fetchData = async () => {
-        const listProducto = await getData("producto");
-        setProducto(listProducto);
-        console.log(producto)
-        setQuantities(new Array(listProducto.length).fill(0));
-        setEstado(new Array(listProducto.length).fill(false));
+        const listPedido = await getData("pedido");
+        setProducto(listPedido)
+        //etQuantities(new Array(listPedido.length).fill(0));
+        setEstado(new Array(listPedido.length).fill(false));
     };
 
     useEffect(() => {
@@ -66,9 +65,6 @@ function Ordenes() {
     return (
         <>
             <View style={styles.header}>
-                <TouchableOpacity onPress={() => cambiarSubPestana('Pendiente')}>
-                    <Text>Pendientes</Text>
-                </TouchableOpacity>
                 <TouchableOpacity onPress={() => cambiarSubPestana('proceso')}>
                     <Text>En proceso</Text>
                 </TouchableOpacity>
@@ -78,50 +74,16 @@ function Ordenes() {
             </View>
             <View style={general.hr} />
             {/* Recorre los productos y renderiza cada uno */}
-            {producto.map((item, index) => (
-                item.estado == currentTab ? 
-                    <View key={index} style={general.ordenes}>
-                        <View>
-                            <Text>{item.nombreProducto}</Text>
-                            <Text>{item.estado}</Text>
-                        </View>
-                        <View style={{ flexDirection: 'row' }}>
-                            {currentTab == "Pendiente" ? 
-                                <Button title="Preparar" onPress={() => cambiarEstado(index)} />
-                                :
-                                null    
-                            }
 
-                            {estado[index] ?
-                                <Button title="Ordenar" onPress={() => updateEstado(item,"proceso", index)} />
-                                :
-                                null
-                            }
-
-                            {currentTab == "proceso" ? 
-                                <Button title="Completar" onPress={() => updateEstado(item,"completado", index)} />
-                                :
-                                null
-                            }
+            {producto.map((pedido, index) => (
+                <View key={index}>
+                    {pedido.pedido.map((producto, index) => (
+                        <View key={index}>
+                            <Text>{producto.nombreProducto}</Text>
                         </View>
-                        {estado[index] ?  
-                        <View style={general.containerPlusMinus}>
-                            <TouchableOpacity style={general.plusMinus} onPress={() => downQuantity(index)}>
-                                <Icon name="minus" size={15} color="black" />
-                            </TouchableOpacity>
-                            <View style={styles.containerIcon}>
-                                <Text style={styles.textFontIcon}>{quantities[index]}</Text>
-                            </View>
-                            <TouchableOpacity style={general.plusMinus} onPress={() => addQuantity(index)}> 
-                                <Icon name="plus" size={15} color="black" />
-                            </TouchableOpacity>
-                        </View>
-                        :
-                        null     
-                        }
-                    </View>
-                :
-                null
+                    ))}
+                    <Text>-----------------------------</Text>
+                </View>
             ))}
         </>
     );

@@ -21,7 +21,6 @@ function Detail({route}){
             <Text style={styles.productName}>{productDetail.nombreProducto}</Text>
             <Text style={styles.productPrice}>Precio: ${productDetail.price}</Text>
             <Text style={styles.productStock}>Stock: {productDetail.stock} unidades</Text>
-            <Text style={styles.productStatus}>Estado: {productDetail.estado}</Text>
             <Text style={styles.sectionTitle}>Ingredientes:</Text>
             <FlatList
                 data={productDetail.ingredients}
