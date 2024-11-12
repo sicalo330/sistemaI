@@ -3,7 +3,7 @@ import { FIRESTORE_DB } from "../firebase/firebase";
 import { collection, addDoc } from "firebase/firestore";
 import { Alert } from "react-native";
 
-const agregarPedido = async (item, tabla) => {
+const agregarPedido = async (item,tabla) => {
     try {
         await addDoc(collection(FIRESTORE_DB, tabla), {
             pedido:item,

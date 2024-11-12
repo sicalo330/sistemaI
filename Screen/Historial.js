@@ -1,26 +1,42 @@
 import React, { useEffect, useState } from "react";
-import { Text, View, StyleSheet } from "react-native";
+import { Text, View, StyleSheet, ScrollView } from "react-native";
 import getData from "../db/getData";
+import useObtenerPedido from "../hook/useObtenerPedido";
 
 function Historial() {
     const [producto, setProducto] = useState([]);
+    const [cantidadPedidoTotal, setCantidadPedidoTotal] = useState(0)
+    const [lista] = useObtenerPedido()
 
     useEffect(() => {
+        let pedidoTotal = 0
         async function fetchData() {
-            const listProducto = await getData("producto");
-            setProducto(listProducto);
+            const listPedido = await getData("pedido");
+            setProducto(listPedido);
+            listPedido.forEach((element) => {
+                element.pedido.forEach((pedido) => {
+                    let precioInt = parseInt(pedido.price);
+                    pedidoTotal += pedido.stock * precioInt
+                })
+                element.precioTotal = pedidoTotal
+            })
+            console.log(listPedido)
         }
         fetchData();
-    }, []);
+    }, [lista]);
 
     return (
         <View style={styles.mainContainer}>
-            {producto.map((item, index) => (
-                <View key={index} style={styles.container}>
-                    <Text style={styles.productName}>{item.nombreProducto}</Text>
-                    <Text style={styles.price}>${item.price}</Text>
-                </View>
-            ))}
+            <ScrollView>
+                {producto.map((item, index) => (
+                    item.pedido.map((pedido,index) => (
+                        <View key={index} style={styles.container}>
+                            <Text style={styles.productName}>{pedido.nombreProducto}</Text>
+                            <Text style={styles.price}>${item.precioTotal}</Text>
+                        </View>
+                    ))
+                ))}
+            </ScrollView>
         </View>
     );
 }

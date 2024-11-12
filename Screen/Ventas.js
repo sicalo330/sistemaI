@@ -11,6 +11,7 @@ function Ventas(){
     const [producto, setProducto] = useState([])
     const [pedido, setPedido] = useState([])
     const [precio, setPrecio] = useState(0)
+    const [precioPedido, setPrecioPedido] = useState(0)
     const [precioVendido, setPrecionVendido] = useState(0)
 
     const [lista] = useObtenerPedido() 
@@ -34,6 +35,7 @@ function Ventas(){
         async function loopPrecio() {
             let precioTotal = 0;
             let precioTotalVendido = 0;
+            let precioTotalPedido = 0
 
             producto.forEach((element) => {
                 let precioInt = parseInt(element.price);
@@ -41,11 +43,15 @@ function Ventas(){
             });
 
             pedido.forEach((element) => {
-                console.log("--------------")
-                console.log(element)
+                let pedido = element.pedido
+                pedido.forEach((element) => {
+                    let precioInt = parseInt(element.price);
+                    precioTotalPedido += precioInt * element.stock
+                })
             })
 
             setPrecio(precioTotal);
+            setPrecioPedido(precioTotalPedido)
             setPrecionVendido(precioTotalVendido);
         }
 
@@ -64,7 +70,7 @@ function Ventas(){
             <View style={styles.containerPrice}>
                 <View style={styles.inventarioContainer}>
                     <Text style={styles.title}>Ventas</Text>
-                    <Text style={titlePrice.titleMain}>${precioVendido}</Text>
+                    <Text style={titlePrice.titleMain}>${precioPedido}</Text>
                 </View>
             </View>
             <View style={styles.containerPrice}>

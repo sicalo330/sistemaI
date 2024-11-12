@@ -76,6 +76,7 @@ function Ordenes() {
         if (listaChecked.length <= 0) {
             return;
         }
+        let cantidadTotal = 0
     
         for (let index = 0; index < listaChecked.length; index++) {
             const item = listaChecked[index];
@@ -97,13 +98,15 @@ function Ordenes() {
                 //Qué pasa si carne tiene 40 en stock pero pido 50? Asegurarme de arreglar ese pequeño error de lógica
                 item.stock = quantities[index];
                 item.estado = nuevoEstado;
-    
+                
+                //Es necesario que esté debajo porque primero se debe hacer la transición del stock original al nuevo stock
+                cantidadTotal += item.stock
+                item.cantidadTotal = cantidadTotal
                 //Actualización del producto (se pueden habilitar las siguientes líneas según lo necesites)
                 await updateProducto('producto',item.id, { estado: nuevoEstado, stock: newStock });
                 await fetchData();
             }
         }
-    
         const elementosSeleccionados = listaChecked.filter(item => item !== 0);
         await agregarPedido(elementosSeleccionados, 'pedido'); // Llamada a agregarPedido si es necesario
     };
