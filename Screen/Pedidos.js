@@ -94,7 +94,7 @@ function Ordenes() {
                     Alert.alert("El producto ha sido agotado");
                     return;
                 }
-    
+                //Qué pasa si carne tiene 40 en stock pero pido 50? Asegurarme de arreglar ese pequeño error de lógica
                 item.stock = quantities[index];
                 item.estado = nuevoEstado;
     

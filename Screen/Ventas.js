@@ -5,14 +5,15 @@ import {titlePrice, linkContainer} from "../Style/style";
 import Icon from 'react-native-vector-icons/FontAwesome';
 import getData from "../db/getData";
 import { useNavigation } from "@react-navigation/native";
-import  useObtenerProducto  from "../hook/useObtenerProducto";
+import useObtenerPedido from "../hook/useObtenerPedido";
 
 function Ventas(){
     const [producto, setProducto] = useState([])
+    const [pedido, setPedido] = useState([])
     const [precio, setPrecio] = useState(0)
     const [precioVendido, setPrecionVendido] = useState(0)
 
-    const [lista] = useObtenerProducto () 
+    const [lista] = useObtenerPedido() 
     const navigation = useNavigation()
 
     useEffect(() => {
@@ -20,6 +21,12 @@ function Ventas(){
             const listProducto = await getData("producto");
             setProducto(listProducto);
         }
+
+        async function fetchPedidos() {
+            const listPedido = await getData('pedido')
+            setPedido(listPedido)
+        }
+        fetchPedidos()
         fetchData();
     }, [lista]);
 
@@ -29,14 +36,14 @@ function Ventas(){
             let precioTotalVendido = 0;
 
             producto.forEach((element) => {
-                if (element.estado === "Pendiente") {
-                    let precioInt = parseInt(element.price);
-                    precioTotal += precioInt;
-                } else {
-                    let precioIntVendido = parseInt(element.price);
-                    precioTotalVendido += precioIntVendido;
-                }
+                let precioInt = parseInt(element.price);
+                precioTotal += precioInt * element.stock;
             });
+
+            pedido.forEach((element) => {
+                console.log("--------------")
+                console.log(element)
+            })
 
             setPrecio(precioTotal);
             setPrecionVendido(precioTotalVendido);
