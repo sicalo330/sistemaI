@@ -4,13 +4,14 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import getData from "../db/getData";
 import updateProducto from "../db/updateProducto";
 import useObtenerPedido from "../hook/useObtenerPedido";
-import agregarProducto from "../db/agregarProducto";
+import LoadingScreen from "./LoadingScreen";
 
 function Ordenes() {
     const [producto, setProducto] = useState([]);
     const [estado, setEstado] = useState([]);
     const [currentTab, setCurrentTab] = useState('proceso');
     const [lista] = useObtenerPedido();
+    const [loading, setLoading] = useState(true); // Estado de carga
 
     const fetchData = async () => {
         const listPedido = await getData("pedido");
@@ -19,7 +20,7 @@ function Ordenes() {
     };
 
     useEffect(() => {
-        fetchData();
+        Promise.all([fetchData()]).then(() => setLoading(false));
     }, [lista]);
 
     const updateEstado = async (item, nuevoEstado) => {
@@ -30,6 +31,10 @@ function Ordenes() {
     const cambiarSubPestana = (pestana) => {
         setCurrentTab(pestana);
     };
+
+    if (loading){
+        return <LoadingScreen message="Cargando datos de ventas..." />; // Uso del componente reutilizable
+    }
 
     return (
         <View style={styles.container}>

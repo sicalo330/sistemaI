@@ -3,11 +3,13 @@ import { Text, View, StyleSheet, ScrollView, TouchableOpacity } from "react-nati
 import getData from "../db/getData";
 import useObtenerPedido from "../hook/useObtenerPedido";
 import { useNavigation } from "@react-navigation/native";
+import LoadingScreen from "./LoadingScreen";
 
 function Historial() {
     const navigation = useNavigation()
     const [producto, setProducto] = useState([]);
     const [lista] = useObtenerPedido();
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         async function fetchData() {
@@ -22,12 +24,16 @@ function Historial() {
             });
             setProducto(updatedPedidos);
         }
-        fetchData();
+        Promise.all([fetchData()]).then(() => setLoading(false));
     }, [lista]);
 
     const detailFactura = (factura) => {
         console.log("llendo a factura")
         navigation.navigate("DetailFactura", {factura:factura})
+    }
+
+    if (loading){
+        return <LoadingScreen message="Cargando datos de ventas..." />; // Uso del componente reutilizable
     }
 
     return (

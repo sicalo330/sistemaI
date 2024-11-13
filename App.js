@@ -74,7 +74,7 @@ function TabNavigator() {
 // Define los stacks individuales
 function VentasStack() {
   return (
-    <Stack.Navigator initialRouteName='Ventas'>
+    <Stack.Navigator initialRouteName="Ventas">
       <Stack.Screen name='Ventas' component={Ventas}></Stack.Screen>
       <Stack.Screen name='Historial' component={Historial}></Stack.Screen>
       <Stack.Screen name='DetailFactura' component={DetailFactura}></Stack.Screen>

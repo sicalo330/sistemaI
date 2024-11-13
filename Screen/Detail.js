@@ -1,19 +1,25 @@
 import React, { useEffect,useState } from "react";
 import { View, Text, Image, StyleSheet, FlatList } from "react-native";
 import getSingleData from "../db/getSingleData";
+import LoadingScreen from "./LoadingScreen";
 
 
 function Detail({route}){
     const { product } = route.params
     const [productDetail, setProductDetail] = useState([])
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         async function fetchData(){
             const listData = await getSingleData("producto", product.id)
             setProductDetail(listData)
         }
-        fetchData()
+        Promise.all([fetchData()]).then(() => setLoading(false));
     },[])
+
+    if (loading){
+        return <LoadingScreen message="Cargando datos de ventas..." />; // Uso del componente reutilizable
+    }    
 
     return(
         <View style={styles.container}>

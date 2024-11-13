@@ -1,21 +1,23 @@
-import React,{useEffect, useState} from "react";
-import { Text, TouchableOpacity, View } from "react-native";
+import React, { useEffect, useState } from "react";
+import { Text, TouchableOpacity, View,ActivityIndicator } from 'react-native';
 import { StyleSheet } from "react-native";
-import {titlePrice, linkContainer} from "../Style/style";
+import { titlePrice, linkContainer } from "../Style/style";
 import Icon from 'react-native-vector-icons/FontAwesome';
 import getData from "../db/getData";
 import { useNavigation } from "@react-navigation/native";
 import useObtenerPedido from "../hook/useObtenerPedido";
+import LoadingScreen from "./LoadingScreen";
 
-function Ventas(){
-    const [producto, setProducto] = useState([])
-    const [pedido, setPedido] = useState([])
-    const [precio, setPrecio] = useState(0)
-    const [precioPedido, setPrecioPedido] = useState(0)
-    const [precioVendido, setPrecionVendido] = useState(0)
+function Ventas() {
+    const [producto, setProducto] = useState([]);
+    const [pedido, setPedido] = useState([]);
+    const [precio, setPrecio] = useState(0);
+    const [precioPedido, setPrecioPedido] = useState(0);
+    const [precioVendido, setPrecioVendido] = useState(0);
+    const [loading, setLoading] = useState(true); // Estado de carga
 
-    const [lista] = useObtenerPedido() 
-    const navigation = useNavigation()
+    const [lista] = useObtenerPedido();
+    const navigation = useNavigation();
 
     useEffect(() => {
         async function fetchData() {
@@ -24,18 +26,19 @@ function Ventas(){
         }
 
         async function fetchPedidos() {
-            const listPedido = await getData('pedido')
-            setPedido(listPedido)
+            const listPedido = await getData('pedido');
+            setPedido(listPedido);
         }
-        fetchPedidos()
-        fetchData();
+
+        // Llamamos ambas funciones y luego apagamos el indicador de carga
+        Promise.all([fetchData(), fetchPedidos()]).then(() => setLoading(false));
     }, [lista]);
 
     useEffect(() => {
-        async function loopPrecio() {
+        function loopPrecio() {
             let precioTotal = 0;
             let precioTotalVendido = 0;
-            let precioTotalPedido = 0
+            let precioTotalPedido = 0;
 
             producto.forEach((element) => {
                 let precioInt = parseInt(element.price);
@@ -43,16 +46,16 @@ function Ventas(){
             });
 
             pedido.forEach((element) => {
-                let pedido = element.pedido
-                pedido.forEach((element) => {
-                    let precioInt = parseInt(element.price);
-                    precioTotalPedido += precioInt * element.stock
-                })
-            })
+                let pedidos = element.pedido;
+                pedidos.forEach((item) => {
+                    let precioInt = parseInt(item.price);
+                    precioTotalPedido += precioInt * item.stock;
+                });
+            });
 
             setPrecio(precioTotal);
-            setPrecioPedido(precioTotalPedido)
-            setPrecionVendido(precioTotalVendido);
+            setPrecioPedido(precioTotalPedido);
+            setPrecioVendido(precioTotalVendido);
         }
 
         if (producto.length > 0) {
@@ -61,11 +64,16 @@ function Ventas(){
     }, [producto]);
 
     const navegarHistorial = () => {
-        navigation.navigate("Historial")
-    }
-    
+        navigation.navigate("Historial");
+    };
 
-    return(
+    // Mostrar pantalla de carga mientras `loading` esté en `true`
+    if (loading){
+        return <LoadingScreen message="Cargando datos de ventas..." />; // Uso del componente reutilizable
+    }
+
+    // Renderizar contenido principal cuando `loading` sea `false`
+    return (
         <>
             <View style={styles.containerPrice}>
                 <View style={styles.inventarioContainer}>
@@ -89,33 +97,38 @@ function Ventas(){
                 </View>
             </TouchableOpacity>
         </>
-    )
+    );
 }
 
 const styles = StyleSheet.create({
     containerPrice: {
-        marginTop:10,
-        justifyContent:'center',
-        justifyContent:'space-around',
-        flexDirection:'row'
+        marginTop: 10,
+        justifyContent: 'center',
+        flexDirection: 'row',
     },
-    inventarioContainer:{
-        justifyContent:'center',
-        width:385,
-        height:100,
-        backgroundColor:'#ddd',
-        borderRadius:10
+    inventarioContainer: {
+        justifyContent: 'center',
+        width: 385,
+        height: 100,
+        backgroundColor: '#ddd',
+        borderRadius: 10,
     },
-    title:{
-        fontSize:15,
-        textAlign:'left',
-        marginLeft:10,
-        color:'#66624f'
+    title: {
+        fontSize: 15,
+        textAlign: 'left',
+        marginLeft: 10,
+        color: '#66624f',
     },
-    iconContainer:{
-        alignContent:'center',
-        alignSelf:'center'
-    }
-  });
+    iconContainer: {
+        alignContent: 'center',
+        alignSelf: 'center',
+    },
+    loadingContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: '#f5f5f5',
+    },
+});
 
-export default Ventas
+export default Ventas;

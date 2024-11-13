@@ -6,6 +6,7 @@ import {general} from './../Style/style'
 import agregarProducto from '../db/agregarProducto';
 import getIngrediente from '../db/getData';
 import { useNavigation } from '@react-navigation/native';
+import LoadingScreen from './LoadingScreen';
 
 function FormularioProducto() {
 const [nombreProducto, setNombreProducto] = useState('');
@@ -14,6 +15,7 @@ const [price, setPrice] = useState(0)
 const [stock, setStock] = useState(0)
 const [dropdowns, setDropdowns] = useState([{ id: 1, selectedValue: '' }]);
 const [options, setOption] = useState([])
+const [loading, setLoading] = useState(true);
 
 const navigation = useNavigation()
 
@@ -23,7 +25,7 @@ const fetchData = async () => {
 };
 
 useEffect(() => {
-    fetchData();
+  Promise.all([fetchData()]).then(() => setLoading(false));
   }, []);
 
 
@@ -60,8 +62,11 @@ useEffect(() => {
     data.ingredients = ingredients;
     await agregarProducto(data,'producto')
     navigation.navigate("Inventario")
-};
+  };
 
+  if (loading){
+    return <LoadingScreen message="Cargando datos de ventas..." />; // Uso del componente reutilizable
+  }
 
   return (
     <SafeAreaView style={styles.containerForm}>

@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Text, View, Image, StyleSheet, FlatList,TouchableOpacity, Button } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import { collection, getDocs } from "firebase/firestore";   
-import { FIRESTORE_DB } from '../firebase/firebase';
-import getIngrediente from "../db/getData";
+import LoadingScreen from "./LoadingScreen";
 import getData from "../db/getData";
 import useObtenerGastos from "../hook/useObtenerProducto";
 
@@ -14,13 +12,15 @@ function Inventario() {
 
   const navigation = useNavigation()
   const [lista] = useObtenerGastos()
+  const [loading, setLoading] = useState(true);
+
 
   useEffect(() => {
-    async function fetchData(params) {
+    async function fetchData() {
       const listData = await getData("producto")
       setInventario(listData)
     }
-    fetchData()
+    Promise.all([fetchData()]).then(() => setLoading(false));
   },[lista])
 
   const agregar = () => {
@@ -30,6 +30,10 @@ function Inventario() {
   const handlePress = (item) => {
     navigation.navigate('Detail',{product:item})
   };
+
+  if (loading){
+    return <LoadingScreen message="Cargando datos de ventas..." />; // Uso del componente reutilizable
+  }
 
   const renderItem = ({ item }) => (
     <TouchableOpacity style={styles.itemContainer} onPress={() => handlePress(item)}>
@@ -42,7 +46,7 @@ function Inventario() {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Inventario de Platillos</Text>
-      <Button title="Agregar orden" onPress={agregar} />
+      <Button title="Agregar producto" onPress={agregar} />
       <FlatList
         data={inventarios}
         renderItem={renderItem}

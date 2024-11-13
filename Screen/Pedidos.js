@@ -9,6 +9,7 @@ import useObtenerGastos from "../hook/useObtenerProducto";
 import { CheckBox } from "react-native-web";
 import agregarProducto from "../db/agregarProducto";
 import agregarPedido from "../db/agregarPedido";
+import LoadingScreen from "./LoadingScreen";
 
 function Ordenes() {
     const [producto, setProducto] = useState([]);
@@ -17,6 +18,7 @@ function Ordenes() {
     const [currentTab, setCurrentTab] = useState('Pendiente')
     const [listaProducto, setListaProducto] = useState([])
     const [listaChecked, setListaChecked] = useState([])
+    const [loading, setLoading] = useState(true); // Estado de carga
 
     const [lista] = useObtenerGastos();
 
@@ -30,7 +32,7 @@ function Ordenes() {
     };
 
     useEffect(() => {
-        fetchData();
+        Promise.all([fetchData()]).then(() => setLoading(false));
     }, [lista]);
 
     const addQuantity = (index) => {
@@ -112,8 +114,12 @@ function Ordenes() {
     };
     
 
-    const actualizarEstado = (item) => {
-        setListaProducto(item)
+    // const actualizarEstado = (item) => {
+    //     setListaProducto(item)
+    // }
+
+    if (loading){
+        return <LoadingScreen message="Cargando datos de ventas..." />; // Uso del componente reutilizable
     }
 
     return (
