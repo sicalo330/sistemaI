@@ -128,8 +128,7 @@ function Ordenes() {
             {producto.map((item, index) => (
                     <View key={index} style={general.ordenes}>
                         <View style={styles.checkboxContainer}>
-                                <Text>{item.nombreProducto}</Text>
-                                <Text>{item.estado}</Text>
+                                <Text>{item.nombreProducto.length > 20 ? item.nombreProducto.substring(0, 20) + "..." : item.nombreProducto}</Text>
                         </View>
                         <View style={styles.containerProcess}>
                             {currentTab == "Pendiente" ? 
@@ -137,12 +136,6 @@ function Ordenes() {
                                 :
                                 null    
                             }
-
-                            {/* {estado[index] ?
-                                <Button title="Ordenar" onPress={() => updateEstado("proceso", index)} />
-                                :
-                                null
-                            } */}
 
                             {currentTab == "proceso" ? 
                                 <Button title="Completar" onPress={() => updateEstado(item,"completado", index)} />
@@ -179,7 +172,7 @@ const styles = StyleSheet.create({
         alignSelf: 'center'
     },
     checkboxContainer:{
-        width:100
+        width:150
     },
     containerProcess:{
         flexDirection:'row'
@@ -188,7 +181,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row', 
         justifyContent: 'center', 
         justifyContent: 'space-evenly' 
-    }
+    },
 });
 
 export default Ordenes;

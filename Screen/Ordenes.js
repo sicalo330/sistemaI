@@ -57,6 +57,15 @@ function Ordenes() {
                 >
                     <Text style={styles.tabText}>Completados</Text>
                 </TouchableOpacity>
+                <TouchableOpacity
+                    style={[
+                        styles.tab,
+                        currentTab === 'cancelado' && styles.activeTab,
+                    ]}
+                    onPress={() => cambiarSubPestana('cancelado')}
+                >
+                    <Text style={styles.tabText}>Cancelados</Text>
+                </TouchableOpacity>
             </View>
 
             <ScrollView style={styles.scrollView}>
@@ -72,15 +81,24 @@ function Ordenes() {
                                 </View>
                             ))}
                             <View style={styles.divider} />
-                            <View style={styles.buttonContainer}>
+                            <View>
                                 {currentTab === "proceso" && (
-                                    <TouchableOpacity
-                                        style={styles.completarButton}
-                                        onPress={() => updateEstado(pedido, "completado")}
-                                    >
-                                        <Icon name="check" size={16} color="#fff" />
-                                        <Text style={styles.completarButtonText}>Completar</Text>
-                                    </TouchableOpacity>
+                                    <View style={styles.buttonContainer}>
+                                        <TouchableOpacity
+                                            style={styles.completarButton}
+                                            onPress={() => updateEstado(pedido, "completado")}
+                                        >
+                                            <Icon name="check" size={16} color="#000000" />
+                                            <Text style={styles.completarButtonText}>Completar</Text>
+                                        </TouchableOpacity>
+                                        <TouchableOpacity 
+                                            style={styles.cancelarButton} 
+                                            onPress={() => updateEstado(pedido,"cancelado")}
+                                        >
+                                            <Icon name="trash" size={16} color="#000000" />
+                                            <Text style={styles.completarButtonText}>Cancelar</Text>
+                                        </TouchableOpacity>
+                                    </View>
                                 )}
                             </View>
                         </View>
@@ -148,6 +166,8 @@ const styles = StyleSheet.create({
     buttonContainer: {
         alignItems: "center",
         marginTop: 8,
+        flexDirection:'row',
+        justifyContent:'space-evenly'
     },
     completarButton: {
         flexDirection: "row",
@@ -157,8 +177,16 @@ const styles = StyleSheet.create({
         paddingVertical: 8,
         borderRadius: 5,
     },
+    cancelarButton: {
+        flexDirection: "row",
+        alignItems: "center",
+        backgroundColor: "red",
+        paddingHorizontal: 12,
+        paddingVertical: 8,
+        borderRadius: 5,
+    },
     completarButtonText: {
-        color: "#fff",
+        color: "#000000",
         marginLeft: 5,
     },
 });

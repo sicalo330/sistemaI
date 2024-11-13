@@ -1,33 +1,32 @@
 import React, { useState, useEffect } from 'react';
-import {Text,SafeAreaView,TextInput,Button,StyleSheet,View,TouchableOpacity} from 'react-native';
-import {Picker} from '@react-native-picker/picker';
+import { Text,SafeAreaView,TextInput,Button,StyleSheet,View,TouchableOpacity} from 'react-native';
+import { Picker } from '@react-native-picker/picker';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import {general} from './../Style/style'
+import { general } from './../Style/style';
 import agregarProducto from '../db/agregarProducto';
 import getIngrediente from '../db/getData';
 import { useNavigation } from '@react-navigation/native';
 import LoadingScreen from './LoadingScreen';
 
 function FormularioProducto() {
-const [nombreProducto, setNombreProducto] = useState('');
-const [url, setUrl] = useState('');
-const [price, setPrice] = useState(0)
-const [stock, setStock] = useState(0)
-const [dropdowns, setDropdowns] = useState([{ id: 1, selectedValue: '' }]);
-const [options, setOption] = useState([])
-const [loading, setLoading] = useState(true);
+  const [nombreProducto, setNombreProducto] = useState('');
+  const [url, setUrl] = useState('');
+  const [price, setPrice] = useState(0);
+  const [stock, setStock] = useState(0);
+  const [dropdowns, setDropdowns] = useState([{ id: 1, selectedValue: '' }]);
+  const [options, setOption] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-const navigation = useNavigation()
+  const navigation = useNavigation();
 
-const fetchData = async () => {
-  const ingredientList = await getIngrediente("Ingrediente")
-  setOption(ingredientList)
-};
+  const fetchData = async () => {
+    const ingredientList = await getIngrediente('Ingrediente');
+    setOption(ingredientList);
+  };
 
-useEffect(() => {
-  Promise.all([fetchData()]).then(() => setLoading(false));
+  useEffect(() => {
+    Promise.all([fetchData()]).then(() => setLoading(false));
   }, []);
-
 
   const addDropdown = () => {
     const newDropdown = { id: dropdowns.length + 1, selectedValue: '' };
@@ -39,7 +38,6 @@ useEffect(() => {
       setDropdowns((prevDropdowns) => prevDropdowns.slice(0, -1));
     }
   };
-  
 
   const updateDropdownValue = (id, value) => {
     const updatedDropdowns = dropdowns.map((dropdown) =>
@@ -49,22 +47,43 @@ useEffect(() => {
   };
 
   const crearProducto = async () => {
+    if (!nombreProducto.trim()) {
+      alert('El nombre del producto no puede estar vacío.');
+      return;
+    }
+    if (!/^https?:\/\/.+/.test(url)) {
+      alert('La URL no es válida. Debe empezar con http:// o https://');
+      return;
+    }
+    if (isNaN(price) || price <= 0) {
+      alert('El precio debe ser un número mayor a 0.');
+      return;
+    }
+    if (isNaN(stock) || stock <= 0) {
+      alert('El stock debe ser un número mayor o igual a 0.');
+      return;
+    }
+    if (dropdowns.some((dropdown) => !dropdown.selectedValue)) {
+      alert('Todos los ingredientes deben estar seleccionados.');
+      return;
+    }
+
     let ingredients = [];
     let data = {
-        nombreProducto: nombreProducto,
-        urlProducto: url,
-        price:price,
-        stock:stock
+      nombreProducto: nombreProducto,
+      urlProducto: url,
+      price: price,
+      stock: stock,
     };
-    dropdowns.forEach(element => {
-        ingredients.push({ "ingredient": element.selectedValue });
+    dropdowns.forEach((element) => {
+      ingredients.push({ ingredient: element.selectedValue });
     });
     data.ingredients = ingredients;
-    await agregarProducto(data,'producto')
-    navigation.navigate("Inventario")
+    // await agregarProducto(data, 'producto');
+    // navigation.navigate('Inventario', { productoCreado: true });
   };
 
-  if (loading){
+  if (loading) {
     return <LoadingScreen message="Cargando datos de ventas..." />; // Uso del componente reutilizable
   }
 
@@ -73,59 +92,59 @@ useEffect(() => {
       <View>
         <Text style={styles.h1}>Formulario para agregar productos</Text>
         <TextInput
-            onChangeText={setNombreProducto}
-            value={nombreProducto}
-            placeholder="Nombre del producto"
-            style={styles.inputContainer}
+          onChangeText={setNombreProducto}
+          value={nombreProducto}
+          placeholder="Nombre del producto"
+          style={styles.inputContainer}
         />
         <TextInput
-            onChangeText={setUrl}
-            value={url}
-            placeholder="URL del producto"
-            style={styles.inputContainer}
+          onChangeText={setUrl}
+          value={url}
+          placeholder="URL del producto"
+          style={styles.inputContainer}
         />
         <TextInput
-            onChangeText={setPrice}
-            value={price}
-            placeholder="Precio del producto"
-            keyboardType='numeric'
-            style={styles.inputContainer}
+          onChangeText={setPrice}
+          value={price}
+          placeholder="Precio del producto"
+          keyboardType="numeric"
+          style={styles.inputContainer}
         />
         <TextInput
-            onChangeText={setStock}
-            value={stock}
-            placeholder="Cantidad de existencia del producto"
-            keyboardType='numeric'
-            style={styles.inputContainer}
+          onChangeText={setStock}
+          value={stock}
+          placeholder="Cantidad de existencia del producto"
+          keyboardType="numeric"
+          style={styles.inputContainer}
         />
         <View>
-            <Text>Selecciona los ingredientes</Text>
-            <View style={styles.containerPlusMinus}>
-                <TouchableOpacity style={general.plusMinus} onPress={addDropdown}> 
-                        <Icon name="plus" size={15} color="black" />
-                </TouchableOpacity>
-                <TouchableOpacity style={general.plusMinus} onPress={deleteDropDown}> 
-                        <Icon name="minus" size={15} color="black" />
-                </TouchableOpacity>
+          <Text>Selecciona los ingredientes</Text>
+          <View style={styles.containerPlusMinus}>
+            <TouchableOpacity style={general.plusMinus} onPress={addDropdown}>
+              <Icon name="plus" size={15} color="black" />
+            </TouchableOpacity>
+            <TouchableOpacity style={general.plusMinus} onPress={deleteDropDown}>
+              <Icon name="minus" size={15} color="black" />
+            </TouchableOpacity>
+          </View>
+          {dropdowns.map((dropdown) => (
+            <View key={dropdown.id} style={styles.row}>
+              <Picker
+                selectedValue={dropdown.selectedValue}
+                style={styles.picker}
+                onValueChange={(value) => updateDropdownValue(dropdown.id, value)}
+              >
+                <Picker.Item label="Selecciona un valor" value="" />
+                {options.map((option) => (
+                  <Picker.Item
+                    key={option.id}
+                    label={option.nombre}
+                    value={option.nombre}
+                  />
+                ))}
+              </Picker>
             </View>
-            {dropdowns.map((dropdown) => (
-                <View key={dropdown.id} style={styles.row}>
-                    <Picker
-                        selectedValue={dropdown.selectedValue}
-                        style={styles.picker}
-                        onValueChange={(value) => updateDropdownValue(dropdown.id, value)}
-                    >
-                        <Picker.Item label="Selecciona un valor" value="" />
-                        {options.map((option) => (
-                        <Picker.Item
-                            key={option.id}
-                            label={option.nombre}
-                            value={option.nombre}
-                        />
-                        ))}
-                    </Picker>
-                </View>
-            ))}
+          ))}
         </View>
 
         <Button title="Agregar" onPress={crearProducto} />
@@ -153,9 +172,9 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     borderRadius: 5,
   },
-  containerPlusMinus:{
-    flexDirection:'row'
-  }
+  containerPlusMinus: {
+    flexDirection: 'row',
+  },
 });
 
 export default FormularioProducto;
