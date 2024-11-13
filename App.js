@@ -19,6 +19,7 @@ import FormularioProducto from './Screen/FormularioProducto.js';
 import Historial from './Screen/Historial.js';
 import Detail from './Screen/Detail.js';
 import Pedidos from './Screen/Pedidos.js';
+import DetailFactura from './Screen/DetailFactura.js';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -76,6 +77,7 @@ function VentasStack() {
     <Stack.Navigator initialRouteName='Ventas'>
       <Stack.Screen name='Ventas' component={Ventas}></Stack.Screen>
       <Stack.Screen name='Historial' component={Historial}></Stack.Screen>
+      <Stack.Screen name='DetailFactura' component={DetailFactura}></Stack.Screen>
     </Stack.Navigator>
   );
 }

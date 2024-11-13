@@ -1,40 +1,44 @@
 import React, { useEffect, useState } from "react";
-import { Text, View, StyleSheet, ScrollView } from "react-native";
+import { Text, View, StyleSheet, ScrollView, TouchableOpacity } from "react-native";
 import getData from "../db/getData";
 import useObtenerPedido from "../hook/useObtenerPedido";
+import { useNavigation } from "@react-navigation/native";
 
 function Historial() {
+    const navigation = useNavigation()
     const [producto, setProducto] = useState([]);
-    const [cantidadPedidoTotal, setCantidadPedidoTotal] = useState(0)
-    const [lista] = useObtenerPedido()
+    const [lista] = useObtenerPedido();
 
     useEffect(() => {
-        let pedidoTotal = 0
         async function fetchData() {
             const listPedido = await getData("pedido");
-            setProducto(listPedido);
-            listPedido.forEach((element) => {
+            const updatedPedidos = listPedido.map((element) => {
+                let pedidoTotal = 0;
                 element.pedido.forEach((pedido) => {
                     let precioInt = parseInt(pedido.price);
-                    pedidoTotal += pedido.stock * precioInt
-                })
-                element.precioTotal = pedidoTotal
-            })
-            console.log(listPedido)
+                    pedidoTotal += pedido.stock * precioInt;
+                });
+                return { ...element, precioTotal: pedidoTotal };
+            });
+            setProducto(updatedPedidos);
         }
         fetchData();
     }, [lista]);
+
+    const detailFactura = (factura) => {
+        console.log("llendo a factura")
+        navigation.navigate("DetailFactura", {factura:factura})
+    }
 
     return (
         <View style={styles.mainContainer}>
             <ScrollView>
                 {producto.map((item, index) => (
-                    item.pedido.map((pedido,index) => (
-                        <View key={index} style={styles.container}>
-                            <Text style={styles.productName}>{pedido.nombreProducto}</Text>
-                            <Text style={styles.price}>${item.precioTotal}</Text>
-                        </View>
-                    ))
+                    <TouchableOpacity key={index} style={styles.container} onPress={() => detailFactura(item)}>
+                        <Text style={styles.productName}>Pedido #{index + 1}</Text>
+                        <Text style={styles.productId}>ID: {item.id.slice(0, 5)}</Text>
+                        <Text style={styles.price}>Total: ${item.precioTotal}</Text>
+                    </TouchableOpacity>
                 ))}
             </ScrollView>
         </View>
@@ -45,7 +49,7 @@ const styles = StyleSheet.create({
     mainContainer: {
         flex: 1,
         padding: 20,
-        backgroundColor: '#F5F5F5', // Fondo suave y neutro
+        backgroundColor: '#F5F5F5',
     },
     container: {
         flexDirection: 'row',
@@ -54,7 +58,7 @@ const styles = StyleSheet.create({
         paddingVertical: 10,
         paddingHorizontal: 15,
         marginVertical: 5,
-        backgroundColor: '#FFFFFF', // Fondo blanco para destacar
+        backgroundColor: '#FFFFFF',
         borderRadius: 8,
         shadowColor: "#000",
         shadowOpacity: 0.1,
