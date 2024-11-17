@@ -14,7 +14,12 @@ function Historial() {
     useEffect(() => {
         async function fetchData() {
             const listPedido = await getData("pedido");
-            const updatedPedidos = listPedido.map((element) => {
+    
+            // Filtrar los pedidos cuyo estado sea 'completado'
+            const filteredPedidos = listPedido.filter((element) => element.estado === 'completado');
+    
+            // Calcular el precio total de cada pedido
+            const updatedPedidos = filteredPedidos.map((element) => {
                 let pedidoTotal = 0;
                 element.pedido.forEach((pedido) => {
                     let precioInt = parseInt(pedido.price);
@@ -22,10 +27,14 @@ function Historial() {
                 });
                 return { ...element, precioTotal: pedidoTotal };
             });
-            setProducto(updatedPedidos);
+    
+            setProducto(updatedPedidos); // Actualizar el estado con los pedidos filtrados
         }
+    
         Promise.all([fetchData()]).then(() => setLoading(false));
     }, [lista]);
+    
+    
 
     const detailFactura = (factura) => {
         console.log("llendo a factura")
