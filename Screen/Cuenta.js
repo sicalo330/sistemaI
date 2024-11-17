@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import { Text, View, Image, StyleSheet, TouchableOpacity } from "react-native";
-import { useNavigation } from '@react-navigation/native'; // Importar useNavigation
+import { useNavigation } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 export default function Cuenta() {
-  const navigation = useNavigation(); // Hook para acceder a la navegación
+  const navigation = useNavigation();
 
   const [URL, setURL] = useState([
     {

@@ -5,6 +5,7 @@ import getData from "../db/getData";
 import updateProducto from "../db/updateProducto";
 import useObtenerPedido from "../hook/useObtenerPedido";
 import LoadingScreen from "./LoadingScreen";
+import { useNavigation } from "@react-navigation/native";
 
 function Ordenes() {
     const [producto, setProducto] = useState([]);
@@ -12,6 +13,7 @@ function Ordenes() {
     const [currentTab, setCurrentTab] = useState('proceso');
     const [lista] = useObtenerPedido();
     const [loading, setLoading] = useState(true); // Estado de carga
+    const navigation = useNavigation();
 
     const fetchData = async () => {
         const listPedido = await getData("pedido");
@@ -31,6 +33,10 @@ function Ordenes() {
     const cambiarSubPestana = (pestana) => {
         setCurrentTab(pestana);
     };
+
+    const enviarFormulario = (pedido) => {
+        navigation.navigate('FormularioActualizacionPedido',{pedido:pedido})
+    }
 
     if (loading){
         return <LoadingScreen message="Cargando datos de ventas..." />; // Uso del componente reutilizable
@@ -90,6 +96,13 @@ function Ordenes() {
                                         >
                                             <Icon name="check" size={16} color="#000000" />
                                             <Text style={styles.completarButtonText}>Completar</Text>
+                                        </TouchableOpacity>
+                                        <TouchableOpacity 
+                                            style={styles.editarButton} 
+                                            onPress={() => enviarFormulario(pedido)}
+                                        >
+                                            <Icon name="pencil" size={16} color="#000000" />
+                                            <Text style={styles.completarButtonText}>Editar</Text>
                                         </TouchableOpacity>
                                         <TouchableOpacity 
                                             style={styles.cancelarButton} 
@@ -181,6 +194,14 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         alignItems: "center",
         backgroundColor: "red",
+        paddingHorizontal: 12,
+        paddingVertical: 8,
+        borderRadius: 5,
+    },
+    editarButton: {
+        flexDirection: "row",
+        alignItems: "center",
+        backgroundColor: "#fce700",
         paddingHorizontal: 12,
         paddingVertical: 8,
         borderRadius: 5,

@@ -11,7 +11,7 @@ import agregarProducto from "../db/agregarProducto";
 import agregarPedido from "../db/agregarPedido";
 import LoadingScreen from "./LoadingScreen";
 
-function Ordenes() {
+function Pedidos() {
     const [producto, setProducto] = useState([]);
     const [quantities, setQuantities] = useState([]);
     const [estado, setEstado] = useState([]);
@@ -184,4 +184,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default Ordenes;
+export default Pedidos;

@@ -20,6 +20,7 @@ import Historial from './Screen/Historial.js';
 import Detail from './Screen/Detail.js';
 import Pedidos from './Screen/Pedidos.js';
 import DetailFactura from './Screen/DetailFactura.js';
+import FormularioActualizacionPedido from './Screen/FormularioActualizacionPedido.js';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -86,6 +87,7 @@ function OrdenesStack() {
   return (
     <Stack.Navigator initialRouteName='Ordenes'>
       <Stack.Screen name='Ordenes' component={Ordenes}></Stack.Screen>
+      <Stack.Screen name='FormularioActualizacionPedido' component={FormularioActualizacionPedido}></Stack.Screen>
     </Stack.Navigator>
   );
 }
