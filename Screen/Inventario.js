@@ -4,6 +4,7 @@ import { useNavigation } from "@react-navigation/native";
 import LoadingScreen from "./LoadingScreen";
 import getData from "../db/getData";
 import useObtenerGastos from "../hook/useObtenerProducto";
+import { FormattedMessage } from "react-intl";
 
 // Datos simulados de inventario
 
@@ -45,8 +46,10 @@ function Inventario() {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Inventario de Platillos</Text>
-      <Button title="Agregar producto" onPress={agregar} />
+      <Text style={styles.title}><FormattedMessage id="inventario_platillos" /></Text>
+      <TouchableOpacity onPress={agregar}>
+        <Text><FormattedMessage id="boton" /></Text>
+      </TouchableOpacity>
       <FlatList
         data={inventarios}
         renderItem={renderItem}

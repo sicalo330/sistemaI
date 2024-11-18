@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from "react";
-import {Text,TextInput,SafeAreaView,StyleSheet,View,TouchableOpacity,FlatList,Button} from "react-native";
+import {Text,SafeAreaView,StyleSheet,View,TouchableOpacity,FlatList,Button} from "react-native";
 import { Picker } from "@react-native-picker/picker";
 import getData from "../db/getData";
-import {general} from './../Style/style'
-import { Icon } from "react-native-paper";
 import updateProducto from "../db/updateProducto";
 import { useNavigation } from "@react-navigation/native";
 
@@ -23,7 +21,6 @@ function FormularioActualizacionPedido({ route }) {
           const listData = await getData("producto");
           setListProducto(listData);
           setOriginalStock(listData.map((p) => ({ id: p.id, stock: p.stock })));
-      
           // Guardar una copia de los productos originales en el pedido
           setProductosOriginales(pedido.pedido);
         }

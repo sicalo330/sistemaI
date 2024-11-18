@@ -4,6 +4,7 @@ import getData from "../db/getData";
 import useObtenerPedido from "../hook/useObtenerPedido";
 import { useNavigation } from "@react-navigation/native";
 import LoadingScreen from "./LoadingScreen";
+import { FormattedMessage, useIntl } from 'react-intl';
 
 function Historial() {
     const navigation = useNavigation()
@@ -50,7 +51,7 @@ function Historial() {
             <ScrollView>
                 {producto.map((item, index) => (
                     <TouchableOpacity key={index} style={styles.container} onPress={() => detailFactura(item)}>
-                        <Text style={styles.productName}>Pedido #{index + 1}</Text>
+                        <Text style={styles.productName}><FormattedMessage id="pedido" /> #{index + 1}</Text>
                         <Text style={styles.productId}>ID: {item.id.slice(0, 5)}</Text>
                         <Text style={styles.price}>Total: ${item.precioTotal}</Text>
                     </TouchableOpacity>

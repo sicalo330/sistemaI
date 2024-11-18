@@ -7,6 +7,7 @@ import getData from "../db/getData";
 import { useNavigation } from "@react-navigation/native";
 import useObtenerPedido from "../hook/useObtenerPedido";
 import LoadingScreen from "./LoadingScreen";
+import { FormattedMessage, useIntl } from 'react-intl';
 
 function Ventas() {
     const [producto, setProducto] = useState([]);
@@ -16,6 +17,7 @@ function Ventas() {
     const [precioVendido, setPrecioVendido] = useState(0);
     const [loading, setLoading] = useState(true); // Estado de carga
 
+    const intl = useIntl();
     const [lista] = useObtenerPedido();
     const navigation = useNavigation();
 
@@ -77,20 +79,24 @@ function Ventas() {
         <>
             <View style={styles.containerPrice}>
                 <View style={styles.inventarioContainer}>
-                    <Text style={styles.title}>Ventas</Text>
+                    <Text style={styles.title}>
+                        <FormattedMessage id="ventas_encabezado_ventas" />
+                    </Text>
                     <Text style={titlePrice.titleMain}>${precioPedido}</Text>
                 </View>
             </View>
             <View style={styles.containerPrice}>
                 <View style={styles.inventarioContainer}>
-                    <Text style={styles.title}>Inventario</Text>
+                    <Text style={styles.title}>
+                        <FormattedMessage id="ventas_encabezado_inventario" />
+                    </Text>
                     <Text style={titlePrice.titleMain}>${precio}</Text>
                 </View>
             </View>
             <TouchableOpacity style={linkContainer.linkArrow} onPress={navegarHistorial}>
                 <View>
-                    <Text>Ver ventas</Text>
-                    <Text>Revisar todas las transacciones</Text>
+                    <Text><FormattedMessage id="verVentas" /></Text>
+                    <Text><FormattedMessage id="revisar" /></Text>
                 </View>
                 <View style={styles.iconContainer}>
                     <Icon name="arrow-right" size={25} color="black" />

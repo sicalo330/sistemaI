@@ -1,0 +1,22 @@
+{
+    "ventas_encabezado_ventas":"Ventas",
+    "ventas_encabezado_inventario":"Inventario",
+    "verVentas": "Ver ventas",
+    "revisar": "Revisar todas las transacciones",
+    "pedido": "pedido",
+    "enProceso": "En proceso",
+    "completados": "Completados",
+    "cancelados": "Cancelados",
+    "cantidad":"Cantidad",
+    "completar": "Completar",
+    "editar": "Editar",
+    "cancelar": "Cancelar",
+    "inventario_platillos": "Inventario de platillos",
+    "boton": "Agregar producto",
+    "preparar": "Preparar",
+    "datos": "Token data",
+    "servicios":"Términos y servicios",
+    "seguridad":"Seguridad",
+    "cambiar_idioma":"Cambiar lenguaje",
+    "seleccionar":"Seleccione el idioma para la aplicación"
+}

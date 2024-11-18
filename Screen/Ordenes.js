@@ -6,6 +6,7 @@ import updateProducto from "../db/updateProducto";
 import useObtenerPedido from "../hook/useObtenerPedido";
 import LoadingScreen from "./LoadingScreen";
 import { useNavigation } from "@react-navigation/native";
+import { FormattedMessage } from "react-intl";
 
 function Ordenes() {
     const [producto, setProducto] = useState([]);
@@ -52,7 +53,7 @@ function Ordenes() {
                     ]}
                     onPress={() => cambiarSubPestana('proceso')}
                 >
-                    <Text style={styles.tabText}>En proceso</Text>
+                    <Text style={styles.tabText}><FormattedMessage id="enProceso" /></Text>
                 </TouchableOpacity>
                 <TouchableOpacity
                     style={[
@@ -61,7 +62,7 @@ function Ordenes() {
                     ]}
                     onPress={() => cambiarSubPestana('completado')}
                 >
-                    <Text style={styles.tabText}>Completados</Text>
+                    <Text style={styles.tabText}><FormattedMessage id="completados" /></Text>
                 </TouchableOpacity>
                 <TouchableOpacity
                     style={[
@@ -70,7 +71,7 @@ function Ordenes() {
                     ]}
                     onPress={() => cambiarSubPestana('cancelado')}
                 >
-                    <Text style={styles.tabText}>Cancelados</Text>
+                    <Text style={styles.tabText}><FormattedMessage id="cancelados" /></Text>
                 </TouchableOpacity>
             </View>
 
@@ -83,7 +84,7 @@ function Ordenes() {
                                     <Text style={styles.productText}>
                                         {producto.nombreProducto}
                                     </Text>
-                                    <Text style={styles.productText}>Cantidad: {producto.stock}</Text>
+                                    <Text style={styles.productText}><FormattedMessage id="cantidad" />: {producto.stock}</Text>
                                 </View>
                             ))}
                             <View style={styles.divider} />
@@ -95,21 +96,21 @@ function Ordenes() {
                                             onPress={() => updateEstado(pedido, "completado")}
                                         >
                                             <Icon name="check" size={16} color="#000000" />
-                                            <Text style={styles.completarButtonText}>Completar</Text>
+                                            <Text style={styles.completarButtonText}><FormattedMessage id="completar" /></Text>
                                         </TouchableOpacity>
                                         <TouchableOpacity 
                                             style={styles.editarButton} 
                                             onPress={() => enviarFormulario(pedido)}
                                         >
                                             <Icon name="pencil" size={16} color="#000000" />
-                                            <Text style={styles.completarButtonText}>Editar</Text>
+                                            <Text style={styles.completarButtonText}><FormattedMessage id="editar" /></Text>
                                         </TouchableOpacity>
                                         <TouchableOpacity 
                                             style={styles.cancelarButton} 
                                             onPress={() => updateEstado(pedido,"cancelado")}
                                         >
                                             <Icon name="trash" size={16} color="#000000" />
-                                            <Text style={styles.completarButtonText}>Cancelar</Text>
+                                            <Text style={styles.completarButtonText}><FormattedMessage id="cancelar" /></Text>
                                         </TouchableOpacity>
                                     </View>
                                 )}

@@ -1,0 +1,23 @@
+{
+    "ventas_encabezado_ventas":"Sales",
+    "ventas_encabezado_inventario":"Inventory",
+    "verVentas": "View sales",
+    "revisar": "Review all transactions",
+    "pedido": "Order",
+    "total": "Total",
+    "enProceso": "In progress",
+    "completados": "Completed",
+    "cancelados": "Canceled",
+    "cantidad":"Quantity",
+    "completar": "Complete",
+    "editar": "Edit",
+    "cancelar": "Cancel",
+    "inventario_platillos": "Dish inventory",
+    "boton": "Add product",
+    "preparar": "Prepare",
+    "datos": "Data token",
+    "servicios":"Cookies",
+    "seguridad":"Security",
+    "cambiar_idioma":"Change language",
+    "seleccionar":"Select the language for the application"
+}

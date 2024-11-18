@@ -1,4 +1,4 @@
-import React,{useContext} from 'react';
+import React,{useContext,useState} from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -21,6 +21,19 @@ import Detail from './Screen/Detail.js';
 import Pedidos from './Screen/Pedidos.js';
 import DetailFactura from './Screen/DetailFactura.js';
 import FormularioActualizacionPedido from './Screen/FormularioActualizacionPedido.js';
+import CambiarIdioma from './Screen/CambiarIdioma.js';
+
+
+//Lenguajes
+import enMessages from './translations/en/globalEn.json';
+import esMessages from './translations/es/globalEs.json';
+import { IntlProvider } from 'react-intl';
+import { LanguageProvider,useLanguage } from './Screen/LanguageProvider.js';
+
+const messages = {
+  en: enMessages,
+  es: esMessages,
+};
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -105,6 +118,7 @@ function CuentaStack() {
     <Stack.Navigator initialRouteName='Cuenta'>
       <Stack.Screen name='Cuenta' component={Cuenta}></Stack.Screen>
       <Stack.Screen name='Configuration' component={Configuration}></Stack.Screen>
+      <Stack.Screen name='CambiarIdioma' component={CambiarIdioma}></Stack.Screen>
     </Stack.Navigator>
   );
 }
@@ -143,9 +157,22 @@ function AppContent() {
 
 export default function App() {
   return (
+    <LanguageProvider>
+      <LanguageApp />
+    </LanguageProvider>
+  );
+}
+
+// Desglosar la lógica dentro de un componente que está dentro del contexto
+function LanguageApp() {
+  const { locale } = useLanguage(); // Ahora puedes usar el hook porque está dentro del contexto
+
+  return (
+    <IntlProvider locale={locale} messages={messages[locale]}>
       <AuthContextProvider>
-          <AppContent />
+        <AppContent />
       </AuthContextProvider>
+    </IntlProvider>
   );
 }
 const styles = StyleSheet.create({

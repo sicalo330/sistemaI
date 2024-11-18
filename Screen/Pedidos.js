@@ -10,6 +10,7 @@ import { CheckBox } from "react-native-web";
 import agregarProducto from "../db/agregarProducto";
 import agregarPedido from "../db/agregarPedido";
 import LoadingScreen from "./LoadingScreen";
+import { FormattedMessage } from "react-intl";
 
 function Pedidos() {
     const [producto, setProducto] = useState([]);
@@ -76,9 +77,9 @@ function Pedidos() {
     
     const updateEstado = async (nuevoEstado) => {
         if (listaChecked.length <= 0) {
+            Alert.alert("No hay nada seleccionado")
             return;
         }
-        let cantidadTotal = 0
     
         for (let index = 0; index < listaChecked.length; index++) {
             const item = listaChecked[index];
@@ -124,7 +125,9 @@ function Pedidos() {
 
     return (
         <>
-            <Button title="Enviar" onPress={() => {updateEstado("proceso")}}/>
+            <TouchableOpacity onPress={() => {updateEstado("proceso")}}>
+                <Text><FormattedMessage id="boton" /></Text>
+            </TouchableOpacity>
             {producto.map((item, index) => (
                     <View key={index} style={general.ordenes}>
                         <View style={styles.checkboxContainer}>
@@ -132,7 +135,9 @@ function Pedidos() {
                         </View>
                         <View style={styles.containerProcess}>
                             {currentTab == "Pendiente" ? 
-                                <Button title="Preparar" onPress={() => cambiarEstado(index, item)} />
+                                <TouchableOpacity onPress={() => cambiarEstado(index, item)}>
+                                    <Text><FormattedMessage id="preparar" /></Text>
+                                </TouchableOpacity>
                                 :
                                 null    
                             }

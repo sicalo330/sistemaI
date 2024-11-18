@@ -1,20 +1,26 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
-import { useNavigation } from '@react-navigation/native'; 
+import { useNavigation } from '@react-navigation/native';
+import { FormattedMessage } from 'react-intl';
 
 
 function Configuration() {
+  const navigation = useNavigation()
+
+  const cambiarIdioma = () => {
+    navigation.navigate("CambiarIdioma")
+  }
 
   return (
     <View>
       <TouchableOpacity>
-        <Text style={styles.optionItem}>Términos de Servicio</Text>
+        <Text style={styles.optionItem}><FormattedMessage id="servicios" /></Text>
       </TouchableOpacity>
       <TouchableOpacity>
-        <Text style={styles.optionItem}>Seguridad</Text>
+        <Text style={styles.optionItem}><FormattedMessage id="seguridad" /></Text>
       </TouchableOpacity>
-      <TouchableOpacity>
-        <Text style={styles.optionItem}>Cambiar tema</Text>{/*El plan sería poner muchos temas*/}
+      <TouchableOpacity onPress={cambiarIdioma}>
+        <Text style={styles.optionItem}><FormattedMessage id="cambiar_idioma" /></Text>{/*El plan sería poner muchos temas*/}
       </TouchableOpacity>
     </View>
   );
