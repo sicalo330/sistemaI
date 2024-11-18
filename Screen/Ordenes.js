@@ -10,6 +10,7 @@ import { FormattedMessage } from "react-intl";
 
 function Ordenes() {
     const [producto, setProducto] = useState([]);
+    const [productoOriginal, setProductoOriginal] = useState([]);
     const [estado, setEstado] = useState([]);
     const [currentTab, setCurrentTab] = useState('proceso');
     const [lista] = useObtenerPedido();
@@ -19,6 +20,8 @@ function Ordenes() {
     const fetchData = async () => {
         const listPedido = await getData("pedido");
         setProducto(listPedido);
+        const listProducto = await getData("producto")
+        setProductoOriginal(listProducto)
         setEstado(new Array(listPedido.length).fill(false));
     };
 
@@ -27,9 +30,22 @@ function Ordenes() {
     }, [lista]);
 
     const updateEstado = async (item, nuevoEstado) => {
+        if (nuevoEstado === "cancelado") {
+            // Itera sobre el array "pedido" de "item"
+            for (let i = 0; i < item.pedido.length; i++) {
+                // Compara cada id del pedido con los ids de productoOriginal
+                for (let j = 0; j < productoOriginal.length; j++) {
+                    if (item.pedido[i].id === productoOriginal[j].id) {
+                        let recuperacion = productoOriginal[j].stock + item.pedido[i].stock;
+                        updateProducto("producto",productoOriginal[j].id,{stock:recuperacion})
+                    }
+                }
+            }
+        }
+        // Lógica para otros estados
         await updateProducto('pedido', item.id, { estado: nuevoEstado });
         await fetchData();
-    };
+    };    
 
     const cambiarSubPestana = (pestana) => {
         setCurrentTab(pestana);

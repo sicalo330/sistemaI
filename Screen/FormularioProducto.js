@@ -7,6 +7,7 @@ import agregarProducto from '../db/agregarProducto';
 import getIngrediente from '../db/getData';
 import { useNavigation } from '@react-navigation/native';
 import LoadingScreen from './LoadingScreen';
+import { FormattedMessage } from 'react-intl';
 
 function FormularioProducto() {
   const [nombreProducto, setNombreProducto] = useState('');
@@ -79,8 +80,8 @@ function FormularioProducto() {
       ingredients.push({ ingredient: element.selectedValue });
     });
     data.ingredients = ingredients;
-    // await agregarProducto(data, 'producto');
-    // navigation.navigate('Inventario', { productoCreado: true });
+    await agregarProducto(data, 'producto');
+    navigation.navigate('Inventario', { productoCreado: true });
   };
 
   if (loading) {
@@ -90,7 +91,7 @@ function FormularioProducto() {
   return (
     <SafeAreaView style={styles.containerForm}>
       <View>
-        <Text style={styles.h1}>Formulario para agregar productos</Text>
+        <Text style={styles.h1}><FormattedMessage id='formularioAgregarProducto' /></Text>
         <TextInput
           onChangeText={setNombreProducto}
           value={nombreProducto}
@@ -118,7 +119,7 @@ function FormularioProducto() {
           style={styles.inputContainer}
         />
         <View>
-          <Text>Selecciona los ingredientes</Text>
+          <Text><FormattedMessage id='Selecciona_ingredientes' /></Text>
           <View style={styles.containerPlusMinus}>
             <TouchableOpacity style={general.plusMinus} onPress={addDropdown}>
               <Icon name="plus" size={15} color="black" />
@@ -147,7 +148,9 @@ function FormularioProducto() {
           ))}
         </View>
 
-        <Button title="Agregar" onPress={crearProducto} />
+        <TouchableOpacity onPress={crearProducto} style={styles.button}>
+          <Text style={styles.buttonText}><FormattedMessage id='boton' /></Text>
+        </TouchableOpacity>
       </View>
     </SafeAreaView>
   );
@@ -155,26 +158,67 @@ function FormularioProducto() {
 
 const styles = StyleSheet.create({
   h1: {
-    fontSize: 20,
+    fontSize: 22,
     textAlign: 'center',
-    color: '#66624f',
+    color: '#FF6F00', // Naranja vibrante para el título
     marginBottom: 20,
+    fontWeight: 'bold',
   },
   containerForm: {
     flex: 1,
     justifyContent: 'center',
     paddingHorizontal: 20,
+    backgroundColor: '#F4F4F4', // Fondo gris claro
   },
   inputContainer: {
-    borderColor: '#ccc',
+    borderColor: '#E0E0E0', // Borde gris claro
     borderWidth: 1,
     padding: 10,
     marginBottom: 10,
     borderRadius: 5,
+    backgroundColor: '#FFFFFF', // Fondo blanco para los inputs
   },
   containerPlusMinus: {
     flexDirection: 'row',
+    justifyContent: 'center',
+    marginVertical: 10,
+  },
+  row: {
+    marginVertical: 10,
+  },
+  picker: {
+    borderColor: '#E0E0E0', // Borde gris claro
+    borderWidth: 1,
+    borderRadius: 5,
+    backgroundColor: '#FFFFFF', // Fondo blanco
+    padding: 5,
+  },
+  plusMinus: {
+    borderRadius: 25,
+    width: 40,
+    height: 40,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginHorizontal: 5,
+    backgroundColor: '#FF6F00', // Naranja para los botones de + y -
+    shadowColor: '#000',
+    shadowOpacity: 0.1,
+    shadowOffset: { width: 0, height: 2 },
+    shadowRadius: 4,
+  },
+  button: {
+    marginTop: 20,
+    backgroundColor: 'orange', // Fondo naranja para el botón
+    borderRadius: 5,
+    paddingVertical: 10,
+  },
+  buttonText: {
+    color: '#FFFFFF', // Texto blanco
+    textAlign: 'center',
+    fontSize: 16,
+    fontWeight: 'bold',
   },
 });
+
 
 export default FormularioProducto;

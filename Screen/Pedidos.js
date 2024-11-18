@@ -76,10 +76,16 @@ function Pedidos() {
     
     
     const updateEstado = async (nuevoEstado) => {
-        if (listaChecked.length <= 0) {
-            Alert.alert("No hay nada seleccionado")
+        setLoading(true)
+        const pedidosSeleccionados = listaChecked.filter((item, index) => item !== 0 && quantities[index] > 0);
+
+        if (pedidosSeleccionados.length === 0) {
+            Alert.alert("Error", "No hay productos válidos seleccionados.");
+            setLoading(false);
             return;
         }
+
+        let cantidadTotal = 0
     
         for (let index = 0; index < listaChecked.length; index++) {
             const item = listaChecked[index];
@@ -112,6 +118,7 @@ function Pedidos() {
         }
         const elementosSeleccionados = listaChecked.filter(item => item !== 0);
         await agregarPedido(elementosSeleccionados, 'pedido'); // Llamada a agregarPedido si es necesario
+        setLoading(false)
     };
     
 
@@ -125,68 +132,233 @@ function Pedidos() {
 
     return (
         <>
-            <TouchableOpacity onPress={() => {updateEstado("proceso")}}>
-                <Text><FormattedMessage id="boton" /></Text>
+            <TouchableOpacity 
+                onPress={() => { updateEstado("proceso") }} 
+                style={{ 
+                    backgroundColor: 'orange', 
+                    padding: 10, 
+                    borderRadius: 5, 
+                    alignItems: 'center',
+                    marginVertical: 10 
+                }}
+            >
+                <Text style={{ color: 'black', fontSize: 16, fontWeight: 'bold' }}>
+                    <FormattedMessage id="boton" />
+                </Text>
             </TouchableOpacity>
+    
             {producto.map((item, index) => (
-                    <View key={index} style={general.ordenes}>
-                        <View style={styles.checkboxContainer}>
-                                <Text>{item.nombreProducto.length > 20 ? item.nombreProducto.substring(0, 20) + "..." : item.nombreProducto}</Text>
-                        </View>
-                        <View style={styles.containerProcess}>
-                            {currentTab == "Pendiente" ? 
-                                <TouchableOpacity onPress={() => cambiarEstado(index, item)}>
-                                    <Text><FormattedMessage id="preparar" /></Text>
-                                </TouchableOpacity>
-                                :
-                                null    
-                            }
-
-                            {currentTab == "proceso" ? 
-                                <Button title="Completar" onPress={() => updateEstado(item,"completado", index)} />
-                                :
-                                null
-                            }
-                        </View>
-                        {estado[index] ?  
-                        <View style={general.containerPlusMinus}>
-                            <TouchableOpacity style={general.plusMinus} onPress={() => downQuantity(index)}>
-                                <Icon name="minus" size={15} color="black" />
-                            </TouchableOpacity>
-                            <View style={styles.containerIcon}>
-                                <Text style={styles.textFontIcon}>{quantities[index]}</Text>
-                            </View>
-                            <TouchableOpacity style={general.plusMinus} onPress={() => addQuantity(index)}> 
-                                <Icon name="plus" size={15} color="black" />
-                            </TouchableOpacity>
-                        </View>
-                        :
-                        null     
-                        }
+                <View 
+                    key={index} 
+                    style={{ 
+                        flexDirection: 'row', 
+                        alignItems: 'center', 
+                        justifyContent: 'space-between', 
+                        backgroundColor: '#FFFFFF', 
+                        padding: 15, 
+                        marginBottom: 10, 
+                        borderRadius: 10, 
+                        shadowColor: '#000', 
+                        shadowOpacity: 0.1, 
+                        shadowOffset: { width: 0, height: 2 }, 
+                        shadowRadius: 4, 
+                        borderWidth: 1, 
+                        borderColor: '#E0E0E0' 
+                    }}
+                >
+                    <View style={{ width: 150 }}>
+                        <Text style={{ color: '#424242', fontSize: 14, fontWeight: 'bold' }}>
+                            {item.nombreProducto.length > 20 
+                                ? item.nombreProducto.substring(0, 20) + "..." 
+                                : item.nombreProducto}
+                        </Text>
                     </View>
+    
+                    <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', padding: 10 }}>
+                        {currentTab === "Pendiente" ? (
+                            <TouchableOpacity 
+                                onPress={() => cambiarEstado(index, item)} 
+                                style={{ 
+                                    backgroundColor: 'orange', 
+                                    paddingVertical: 5, 
+                                    paddingHorizontal: 10, 
+                                    borderRadius: 5, 
+                                    alignItems: 'center',
+                                    justifyContent: 'center' 
+                                }}
+                            >
+                                <Text style={{ color: 'black', fontSize: 12, fontWeight: 'bold', marginTop: 3 }}>
+                                    <FormattedMessage id="preparar" />
+                                </Text>
+                            </TouchableOpacity>
+                        ) : null}
+    
+                        {currentTab === "proceso" ? (
+                            <Button 
+                                title="Completar" 
+                                onPress={() => updateEstado(item, "completado", index)} 
+                                color="#FF6F00"
+                            />
+                        ) : null}
+                    </View>
+    
+                    {estado[index] && (
+                        <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-around', padding: 5, backgroundColor: '#F4F4F4', borderRadius: 5 }}>
+                            <TouchableOpacity 
+                                onPress={() => downQuantity(index)} 
+                                style={{ 
+                                    width: 30, 
+                                    height: 30, 
+                                    justifyContent: 'center', 
+                                    alignItems: 'center', 
+                                    backgroundColor: '#FFFFFF', 
+                                    borderWidth: 1, 
+                                    borderColor: '#FF6F00', 
+                                    borderRadius: 5 
+                                }}
+                            >
+                                <Icon name="minus" size={15} color="#FF6F00" />
+                            </TouchableOpacity>
+    
+                            <View 
+                                style={{ 
+                                    alignSelf: 'center', 
+                                    backgroundColor: '#F4F4F4', 
+                                    borderRadius: 5, 
+                                    padding: 5, 
+                                    borderWidth: 1, 
+                                    borderColor: '#E0E0E0' 
+                                }}
+                            >
+                                <Text style={{ fontSize: 20, fontWeight: 'bold', color: '#424242' }}>
+                                    {quantities[index]}
+                                </Text>
+                            </View>
+    
+                            <TouchableOpacity 
+                                onPress={() => addQuantity(index)} 
+                                style={{ 
+                                    width: 30, 
+                                    height: 30, 
+                                    justifyContent: 'center', 
+                                    alignItems: 'center', 
+                                    backgroundColor: '#FFFFFF', 
+                                    borderWidth: 1, 
+                                    borderColor: 'orange', 
+                                    borderRadius: 5 
+                                }}
+                            >
+                                <Icon name="plus" size={15} color="#FF6F00" />
+                            </TouchableOpacity>
+                        </View>
+                    )}
+                </View>
             ))}
         </>
     );
+    
 }
 
 const styles = StyleSheet.create({
     textFontIcon: {
-        fontSize: 20
+        fontSize: 20,
+        fontWeight: 'bold',
+        color: '#424242', // Gris oscuro para el texto
     },
     containerIcon: {
-        alignSelf: 'center'
+        alignSelf: 'center',
+        backgroundColor: '#F4F4F4', // Fondo gris claro
+        borderRadius: 5,
+        padding: 5,
+        borderWidth: 1,
+        borderColor: '#E0E0E0', // Borde gris claro
     },
-    checkboxContainer:{
-        width:150
+    checkboxContainer: {
+        width: 150,
+        backgroundColor: '#FFFFFF', // Fondo blanco
+        borderRadius: 5,
+        padding: 10,
+        marginBottom: 10,
+        shadowColor: '#000',
+        shadowOpacity: 0.1,
+        shadowOffset: { width: 0, height: 2 },
+        shadowRadius: 4,
+        borderWidth: 1,
+        borderColor: '#E0E0E0', // Gris claro
     },
-    containerProcess:{
-        flexDirection:'row'
+    containerProcess: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        padding: 10,
     },
-    header:{
-        flexDirection: 'row', 
-        justifyContent: 'center', 
-        justifyContent: 'space-evenly' 
+    header: {
+        flexDirection: 'row',
+        justifyContent: 'space-evenly',
+        paddingVertical: 10,
+        backgroundColor: 'orange', // Naranja vibrante
+        borderBottomLeftRadius: 10,
+        borderBottomRightRadius: 10,
+    },
+    headerText: {
+        fontSize: 18,
+        color: '#FFFFFF', // Texto blanco
+        fontWeight: 'bold',
+    },
+    ordenes: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        backgroundColor: '#FFFFFF', // Fondo blanco para las tarjetas de pedidos
+        padding: 15,
+        marginBottom: 10,
+        borderRadius: 10,
+        shadowColor: '#000',
+        shadowOpacity: 0.1,
+        shadowOffset: { width: 0, height: 2 },
+        shadowRadius: 4,
+        borderWidth: 1,
+        borderColor: '#E0E0E0', // Gris claro
+    },
+    containerPlusMinus: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-around',
+        backgroundColor: 'orange', // Fondo naranja para los botones de cantidad
+        padding: 5,
+        borderRadius: 5,
+    },
+    plusMinus: {
+        width: 30,
+        height: 30,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: '#FFFFFF', // Botón blanco con borde naranja
+        borderWidth: 1,
+        borderColor: '#FF6F00',
+        borderRadius: 5,
+    },
+    plusMinusText: {
+        color: 'orange', // Texto naranja
+        fontSize: 16,
+        fontWeight: 'bold',
+    },
+    prepararButton: {
+        backgroundColor: 'orange', // Fondo naranja para el botón de preparar
+        paddingVertical: 5,
+        paddingHorizontal: 10,
+        borderRadius: 5,
+        shadowColor: '#000',
+        shadowOpacity: 0.1,
+        shadowOffset: { width: 0, height: 2 },
+        shadowRadius: 4,
+    },
+    prepararButtonText: {
+        color: '#FFFFFF', // Texto blanco
+        fontSize: 14,
+        fontWeight: 'bold',
     },
 });
+
 
 export default Pedidos;

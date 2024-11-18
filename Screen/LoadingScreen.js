@@ -1,11 +1,10 @@
 import React from 'react';
 import { View, Text, ActivityIndicator, StyleSheet } from 'react-native';
 
-const LoadingScreen = ({ message = "Cargando datos..." }) => {
+function LoadingScreen(){
     return (
         <View style={styles.loadingContainer}>
             <ActivityIndicator size="large" color="#FFA726" />
-            <Text>{message}</Text>
         </View>
     );
 };

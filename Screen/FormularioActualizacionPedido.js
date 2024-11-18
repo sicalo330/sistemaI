@@ -4,6 +4,7 @@ import { Picker } from "@react-native-picker/picker";
 import getData from "../db/getData";
 import updateProducto from "../db/updateProducto";
 import { useNavigation } from "@react-navigation/native";
+import { Icon } from "react-native-paper";
 
 function FormularioActualizacionPedido({ route }) {
     const navigation = useNavigation()
@@ -34,8 +35,6 @@ function FormularioActualizacionPedido({ route }) {
   };
 
   const calcularAjustesStock = (productosOriginales, productosActuales) => {
-    console.log(productosOriginales)
-    console.log(productosActuales)
     const ajustes = [];
   
     productosActuales.forEach((productoActual) => {
@@ -167,6 +166,7 @@ function FormularioActualizacionPedido({ route }) {
                 )
                 )
             }
+            color="orange"
             />
             <Button
             title="-"
@@ -179,70 +179,92 @@ function FormularioActualizacionPedido({ route }) {
                 )
                 )
             }
+            color="orange"
             />
-            <Button title="Eliminar" onPress={() => handleRemoveProduct(item.id)} />
+            <Button title="Eliminar" onPress={() => handleRemoveProduct(item.id)} color="orange" />
             </View>
             </View>
         )}
     />
-      <TouchableOpacity style={styles.saveButton} onPress={updatePedido}>
-        <Text style={styles.saveButtonText}>Guardar Cambios</Text>
-      </TouchableOpacity>
-    </SafeAreaView>
+    <TouchableOpacity style={styles.saveButton} onPress={updatePedido}>
+      <Text style={styles.saveButtonText}>Guardar Cambios</Text>
+    </TouchableOpacity>
+    </SafeAreaView> 
   );
 }
 
 const styles = StyleSheet.create({
   h1: {
-    fontSize: 20,
+    fontSize: 22,
     textAlign: "center",
-    color: "#66624f",
+    color: "orange", // Naranja para destacar el título
     marginBottom: 20,
+    fontWeight: "bold",
   },
   containerForm: {
     flex: 1,
-    justifyContent: "center",
     paddingHorizontal: 20,
+    backgroundColor: "#F4F4F4", // Fondo gris claro
   },
   picker: {
     height: 50,
     marginBottom: 20,
-  },
-  inputContainer: {
-    borderColor: "#ccc",
+    backgroundColor: "#FFFFFF", // Fondo blanco para el selector
+    borderColor: "#E0E0E0", // Borde gris claro
     borderWidth: 1,
-    padding: 10,
-    marginBottom: 10,
-    borderRadius: 5,
-  },
-  input: {
-    borderColor: "#ccc",
-    borderWidth: 1,
-    padding: 10,
-    marginBottom: 10,
     borderRadius: 5,
   },
   productContainer: {
-    padding: 10,
+    padding: 15,
     marginBottom: 10,
-    backgroundColor: "#f9f9f9",
-    borderRadius: 5,
+    backgroundColor: "#FFFFFF", // Fondo blanco para los productos
+    borderRadius: 10,
+    shadowColor: "#000",
+    shadowOpacity: 0.1,
+    shadowOffset: { width: 0, height: 2 },
+    shadowRadius: 4,
+    borderWidth: 1,
+    borderColor: "#E0E0E0", // Gris claro
   },
   containerPlusMinus: {
     flexDirection: "row",
-    justifyContent: "space-between",
+    justifyContent: "space-around",
+    alignItems: "center",
     marginTop: 10,
   },
   saveButton: {
-    backgroundColor: "#4CAF50",
+    backgroundColor: "orange", // Botón naranja
     padding: 15,
     borderRadius: 5,
     alignItems: "center",
+    shadowColor: "#000",
+    shadowOpacity: 0.2,
+    shadowOffset: { width: 0, height: 2 },
+    shadowRadius: 4,
   },
   saveButtonText: {
-    color: "#fff",
+    color: "#FFFFFF", // Texto blanco
     fontSize: 16,
+    fontWeight: "bold",
   },
+  button: {
+    padding: 10,
+    borderRadius: 5,
+    color: "orange", // Fondo naranja
+    marginHorizontal: 5,
+  },
+  buttonText: {
+    color: "#FFFFFF", // Texto blanco
+    fontWeight: "bold",
+    textAlign: "center",
+  },
+  row: {
+    marginVertical: 10,
+  },
+  butonPlusMinus:{
+    color:'black',
+  }
 });
+
 
 export default FormularioActualizacionPedido;

@@ -41,29 +41,34 @@ function Ventas() {
             let precioTotal = 0;
             let precioTotalVendido = 0;
             let precioTotalPedido = 0;
-
+    
+            // Calcular el precio total de los productos en inventario
             producto.forEach((element) => {
                 let precioInt = parseInt(element.price);
                 precioTotal += precioInt * element.stock;
             });
-
+    
+            // Calcular el precio total de los pedidos activos
             pedido.forEach((element) => {
-                let pedidos = element.pedido;
-                pedidos.forEach((item) => {
-                    let precioInt = parseInt(item.price);
-                    precioTotalPedido += precioInt * item.stock;
-                });
+                if (element.estado !== "cancelado") { // Filtrar pedidos cancelados
+                    let pedidos = element.pedido;
+                    pedidos.forEach((item) => {
+                        let precioInt = parseInt(item.price);
+                        precioTotalPedido += precioInt * item.stock;
+                    });
+                }
             });
-
+    
             setPrecio(precioTotal);
             setPrecioPedido(precioTotalPedido);
             setPrecioVendido(precioTotalVendido);
         }
-
-        if (producto.length > 0) {
+    
+        if (producto.length > 0 && pedido.length > 0) {
             loopPrecio();
         }
-    }, [producto]);
+    }, [producto, pedido]);
+    
 
     const navegarHistorial = () => {
         navigation.navigate("Historial");

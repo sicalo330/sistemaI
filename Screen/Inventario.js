@@ -47,7 +47,7 @@ function Inventario() {
   return (
     <View style={styles.container}>
       <Text style={styles.title}><FormattedMessage id="inventario_platillos" /></Text>
-      <TouchableOpacity onPress={agregar}>
+      <TouchableOpacity onPress={agregar} style={styles.botonAgregar}>
         <Text><FormattedMessage id="boton" /></Text>
       </TouchableOpacity>
       <FlatList
@@ -59,19 +59,18 @@ function Inventario() {
   );
 }
 
-export default Inventario;
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
+    backgroundColor: '#F4F4F4', // Fondo gris claro para un aspecto limpio
   },
   title: {
     fontSize: 24,
     fontWeight: 'bold',
     marginBottom: 20,
     textAlign: 'center',
-    color:'#66624f'
+    color: 'orange', // Naranja vibrante para destacar el título
   },
   itemContainer: {
     flexDirection: 'row',
@@ -79,20 +78,40 @@ const styles = StyleSheet.create({
     padding: 15,
     marginBottom: 10,
     borderRadius: 10,
+    backgroundColor: '#FFFFFF', // Fondo blanco para contraste
+    borderWidth: 1,
+    borderColor: '#E0E0E0', // Borde gris claro
     shadowColor: '#000',
-    shadowOpacity: 0.2,
+    shadowOpacity: 0.1,
     shadowOffset: { width: 0, height: 2 },
-    shadowRadius: 5,
+    shadowRadius: 4,
   },
   imagen: {
     width: 50,
     height: 50,
     borderRadius: 25,
     marginRight: 15,
+    borderWidth: 1,
+    borderColor: '#FF6F00', // Borde naranja para un detalle llamativo
   },
   nombre: {
     fontSize: 18,
     fontWeight: 'bold',
-    color:'#66624f'
+    color: '#424242', // Gris oscuro para el texto
+  },
+  botonAgregar: {
+    alignSelf: 'center',
+    backgroundColor: 'orange', // Botón naranja
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 20,
+    marginBottom: 20,
+  },
+  botonTexto: {
+    color: '#FFFFFF', // Texto blanco para el botón
+    fontSize: 16,
+    fontWeight: 'bold',
   },
 });
+
+export default Inventario;

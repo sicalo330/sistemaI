@@ -18,5 +18,7 @@
     "servicios":"Términos y servicios",
     "seguridad":"Seguridad",
     "cambiar_idioma":"Cambiar lenguaje",
-    "seleccionar":"Seleccione el idioma para la aplicación"
+    "seleccionar":"Seleccione el idioma para la aplicación",
+    "formularioAgregarProducto":"Formulario para agregar productos",
+    "Selecciona_ingredientes":"Selecciona los ingredientes"
 }

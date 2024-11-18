@@ -19,5 +19,7 @@
     "servicios":"Cookies",
     "seguridad":"Security",
     "cambiar_idioma":"Change language",
-    "seleccionar":"Select the language for the application"
+    "seleccionar":"Select the language for the application",
+    "formularioAgregarProducto":"Form to add product",
+    "Selecciona_ingredientes":"Select the ingredients"
 }
