@@ -49,6 +49,7 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: "#f4f6f7",
     padding: 10,
+    paddingTop:40
   },
   headerContainer: {
     flexDirection: 'row', // Alinea los hijos en fila

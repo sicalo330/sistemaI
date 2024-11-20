@@ -64,6 +64,7 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 20,
     backgroundColor: '#F4F4F4', // Fondo gris claro para un aspecto limpio
+    paddingTop:50
   },
   title: {
     fontSize: 24,

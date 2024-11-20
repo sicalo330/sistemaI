@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Text, TouchableOpacity, View, StyleSheet, Button, Alert,ScrollView } from "react-native";
+import { Text, TouchableOpacity, View, StyleSheet, Button, Alert,SafeAreaView } from "react-native";
 import BouncyCheckbox from "react-native-bouncy-checkbox";
 import { general } from '../Style/style';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -131,7 +131,7 @@ function Pedidos() {
     }
 
     return (
-        <>
+        <SafeAreaView style={styles.screenGeneral}>
             <TouchableOpacity 
                 onPress={() => { updateEstado("proceso") }} 
                 style={{ 
@@ -254,7 +254,7 @@ function Pedidos() {
                     )}
                 </View>
             ))}
-        </>
+        </SafeAreaView>
     );
     
 }
@@ -358,6 +358,9 @@ const styles = StyleSheet.create({
         fontSize: 14,
         fontWeight: 'bold',
     },
+    screenGeneral:{
+        paddingTop:40
+    }
 });
 
 

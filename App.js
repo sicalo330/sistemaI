@@ -105,7 +105,7 @@ function TabNavigator() {
       name="Pedidos"
       component={PedidosStack}
       options={{
-        tabBarLabel: intl.formatMessage({ id: 'tabs.orders', defaultMessage: 'Pedidos' }),
+        tabBarLabel: intl.formatMessage({ id: 'tabs.ask', defaultMessage: 'Pedidos' }),
       }}
     />
     <Tab.Screen

@@ -26,5 +26,6 @@
     "tabs.orders": "Orders",
     "tabs.inventory": "inventory",
     "tabs.deliveries": "deliveries",
-    "tabs.account": "account"
+    "tabs.account": "account",
+    "tabs.ask":"Ask"
 }

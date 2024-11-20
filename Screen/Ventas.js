@@ -8,6 +8,7 @@ import { useNavigation } from "@react-navigation/native";
 import useObtenerPedido from "../hook/useObtenerPedido";
 import LoadingScreen from "./LoadingScreen";
 import { FormattedMessage, useIntl } from 'react-intl';
+import { SafeAreaView } from "react-native-safe-area-context";
 
 function Ventas() {
     const [producto, setProducto] = useState([]);
@@ -81,7 +82,7 @@ function Ventas() {
 
     // Renderizar contenido principal cuando `loading` sea `false`
     return (
-        <>
+        <SafeAreaView style={styles.screenGeneral}>
             <View style={styles.containerPrice}>
                 <View style={styles.inventarioContainer}>
                     <Text style={styles.title}>
@@ -107,7 +108,7 @@ function Ventas() {
                     <Icon name="arrow-right" size={25} color="black" />
                 </View>
             </TouchableOpacity>
-        </>
+        </SafeAreaView>
     );
 }
 
@@ -140,6 +141,9 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         backgroundColor: '#f5f5f5',
     },
+    screenGeneral:{
+        paddingTop:10
+    }
 });
 
 export default Ventas;
