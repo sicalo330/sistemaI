@@ -3,7 +3,7 @@ import { Text, View, Image, StyleSheet, FlatList,TouchableOpacity, Button } from
 import { useNavigation } from "@react-navigation/native";
 import LoadingScreen from "./LoadingScreen";
 import getData from "../db/getData";
-import useObtenerGastos from "../hook/useObtenerProducto";
+import useObtenerDatos from "../hook/useObtenerDatos";
 import { FormattedMessage } from "react-intl";
 
 // Datos simulados de inventario
@@ -12,7 +12,7 @@ function Inventario() {
   const [inventarios, setInventario] = useState([]);
 
   const navigation = useNavigation()
-  const [lista] = useObtenerGastos()
+  const [lista] = useObtenerDatos('producto')
   const [loading, setLoading] = useState(true);
 
 

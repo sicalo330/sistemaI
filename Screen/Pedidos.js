@@ -5,7 +5,7 @@ import { general } from '../Style/style';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import getData from "../db/getData";
 import updateProducto from "../db/updateProducto";
-import useObtenerGastos from "../hook/useObtenerProducto";
+import useObtenerDatos from "../hook/useObtenerDatos";
 import { CheckBox } from "react-native-web";
 import agregarProducto from "../db/agregarProducto";
 import agregarPedido from "../db/agregarPedido";
@@ -21,7 +21,7 @@ function Pedidos() {
     const [listaChecked, setListaChecked] = useState([])
     const [loading, setLoading] = useState(true); // Estado de carga
 
-    const [lista] = useObtenerGastos();
+    const [lista] = useObtenerDatos('pedido')
 
     // Función para obtener datos desde la base de datos
     const fetchData = async () => {

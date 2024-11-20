@@ -4,7 +4,7 @@ import { Picker } from "@react-native-picker/picker";
 import getData from "../db/getData";
 import updateProducto from "../db/updateProducto";
 import { useNavigation } from "@react-navigation/native";
-import { Icon } from "react-native-paper";
+import LoadingScreen from "./LoadingScreen";
 
 function FormularioActualizacionPedido({ route }) {
     const navigation = useNavigation()
@@ -16,6 +16,7 @@ function FormularioActualizacionPedido({ route }) {
     const [dropdowns, setDropdowns] = useState([{ id: 1, selectedValue: '' }]);
     const [productosOriginales, setProductosOriginales] = useState([]);
     const [originalStock, setOriginalStock] = useState([]); // Copia del stock inicial
+  const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         async function fetchData() {
@@ -25,7 +26,7 @@ function FormularioActualizacionPedido({ route }) {
           // Guardar una copia de los productos originales en el pedido
           setProductosOriginales(pedido.pedido);
         }
-        fetchData();
+    Promise.all([fetchData()]).then(() => setLoading(false));
       }, []);
 
 
@@ -75,6 +76,7 @@ function FormularioActualizacionPedido({ route }) {
 
   // Actualizar el pedido completo
   const updatePedido = async () => {
+    setLoading(true)
     const ajustesStock = await calcularAjustesStock(productosOriginales, productos);
 
     // Actualizar el stock global
@@ -101,9 +103,13 @@ function FormularioActualizacionPedido({ route }) {
     };
   
     await updateProducto("pedido", pedido.id, updatedPedido);
-    navigation.navigate("Ordenes")
-    //console.log("Pedido actualizado con éxito:", updatedPedido);
+    setLoading(false)
+    navigation.navigate("OrdenesStack")
   };
+
+  if (loading) {
+    return <LoadingScreen message="Cargando datos de ventas..." />;
+  }
   
 
   return (

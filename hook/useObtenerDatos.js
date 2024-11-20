@@ -2,14 +2,14 @@ import { useState, useEffect } from "react";
 import { FIRESTORE_DB } from "../firebase/firebase";
 import { collection, onSnapshot, query, orderBy, where, limit } from "firebase/firestore";
 
-function useObtenerPedido(){
+function useObtenerDatos(tabla){
     const [producto, setProducto] = useState([]);
     const [ultimoProducto, setUltimoProducto] = useState(null);
     const [hayMasPorCargar, setHayMasPorCargar] = useState(false)
     
     useEffect(() => {
         const consulta = query(
-            collection(FIRESTORE_DB,'pedido'),
+            collection(FIRESTORE_DB,tabla),
         );
 
         const unsuscribe = onSnapshot(consulta, (snapshot) => {
@@ -30,4 +30,4 @@ function useObtenerPedido(){
     return [producto, hayMasPorCargar]
 }
 
-export default useObtenerPedido
+export default useObtenerDatos

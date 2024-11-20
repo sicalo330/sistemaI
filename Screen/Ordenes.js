@@ -3,7 +3,7 @@ import { Text, TouchableOpacity, View, StyleSheet, Button, ScrollView } from "re
 import Icon from 'react-native-vector-icons/FontAwesome';
 import getData from "../db/getData";
 import updateProducto from "../db/updateProducto";
-import useObtenerPedido from "../hook/useObtenerPedido";
+import useObtenerDatos from "../hook/useObtenerDatos";
 import LoadingScreen from "./LoadingScreen";
 import { useNavigation } from "@react-navigation/native";
 import { FormattedMessage } from "react-intl";
@@ -13,7 +13,7 @@ function Ordenes() {
     const [productoOriginal, setProductoOriginal] = useState([]);
     const [estado, setEstado] = useState([]);
     const [currentTab, setCurrentTab] = useState('proceso');
-    const [lista] = useObtenerPedido();
+    const [lista] = useObtenerDatos('pedido');
     const [loading, setLoading] = useState(true); // Estado de carga
     const navigation = useNavigation();
 

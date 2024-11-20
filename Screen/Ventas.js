@@ -5,7 +5,7 @@ import { titlePrice, linkContainer } from "../Style/style";
 import Icon from 'react-native-vector-icons/FontAwesome';
 import getData from "../db/getData";
 import { useNavigation } from "@react-navigation/native";
-import useObtenerPedido from "../hook/useObtenerPedido";
+import useObtenerDatos from "../hook/useObtenerDatos";
 import LoadingScreen from "./LoadingScreen";
 import { FormattedMessage, useIntl } from 'react-intl';
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -19,7 +19,7 @@ function Ventas() {
     const [loading, setLoading] = useState(true); // Estado de carga
 
     const intl = useIntl();
-    const [lista] = useObtenerPedido();
+    const [lista] = useObtenerDatos('pedido');
     const navigation = useNavigation();
 
     useEffect(() => {

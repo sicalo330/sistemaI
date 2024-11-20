@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Text, View, StyleSheet, ScrollView, TouchableOpacity } from "react-native";
 import getData from "../db/getData";
-import useObtenerPedido from "../hook/useObtenerPedido";
+import useObtenerDatos from "../hook/useObtenerDatos";
 import { useNavigation } from "@react-navigation/native";
 import LoadingScreen from "./LoadingScreen";
 import { FormattedMessage, useIntl } from 'react-intl';
@@ -9,7 +9,7 @@ import { FormattedMessage, useIntl } from 'react-intl';
 function Historial() {
     const navigation = useNavigation()
     const [producto, setProducto] = useState([]);
-    const [lista] = useObtenerPedido();
+    const [lista] = useObtenerDatos('pedido');
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
