@@ -38,7 +38,6 @@ function Historial() {
     
 
     const detailFactura = (factura) => {
-        console.log("llendo a factura")
         navigation.navigate("DetailFactura", {factura:factura})
     }
 

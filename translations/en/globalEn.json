@@ -21,5 +21,10 @@
     "cambiar_idioma":"Change language",
     "seleccionar":"Select the language for the application",
     "formularioAgregarProducto":"Form to add product",
-    "Selecciona_ingredientes":"Select the ingredients"
+    "Selecciona_ingredientes":"Select the ingredients",
+    "tabs.sales": "Sales",
+    "tabs.orders": "Orders",
+    "tabs.inventory": "inventory",
+    "tabs.deliveries": "deliveries",
+    "tabs.account": "account"
 }

@@ -29,6 +29,7 @@ import enMessages from './translations/en/globalEn.json';
 import esMessages from './translations/es/globalEs.json';
 import { IntlProvider } from 'react-intl';
 import { LanguageProvider,useLanguage } from './Screen/LanguageProvider.js';
+import { useIntl } from 'react-intl';
 
 const messages = {
   en: enMessages,
@@ -40,56 +41,89 @@ const Stack = createStackNavigator();
 
 // Define tu Tab Navigator
 function TabNavigator() {
+  const intl = useIntl();
   return (
     <Tab.Navigator
-      screenOptions={({ route }) => ({
-        headerShown:false,
-        tabBarIcon: ({ color, size }) => {
-          let iconName;
+    screenOptions={({ route }) => ({
+      headerShown: false,
+      tabBarIcon: ({ color, size }) => {
+        let iconName;
 
-          if (route.name === 'VentasStack') {
-            iconName = 'sale';
-          } else if (route.name === 'OrdenesStack') {
-            iconName = 'application-edit-outline';  
-          } else if (route.name === 'InventarioStack') {
-            iconName = 'archive';
-          } else if (route.name === 'CuentaStack') {
-            iconName = 'account';
-          }
+        if (route.name === 'Ventas') {
+          iconName = 'sale';
+        } else if (route.name === 'Ordenes') {
+          iconName = 'application-edit-outline';
+        } else if (route.name === 'Inventario') {
+          iconName = 'archive';
+        } else if (route.name === 'Pedidos') {
+          iconName = 'bucket';
+        } else if (route.name === 'Cuenta') {
+          iconName = 'account';
+        }
 
-          return <MaterialCommunityIcons name={iconName} size={size} color={color} />;
-        },
-        tabBarActiveTintColor: 'orange',
-        tabBarInactiveTintColor: 'gray',
-        tabBarStyle: {
-          height: 80,
-          paddingHorizontal: 20,
-          paddingBottom: 10,
-          paddingTop: 10,
-        },
-        tabBarItemStyle: {
-          marginHorizontal: 10,
-          paddingVertical: 5,
-        },
-        tabBarLabelStyle: {
-          fontSize: 14,
-        },
-      })}
-    >
-      <Tab.Screen name='VentasStack' component={VentasStack}></Tab.Screen>
-      <Tab.Screen name='OrdenesStack' component={OrdenesStack}></Tab.Screen>
-      <Tab.Screen name='InventarioStack' component={InventarioStack}></Tab.Screen>
-      <Tab.Screen name='PedidosStack' component={PedidosStack}></Tab.Screen>
-      <Tab.Screen name='CuentaStack' component={CuentaStack}></Tab.Screen>
-    </Tab.Navigator>
+        return <MaterialCommunityIcons name={iconName} size={size} color={color} />;
+      },
+      tabBarActiveTintColor: 'orange',
+      tabBarInactiveTintColor: 'gray',
+      tabBarStyle: {
+        height: 80,
+        paddingHorizontal: 20,
+        paddingBottom: 10,
+        paddingTop: 10,
+      },
+      tabBarItemStyle: {
+        marginHorizontal: 10,
+        paddingVertical: 5,
+      },
+      tabBarLabelStyle: {
+        fontSize: 14,
+      },
+    })}
+  >
+    <Tab.Screen
+      name="Ventas"
+      component={VentasStack}
+      options={{
+        tabBarLabel: intl.formatMessage({ id: 'tabs.sales', defaultMessage: 'Ventas' }),
+      }}
+    />
+    <Tab.Screen
+      name="Ordenes"
+      component={OrdenesStack}
+      options={{
+        tabBarLabel: intl.formatMessage({ id: 'tabs.orders', defaultMessage: 'Órdenes' }),
+      }}
+    />
+    <Tab.Screen
+      name="Inventario"
+      component={InventarioStack}
+      options={{
+        tabBarLabel: intl.formatMessage({ id: 'tabs.inventory', defaultMessage: 'Inventario' }),
+      }}
+    />
+    <Tab.Screen
+      name="Pedidos"
+      component={PedidosStack}
+      options={{
+        tabBarLabel: intl.formatMessage({ id: 'tabs.orders', defaultMessage: 'Pedidos' }),
+      }}
+    />
+    <Tab.Screen
+      name="Cuenta"
+      component={CuentaStack}
+      options={{
+        tabBarLabel: intl.formatMessage({ id: 'tabs.account', defaultMessage: 'Cuenta' }),
+      }}
+    />
+  </Tab.Navigator>
   );
 }
 
 // Define los stacks individuales
 function VentasStack() {
   return (
-    <Stack.Navigator initialRouteName="Ventas">
-      <Stack.Screen name='Ventas' component={Ventas}></Stack.Screen>
+    <Stack.Navigator initialRouteName="VentasStack">
+      <Stack.Screen name='VentasStack' component={Ventas} options={{ headerShown: false }}></Stack.Screen>
       <Stack.Screen name='Historial' component={Historial}></Stack.Screen>
       <Stack.Screen name='DetailFactura' component={DetailFactura}></Stack.Screen>
     </Stack.Navigator>
@@ -98,8 +132,8 @@ function VentasStack() {
 
 function OrdenesStack() {
   return (
-    <Stack.Navigator initialRouteName='Ordenes'>
-      <Stack.Screen name='Ordenes' component={Ordenes}></Stack.Screen>
+    <Stack.Navigator initialRouteName='OrdenesStack'>
+      <Stack.Screen name='OrdenesStack' component={Ordenes} options={{ headerShown: false }}></Stack.Screen>
       <Stack.Screen name='FormularioActualizacionPedido' component={FormularioActualizacionPedido}></Stack.Screen>
     </Stack.Navigator>
   );
@@ -107,16 +141,16 @@ function OrdenesStack() {
 
 function PedidosStack() {
   return (
-    <Stack.Navigator initialRouteName='Pedidos'>
-      <Stack.Screen name='Pedidos' component={Pedidos}></Stack.Screen>
+    <Stack.Navigator initialRouteName='PedidosStack'>
+      <Stack.Screen name='PedidosStack' component={Pedidos} options={{ headerShown: false }}></Stack.Screen>
     </Stack.Navigator>
   );
 }
 
 function CuentaStack() {
   return (
-    <Stack.Navigator initialRouteName='Cuenta'>
-      <Stack.Screen name='Cuenta' component={Cuenta}></Stack.Screen>
+    <Stack.Navigator initialRouteName='CuentaStack'>
+      <Stack.Screen name='CuentaStack' component={Cuenta} options={{ headerShown: false }}></Stack.Screen>
       <Stack.Screen name='Configuration' component={Configuration}></Stack.Screen>
       <Stack.Screen name='CambiarIdioma' component={CambiarIdioma}></Stack.Screen>
     </Stack.Navigator>
@@ -125,8 +159,8 @@ function CuentaStack() {
 
 function InventarioStack() {
   return (
-    <Stack.Navigator initialRouteName='Inventario'>
-      <Stack.Screen name='Inventario' component={Inventario}></Stack.Screen>
+    <Stack.Navigator initialRouteName='InventarioStack'>
+      <Stack.Screen name='InventarioStack' component={Inventario} options={{ headerShown: false }}></Stack.Screen>
       <Stack.Screen name='Detail' component={Detail}></Stack.Screen>
       <Stack.Screen name='FormularioProducto' component={FormularioProducto}></Stack.Screen>
     </Stack.Navigator>
