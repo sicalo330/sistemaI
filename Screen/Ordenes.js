@@ -7,6 +7,8 @@ import useObtenerDatos from "../hook/useObtenerDatos";
 import LoadingScreen from "./LoadingScreen";
 import { useNavigation } from "@react-navigation/native";
 import { FormattedMessage } from "react-intl";
+import LottieView from 'lottie-react-native';
+import manifest from './../assets/manifest.json'
 
 function Ordenes() {
     const [listPedido, setPedido] = useState([]);
@@ -92,65 +94,68 @@ function Ordenes() {
             </View>
 
             <ScrollView style={styles.scrollView}>
-    {listPedido.filter(pedido => pedido.estado === currentTab).length === 0 ? (
-        <View style={styles.noDataContainer}>
-            <Text style={styles.noDataText}>
-                No hay pedidos con el estado "{currentTab}"
-            </Text>
-        </View>
-    ) : (
-        listPedido.map((pedido, index) =>
-            pedido.estado === currentTab ? (
-                <View key={index} style={styles.pedidoContainer}>
-                    {pedido.pedido.map((producto, index) => (
-                        <View key={index} style={styles.productoContainer}>
-                            <Text style={styles.productText}>
-                                {producto.nombreProducto}
-                            </Text>
-                            <Text style={styles.productText}>
-                                <FormattedMessage id="cantidad" />: {producto.stock}
-                            </Text>
-                        </View>
-                    ))}
-                    <View style={styles.divider} />
-                    <View>
-                        {currentTab === "proceso" && (
-                            <View style={styles.buttonContainer}>
-                                <TouchableOpacity
-                                    style={styles.completarButton}
-                                    onPress={() => updateEstado(pedido, "completado")}
-                                >
-                                    <Icon name="check" size={16} color="#000000" />
-                                    <Text style={styles.completarButtonText}>
-                                        <FormattedMessage id="completar" />
-                                    </Text>
-                                </TouchableOpacity>
-                                <TouchableOpacity
-                                    style={styles.editarButton}
-                                    onPress={() => enviarFormulario(pedido)}
-                                >
-                                    <Icon name="pencil" size={16} color="#000000" />
-                                    <Text style={styles.completarButtonText}>
-                                        <FormattedMessage id="editar" />
-                                    </Text>
-                                </TouchableOpacity>
-                                <TouchableOpacity
-                                    style={styles.cancelarButton}
-                                    onPress={() => updateEstado(pedido, "cancelado")}
-                                >
-                                    <Icon name="trash" size={16} color="#000000" />
-                                    <Text style={styles.completarButtonText}>
-                                        <FormattedMessage id="cancelar" />
-                                    </Text>
-                                </TouchableOpacity>
-                            </View>
-                        )}
+                {listPedido.filter(pedido => pedido.estado === currentTab).length === 0 ? (
+                    <View style={styles.noDataContainer}>
+                        <LottieView
+                            source={manifest}
+                            autoPlay
+                            loop
+                            style={styles.animation}
+                        />
                     </View>
-                </View>
-            ) : null
-        )
-    )}
-</ScrollView>
+                ) : (
+                    listPedido.map((pedido, index) =>
+                        pedido.estado === currentTab ? (
+                            <View key={index} style={styles.pedidoContainer}>
+                                {pedido.pedido.map((producto, index) => (
+                                    <View key={index} style={styles.productoContainer}>
+                                        <Text style={styles.productText}>
+                                            {producto.nombreProducto}
+                                        </Text>
+                                        <Text style={styles.productText}>
+                                            <FormattedMessage id="cantidad" />: {producto.stock}
+                                        </Text>
+                                    </View>
+                                ))}
+                                <View style={styles.divider} />
+                                <View>
+                                    {currentTab === "proceso" && (
+                                        <View style={styles.buttonContainer}>
+                                            <TouchableOpacity
+                                                style={styles.completarButton}
+                                                onPress={() => updateEstado(pedido, "completado")}
+                                            >
+                                                <Icon name="check" size={16} color="#000000" />
+                                                <Text style={styles.completarButtonText}>
+                                                    <FormattedMessage id="completar" />
+                                                </Text>
+                                            </TouchableOpacity>
+                                            <TouchableOpacity
+                                                style={styles.editarButton}
+                                                onPress={() => enviarFormulario(pedido)}
+                                            >
+                                                <Icon name="pencil" size={16} color="#000000" />
+                                                <Text style={styles.completarButtonText}>
+                                                    <FormattedMessage id="editar" />
+                                                </Text>
+                                            </TouchableOpacity>
+                                            <TouchableOpacity
+                                                style={styles.cancelarButton}
+                                                onPress={() => updateEstado(pedido, "cancelado")}
+                                            >
+                                                <Icon name="trash" size={16} color="#000000" />
+                                                <Text style={styles.completarButtonText}>
+                                                    <FormattedMessage id="cancelar" />
+                                                </Text>
+                                            </TouchableOpacity>
+                                        </View>
+                                    )}
+                                </View>
+                            </View>
+                        ) : null
+                    )
+                )}
+            </ScrollView>
 
         </View>
     );
@@ -254,7 +259,10 @@ const styles = StyleSheet.create({
         fontSize: 16,
         color: '#616161',
     },
-    
+    animation: {
+        width: 200,
+        height: 200,
+    },    
 });
 
 export default Ordenes;
