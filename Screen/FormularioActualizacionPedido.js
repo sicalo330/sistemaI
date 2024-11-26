@@ -5,6 +5,7 @@ import getData from "../db/getData";
 import updateProducto from "../db/updateProducto";
 import { useNavigation } from "@react-navigation/native";
 import LoadingScreen from "./LoadingScreen";
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 function FormularioActualizacionPedido({ route }) {
     const navigation = useNavigation()
@@ -108,7 +109,7 @@ function FormularioActualizacionPedido({ route }) {
   };
 
   if (loading) {
-    return <LoadingScreen message="Cargando datos de ventas..." />;
+    return <LoadingScreen />;
   }
   
 
@@ -159,37 +160,46 @@ function FormularioActualizacionPedido({ route }) {
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
         <View style={styles.productContainer}>
-        <Text>Producto: {item.nombreProducto}</Text>
-        <Text>Precio: {item.price}</Text>
-        <Text>Cantidad: {item.stock}</Text>
-        <View style={styles.containerPlusMinus}>
-            <Button
-            title="+"
-            onPress={() =>
-                setProductos(
-                productos.map((prod) =>
-                    prod.id === item.id ? { ...prod, stock: prod.stock + 1 } : prod
-                )
-                )
-            }
-            color="orange"
-            />
-            <Button
-            title="-"
-            onPress={() =>
-                setProductos(
-                productos.map((prod) =>
-                    prod.id === item.id && prod.stock > 1
-                    ? { ...prod, stock: prod.stock - 1 }
-                    : prod
-                )
-                )
-            }
-            color="orange"
-            />
-            <Button title="Eliminar" onPress={() => handleRemoveProduct(item.id)} color="orange" />
-            </View>
-            </View>
+          <Text>Producto: {item.nombreProducto}</Text>
+          <Text>Precio: {item.price}</Text>
+          <Text>Cantidad: {item.stock}</Text>
+          <View style={styles.containerPlusMinus}>
+          <TouchableOpacity
+                onPress={() =>
+                    setProductos(
+                        productos.map((prod) =>
+                            prod.id === item.id && prod.stock > 1
+                                ? { ...prod, stock: prod.stock - 1 }
+                                : prod
+                        )
+                    )
+                }
+                style={styles.button}
+            >
+              <Icon name="minus" size={15} color="white" />
+            </TouchableOpacity>
+
+            <TouchableOpacity
+                onPress={() =>
+                    setProductos(
+                        productos.map((prod) =>
+                            prod.id === item.id ? { ...prod, stock: prod.stock + 1 } : prod
+                        )
+                    )
+                }
+                style={styles.button}
+            >
+              <Icon name="plus" size={15} color="white" />
+            </TouchableOpacity>
+            
+            <TouchableOpacity
+                onPress={() => handleRemoveProduct(item.id)}
+                style={styles.button}
+            >
+                <Text style={styles.buttonText}>Eliminar</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
         )}
     />
     <TouchableOpacity style={styles.saveButton} onPress={updatePedido}>
@@ -257,7 +267,8 @@ const styles = StyleSheet.create({
     padding: 10,
     borderRadius: 5,
     color: "orange", // Fondo naranja
-    marginHorizontal: 5,
+    marginHorizontal: 0,
+    backgroundColor:'orange'
   },
   buttonText: {
     color: "#FFFFFF", // Texto blanco
@@ -269,7 +280,17 @@ const styles = StyleSheet.create({
   },
   butonPlusMinus:{
     color:'black',
-  }
+  },
+  touchableStyle:{
+    width: 30, 
+    height: 30, 
+    justifyContent: 'center', 
+    alignItems: 'center', 
+    backgroundColor: '#FFFFFF', 
+    borderWidth: 1, 
+    borderColor: 'orange', 
+    borderRadius: 5 
+},
 });
 
 

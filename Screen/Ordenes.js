@@ -9,7 +9,7 @@ import { useNavigation } from "@react-navigation/native";
 import { FormattedMessage } from "react-intl";
 
 function Ordenes() {
-    const [producto, setProducto] = useState([]);
+    const [listPedido, setPedido] = useState([]);
     const [productoOriginal, setProductoOriginal] = useState([]);
     const [estado, setEstado] = useState([]);
     const [currentTab, setCurrentTab] = useState('proceso');
@@ -18,11 +18,11 @@ function Ordenes() {
     const navigation = useNavigation();
 
     const fetchData = async () => {
-        const listPedido = await getData("pedido");
-        setProducto(listPedido);
+        const listP = await getData("pedido");
+        setPedido(listP);
         const listProducto = await getData("producto")
         setProductoOriginal(listProducto)
-        setEstado(new Array(listPedido.length).fill(false));
+        setEstado(new Array(listP.length).fill(false));
     };
 
     useEffect(() => {
@@ -56,7 +56,7 @@ function Ordenes() {
     }
 
     if (loading){
-        return <LoadingScreen message="Cargando datos de ventas..." />; // Uso del componente reutilizable
+        return <LoadingScreen />; // Uso del componente reutilizable
     }
 
     return (
@@ -92,49 +92,66 @@ function Ordenes() {
             </View>
 
             <ScrollView style={styles.scrollView}>
-                {producto.map((pedido, index) => (
-                    pedido.estado === currentTab ? (
-                        <View key={index} style={styles.pedidoContainer}>
-                            {pedido.pedido.map((producto, index) => (
-                                <View key={index} style={styles.productoContainer}>
-                                    <Text style={styles.productText}>
-                                        {producto.nombreProducto}
-                                    </Text>
-                                    <Text style={styles.productText}><FormattedMessage id="cantidad" />: {producto.stock}</Text>
-                                </View>
-                            ))}
-                            <View style={styles.divider} />
-                            <View>
-                                {currentTab === "proceso" && (
-                                    <View style={styles.buttonContainer}>
-                                        <TouchableOpacity
-                                            style={styles.completarButton}
-                                            onPress={() => updateEstado(pedido, "completado")}
-                                        >
-                                            <Icon name="check" size={16} color="#000000" />
-                                            <Text style={styles.completarButtonText}><FormattedMessage id="completar" /></Text>
-                                        </TouchableOpacity>
-                                        <TouchableOpacity 
-                                            style={styles.editarButton} 
-                                            onPress={() => enviarFormulario(pedido)}
-                                        >
-                                            <Icon name="pencil" size={16} color="#000000" />
-                                            <Text style={styles.completarButtonText}><FormattedMessage id="editar" /></Text>
-                                        </TouchableOpacity>
-                                        <TouchableOpacity 
-                                            style={styles.cancelarButton} 
-                                            onPress={() => updateEstado(pedido,"cancelado")}
-                                        >
-                                            <Icon name="trash" size={16} color="#000000" />
-                                            <Text style={styles.completarButtonText}><FormattedMessage id="cancelar" /></Text>
-                                        </TouchableOpacity>
-                                    </View>
-                                )}
-                            </View>
+    {listPedido.filter(pedido => pedido.estado === currentTab).length === 0 ? (
+        <View style={styles.noDataContainer}>
+            <Text style={styles.noDataText}>
+                No hay pedidos con el estado "{currentTab}"
+            </Text>
+        </View>
+    ) : (
+        listPedido.map((pedido, index) =>
+            pedido.estado === currentTab ? (
+                <View key={index} style={styles.pedidoContainer}>
+                    {pedido.pedido.map((producto, index) => (
+                        <View key={index} style={styles.productoContainer}>
+                            <Text style={styles.productText}>
+                                {producto.nombreProducto}
+                            </Text>
+                            <Text style={styles.productText}>
+                                <FormattedMessage id="cantidad" />: {producto.stock}
+                            </Text>
                         </View>
-                    ) : null
-                ))}
-            </ScrollView>
+                    ))}
+                    <View style={styles.divider} />
+                    <View>
+                        {currentTab === "proceso" && (
+                            <View style={styles.buttonContainer}>
+                                <TouchableOpacity
+                                    style={styles.completarButton}
+                                    onPress={() => updateEstado(pedido, "completado")}
+                                >
+                                    <Icon name="check" size={16} color="#000000" />
+                                    <Text style={styles.completarButtonText}>
+                                        <FormattedMessage id="completar" />
+                                    </Text>
+                                </TouchableOpacity>
+                                <TouchableOpacity
+                                    style={styles.editarButton}
+                                    onPress={() => enviarFormulario(pedido)}
+                                >
+                                    <Icon name="pencil" size={16} color="#000000" />
+                                    <Text style={styles.completarButtonText}>
+                                        <FormattedMessage id="editar" />
+                                    </Text>
+                                </TouchableOpacity>
+                                <TouchableOpacity
+                                    style={styles.cancelarButton}
+                                    onPress={() => updateEstado(pedido, "cancelado")}
+                                >
+                                    <Icon name="trash" size={16} color="#000000" />
+                                    <Text style={styles.completarButtonText}>
+                                        <FormattedMessage id="cancelar" />
+                                    </Text>
+                                </TouchableOpacity>
+                            </View>
+                        )}
+                    </View>
+                </View>
+            ) : null
+        )
+    )}
+</ScrollView>
+
         </View>
     );
 }
@@ -228,6 +245,16 @@ const styles = StyleSheet.create({
         color: "#000000",
         marginLeft: 5,
     },
+    noDataContainer: {
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginTop: 20,
+    },
+    noDataText: {
+        fontSize: 16,
+        color: '#616161',
+    },
+    
 });
 
 export default Ordenes;

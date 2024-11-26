@@ -33,7 +33,7 @@ function Inventario() {
   };
 
   if (loading){
-    return <LoadingScreen message="Cargando datos de ventas..." />; // Uso del componente reutilizable
+    return <LoadingScreen />; // Uso del componente reutilizable
   }
 
   const renderItem = ({ item }) => (

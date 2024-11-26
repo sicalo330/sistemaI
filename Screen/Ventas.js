@@ -77,7 +77,7 @@ function Ventas() {
 
     // Mostrar pantalla de carga mientras `loading` esté en `true`
     if (loading){
-        return <LoadingScreen message="Cargando datos de ventas..." />; // Uso del componente reutilizable
+        return <LoadingScreen />; // Uso del componente reutilizable
     }
 
     // Renderizar contenido principal cuando `loading` sea `false`

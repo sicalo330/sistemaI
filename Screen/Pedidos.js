@@ -127,7 +127,7 @@ function Pedidos() {
     // }
 
     if (loading){
-        return <LoadingScreen message="Cargando datos de ventas..." />; // Uso del componente reutilizable
+        return <LoadingScreen />; // Uso del componente reutilizable
     }
 
     return (
@@ -206,29 +206,13 @@ function Pedidos() {
                         <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-around', padding: 5, backgroundColor: '#F4F4F4', borderRadius: 5 }}>
                             <TouchableOpacity 
                                 onPress={() => downQuantity(index)} 
-                                style={{ 
-                                    width: 30, 
-                                    height: 30, 
-                                    justifyContent: 'center', 
-                                    alignItems: 'center', 
-                                    backgroundColor: '#FFFFFF', 
-                                    borderWidth: 1, 
-                                    borderColor: '#FF6F00', 
-                                    borderRadius: 5 
-                                }}
+                                style={styles.touchableStyle}
                             >
                                 <Icon name="minus" size={15} color="#FF6F00" />
                             </TouchableOpacity>
     
                             <View 
-                                style={{ 
-                                    alignSelf: 'center', 
-                                    backgroundColor: '#F4F4F4', 
-                                    borderRadius: 5, 
-                                    padding: 5, 
-                                    borderWidth: 1, 
-                                    borderColor: '#E0E0E0' 
-                                }}
+                                style={styles.touchableStyle}
                             >
                                 <Text style={{ fontSize: 20, fontWeight: 'bold', color: '#424242' }}>
                                     {quantities[index]}
@@ -237,16 +221,7 @@ function Pedidos() {
     
                             <TouchableOpacity 
                                 onPress={() => addQuantity(index)} 
-                                style={{ 
-                                    width: 30, 
-                                    height: 30, 
-                                    justifyContent: 'center', 
-                                    alignItems: 'center', 
-                                    backgroundColor: '#FFFFFF', 
-                                    borderWidth: 1, 
-                                    borderColor: 'orange', 
-                                    borderRadius: 5 
-                                }}
+                                style={styles.touchableStyle}
                             >
                                 <Icon name="plus" size={15} color="#FF6F00" />
                             </TouchableOpacity>
@@ -360,6 +335,24 @@ const styles = StyleSheet.create({
     },
     screenGeneral:{
         paddingTop:40
+    },
+    touchableStyle:{
+        width: 30, 
+        height: 30, 
+        justifyContent: 'center', 
+        alignItems: 'center', 
+        backgroundColor: '#FFFFFF', 
+        borderWidth: 1, 
+        borderColor: 'orange', 
+        borderRadius: 5 
+    },
+    addStyle:{
+        alignSelf: 'center', 
+        backgroundColor: '#F4F4F4', 
+        borderRadius: 5, 
+        padding: 5, 
+        borderWidth: 1, 
+        borderColor: '#E0E0E0' 
     }
 });
 

@@ -17,7 +17,7 @@ function Detail({ route }) {
   }, []);
 
   if (loading) {
-    return <LoadingScreen message="Cargando datos de ventas..." />;
+    return <LoadingScreen />;
   }
 
   return (
