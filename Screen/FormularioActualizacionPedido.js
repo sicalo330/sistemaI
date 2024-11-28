@@ -6,37 +6,37 @@ import updateProducto from "../db/updateProducto";
 import { useNavigation } from "@react-navigation/native";
 import LoadingScreen from "./LoadingScreen";
 import Icon from 'react-native-vector-icons/FontAwesome';
+import { FormattedMessage } from "react-intl";
 
 function FormularioActualizacionPedido({ route }) {
     const navigation = useNavigation()
     const { pedido } = route.params;
     const [estado, setEstado] = useState(pedido.estado || "proceso"); // Estado del pedido
     const [productos, setProductos] = useState(pedido.pedido || []); // Lista de productos
-    const [cantidadOriginal,setCantidadOriginal] = useState(0)
     const [listProducto,setListProducto] = useState([])
     const [dropdowns, setDropdowns] = useState([{ id: 1, selectedValue: '' }]);
     const [productosOriginales, setProductosOriginales] = useState([]);
-    const [originalStock, setOriginalStock] = useState([]); // Copia del stock inicial
   const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         async function fetchData() {
           const listData = await getData("producto");
-          setListProducto(listData);
-          setOriginalStock(listData.map((p) => ({ id: p.id, stock: p.stock })));
+          setListProducto(listData);//Se guardan aquí los datos de todos los productos que existen
           // Guardar una copia de los productos originales en el pedido
-          setProductosOriginales(pedido.pedido);
+          setProductosOriginales(pedido.pedido);//Aquí la lista productos que conforman un pedido, este será el pedido cuyo valor será actualizado
         }
-    Promise.all([fetchData()]).then(() => setLoading(false));
+    Promise.all([fetchData()]).then(() => setLoading(false));//Simplemente se mostrará la pantalla de carga
       }, []);
 
 
   // Eliminar un producto del pedido
   const handleRemoveProduct = (id) => {
+    //Tengo entendido que esto hará una copia de la lista de productos excluyendo al producto que tenga una id igual al que se le está pasando a la función
     setProductos(productos.filter((product) => product.id !== id));
   };
 
   const calcularAjustesStock = (productosOriginales, productosActuales) => {
+    //Se inicializa la variable ajustes como una lista vacía
     const ajustes = [];
   
     productosActuales.forEach((productoActual) => {
@@ -78,6 +78,7 @@ function FormularioActualizacionPedido({ route }) {
   // Actualizar el pedido completo
   const updatePedido = async () => {
     setLoading(true)
+    //Necesitamos sumar los productos agregados o eliminados junto con su cantidad para realizar bien el cálculo entre los precios que se han vendido y el de los inventarios
     const ajustesStock = await calcularAjustesStock(productosOriginales, productos);
 
     // Actualizar el stock global
@@ -115,7 +116,7 @@ function FormularioActualizacionPedido({ route }) {
 
   return (
     <SafeAreaView style={styles.containerForm}>
-      <Text style={styles.h1}>Actualizar Pedido</Text>
+      <Text style={styles.h1}><FormattedMessage id="actualizar_pedido" /></Text>
 
       {/* Selector de estado del pedido */}
       <View>

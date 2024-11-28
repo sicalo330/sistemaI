@@ -64,31 +64,13 @@ function Ordenes() {
     return (
         <View style={styles.container}>
             <View style={styles.header}>
-                <TouchableOpacity
-                    style={[
-                        styles.tab,
-                        currentTab === 'proceso' && styles.activeTab,
-                    ]}
-                    onPress={() => cambiarSubPestana('proceso')}
-                >
+                <TouchableOpacity style={[styles.tab,currentTab === 'proceso' && styles.activeTab]} onPress={() => cambiarSubPestana('proceso')}>
                     <Text style={styles.tabText}><FormattedMessage id="enProceso" /></Text>
                 </TouchableOpacity>
-                <TouchableOpacity
-                    style={[
-                        styles.tab,
-                        currentTab === 'completado' && styles.activeTab,
-                    ]}
-                    onPress={() => cambiarSubPestana('completado')}
-                >
+                <TouchableOpacity style={[styles.tab,currentTab === 'completado' && styles.activeTab]} onPress={() => cambiarSubPestana('completado')}>
                     <Text style={styles.tabText}><FormattedMessage id="completados" /></Text>
                 </TouchableOpacity>
-                <TouchableOpacity
-                    style={[
-                        styles.tab,
-                        currentTab === 'cancelado' && styles.activeTab,
-                    ]}
-                    onPress={() => cambiarSubPestana('cancelado')}
-                >
+                <TouchableOpacity style={[styles.tab,currentTab === 'cancelado' && styles.activeTab]}onPress={() => cambiarSubPestana('cancelado')}>
                     <Text style={styles.tabText}><FormattedMessage id="cancelados" /></Text>
                 </TouchableOpacity>
             </View>

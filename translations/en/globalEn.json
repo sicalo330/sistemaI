@@ -27,5 +27,6 @@
     "tabs.inventory": "inventory",
     "tabs.deliveries": "deliveries",
     "tabs.account": "account",
-    "tabs.ask":"Ask"
+    "tabs.ask":"Ask",
+    "actualizar_pedido":"Update order"
 }

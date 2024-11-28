@@ -9,7 +9,7 @@ const CambiarIdioma = () => {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>
-        <FormattedMessage id="seleccionar" defaultMessage="Seleccionar idioma" />
+        <FormattedMessage id="seleccionar" />
       </Text>
       <TouchableOpacity
         style={[styles.button, styles.orangeButton]}

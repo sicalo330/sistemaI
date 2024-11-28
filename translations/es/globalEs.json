@@ -26,5 +26,6 @@
     "tabs.inventory": "Inventario",
     "tabs.deliveries": "Pedidos",
     "tabs.account": "Cuenta",
-    "tabs.ask":"Pedidos"
+    "tabs.ask":"Pedidos",
+    "actualizar_pedido":"Actualizar pedido"
 }
