@@ -1,13 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { Text, TouchableOpacity, View, StyleSheet, Button, Alert,SafeAreaView } from "react-native";
-import BouncyCheckbox from "react-native-bouncy-checkbox";
-import { general } from '../Style/style';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import getData from "../db/getData";
-import updateProducto from "../db/updateProducto";
+import updateData from "../db/updateData";
 import useObtenerDatos from "../hook/useObtenerDatos";
-import { CheckBox } from "react-native-web";
-import agregarProducto from "../db/agregarProducto";
 import agregarPedido from "../db/agregarPedido";
 import LoadingScreen from "./LoadingScreen";
 import { FormattedMessage } from "react-intl";
@@ -112,7 +108,7 @@ function Pedidos() {
                 cantidadTotal += item.stock
                 item.cantidadTotal = cantidadTotal
                 //Actualización del producto (se pueden habilitar las siguientes líneas según lo necesites)
-                await updateProducto('producto',item.id, { estado: nuevoEstado, stock: newStock });
+                await updateData('producto',item.id, { estado: nuevoEstado, stock: newStock });
                 await fetchData();
             }
         }

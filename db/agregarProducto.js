@@ -10,8 +10,7 @@ const agregarProducto = async (item, tabla) => {
             urlProducto: item.urlProducto,
             ingredients: item.ingredients,
             price:item.price,
-            stock:item.stock,
-            //estado:"Pendiente"
+            stock:item.stock
         });
     } catch (error) {
         console.error("Error al agregar el producto: ", error);

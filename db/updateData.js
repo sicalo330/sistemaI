@@ -1,7 +1,7 @@
 import { doc, updateDoc } from "firebase/firestore"; 
 import { FIRESTORE_DB } from "../firebase/firebase";
 
-const updateProducto = async (tabla,productoId, newData) => {
+const updateData = async (tabla,productoId, newData) => {
     if(productoId == undefined){
         return
     }
@@ -21,4 +21,4 @@ const updateProducto = async (tabla,productoId, newData) => {
     }
 };
 
-export default updateProducto;
+export default updateData;

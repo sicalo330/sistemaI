@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Text, TouchableOpacity, View, StyleSheet, Button, ScrollView } from "react-native";
 import Icon from 'react-native-vector-icons/FontAwesome';
 import getData from "../db/getData";
-import updateProducto from "../db/updateProducto";
+import updateData from "../db/updateData";
 import useObtenerDatos from "../hook/useObtenerDatos";
 import LoadingScreen from "./LoadingScreen";
 import { useNavigation } from "@react-navigation/native";
@@ -39,13 +39,13 @@ function Ordenes() {
                 for (let j = 0; j < productoOriginal.length; j++) {
                     if (item.pedido[i].id === productoOriginal[j].id) {
                         let recuperacion = productoOriginal[j].stock + item.pedido[i].stock;
-                        updateProducto("producto",productoOriginal[j].id,{stock:recuperacion})
+                        updateData("producto",productoOriginal[j].id,{stock:recuperacion})
                     }
                 }
             }
         }
         // Lógica para otros estados
-        await updateProducto('pedido', item.id, { estado: nuevoEstado });
+        await updateData('pedido', item.id, { estado: nuevoEstado });
         await fetchData();
     };    
 

@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
-import {Text,SafeAreaView,StyleSheet,View,TouchableOpacity,FlatList,Button} from "react-native";
+import {Text,SafeAreaView,StyleSheet,View,TouchableOpacity,FlatList,Button, Alert} from "react-native";
 import { Picker } from "@react-native-picker/picker";
 import getData from "../db/getData";
-import updateProducto from "../db/updateProducto";
+import updateData from "../db/updateData";
 import { useNavigation } from "@react-navigation/native";
 import LoadingScreen from "./LoadingScreen";
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -40,14 +40,16 @@ function FormularioActualizacionPedido({ route }) {
     const ajustes = [];
   
     productosActuales.forEach((productoActual) => {
-      const productoOriginal = productosOriginales.find(
-        (p) => p.id === productoActual.id
-      );
-  
+      const productoOriginal = productosOriginales.find((p) => p.id === productoActual.id);
       if (productoOriginal) {
-        // Calcular la diferencia en la cantidad del pedido
+        //Si encuentra a este if, significa que el producto se mantuvo en el pedido sin embargo se hace algun calculo para ver si la cantidad cambio
+        //Esto calcula la diferencia en la cantidad del pedido
         const diferencia = productoActual.stock - productoOriginal.stock;
-  
+        //Si la diferencia es positiva significa que se pidió más del producto
+        //Si la diferencia es negativa significa que se pidió menos del producto
+        //¿Por qué un negativo en diferencia al hacer el push?
+        //Si se pide más significa que hay que restar el precio del inventario total, pero si se pide menos significa que hay que sumar el precio total del inventario
+        //Es solo usar ley de signos -*- = + y -*+ = -
         ajustes.push({
           id: productoActual.id,
           ajuste: -diferencia, // Restar la diferencia al stock global
@@ -77,37 +79,50 @@ function FormularioActualizacionPedido({ route }) {
 
   // Actualizar el pedido completo
   const updatePedido = async () => {
-    setLoading(true)
-    //Necesitamos sumar los productos agregados o eliminados junto con su cantidad para realizar bien el cálculo entre los precios que se han vendido y el de los inventarios
+    setLoading(true);
+
+    //Necesitamos sumar los productos agregados o eliminados junto con su cantidad
     const ajustesStock = await calcularAjustesStock(productosOriginales, productos);
 
-    // Actualizar el stock global
+    //El for va a validar si todas las cantidades son validas, si encuentra una cantidad negativa aparecerá una alaerta y el return detendrá todo
     for (const ajuste of ajustesStock) {
-      const productoGlobal = listProducto.find((p) => p.id === ajuste.id);
-      if (productoGlobal) {
-        const nuevoStock = productoGlobal.stock + ajuste.ajuste;
-  
-        await updateProducto("producto", ajuste.id, { stock: nuevoStock });
-  
-        // Actualizar localmente el stock global
-        setListProducto((prev) =>
-          prev.map((p) =>
-            p.id === ajuste.id ? { ...p, stock: nuevoStock } : p
-          )
-        );
-      }
+        const productoGlobal = listProducto.find((p) => p.id === ajuste.id);
+        if (productoGlobal) {
+            const nuevoStock = productoGlobal.stock + ajuste.ajuste;
+            if (nuevoStock < 0) {
+                Alert.alert("Se ha excedido la cantidad disponible del producto", productoGlobal.nombreProducto);
+                setLoading(false);
+                return;
+            }
+        }
     }
-  
+
+    // Si todos los ajustes son válidos, proceder con las actualizaciones
+    for (const ajuste of ajustesStock) {
+        const productoGlobal = listProducto.find((p) => p.id === ajuste.id);
+        if (productoGlobal) {
+            const nuevoStock = productoGlobal.stock + ajuste.ajuste;
+
+            await updateData("producto", ajuste.id, { stock: nuevoStock });
+
+            // Actualizar localmente el stock global
+            setListProducto((prev) =>
+                prev.map((p) => (p.id === ajuste.id ? { ...p, stock: nuevoStock } : p))
+            );
+        }
+    }
+
     // Actualizar el pedido en Firebase
     const updatedPedido = {
-      estado,
-      pedido: productos,
+        estado,
+        pedido: productos,
     };
-  
-    await updateProducto("pedido", pedido.id, updatedPedido);
-    setLoading(false)
-    navigation.navigate("OrdenesStack")
-  };
+
+    await updateData("pedido", pedido.id, updatedPedido);
+    setLoading(false);
+    navigation.navigate("OrdenesStack");
+};
+
 
   if (loading) {
     return <LoadingScreen />;
@@ -124,11 +139,7 @@ function FormularioActualizacionPedido({ route }) {
             <View key={dropdown.id} style={styles.row}>
             <Picker
                 selectedValue={estado}
-                onValueChange={(itemValue) => {
-                    const selectedProduct = listProducto.find(
-                    (product) => product.nombreProducto === itemValue
-                    );
-
+                onValueChange={(itemValue) => { const selectedProduct = listProducto.find((product) => product.nombreProducto === itemValue);
                     if (selectedProduct && !productos.some((p) => p.id === selectedProduct.id)) {
                     setProductos([
                         ...productos,
@@ -165,31 +176,11 @@ function FormularioActualizacionPedido({ route }) {
           <Text>Precio: {item.price}</Text>
           <Text>Cantidad: {item.stock}</Text>
           <View style={styles.containerPlusMinus}>
-          <TouchableOpacity
-                onPress={() =>
-                    setProductos(
-                        productos.map((prod) =>
-                            prod.id === item.id && prod.stock > 1
-                                ? { ...prod, stock: prod.stock - 1 }
-                                : prod
-                        )
-                    )
-                }
-                style={styles.button}
-            >
+          <TouchableOpacity onPress={() => setProductos(productos.map((prod) => prod.id === item.id && prod.stock > 1 ? { ...prod, stock: prod.stock - 1 } : prod))} style={styles.button}>
               <Icon name="minus" size={15} color="white" />
             </TouchableOpacity>
 
-            <TouchableOpacity
-                onPress={() =>
-                    setProductos(
-                        productos.map((prod) =>
-                            prod.id === item.id ? { ...prod, stock: prod.stock + 1 } : prod
-                        )
-                    )
-                }
-                style={styles.button}
-            >
+            <TouchableOpacity onPress={() => setProductos(productos.map((prod) => prod.id === item.id ? { ...prod, stock: prod.stock + 1 } : prod))} style={styles.button}>
               <Icon name="plus" size={15} color="white" />
             </TouchableOpacity>
             

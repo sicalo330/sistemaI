@@ -1,10 +1,10 @@
 import { doc, getDoc } from "firebase/firestore";
 import { FIRESTORE_DB } from "../firebase/firebase";
 
-const getSingleData = async (collectionName, documentId) => {
+const getSingleData = async (tabla, documentId) => {
     try {
         // Referencia al documento específico en la colección
-        const docRef = doc(FIRESTORE_DB, collectionName, documentId);
+        const docRef = doc(FIRESTORE_DB, tabla, documentId);
         
         // Obtiene el documento
         const docSnap = await getDoc(docRef);
