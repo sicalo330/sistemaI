@@ -11,7 +11,7 @@ function DetailFactura({ route }) {
             <View style={styles.facturaContainer}>
                 <Text style={styles.facturaText}>ID: {factura.id}</Text>
                 <Text style={styles.facturaText}>Total: ${factura.precioTotal}</Text>
-                <Text style={styles.facturaText}>Total: ${factura.estado}</Text>
+                <Text style={styles.facturaText}>Estado: {factura.estado}</Text>
             </View>
             <Text style={styles.pedidosTitle}>Pedidos:</Text>
             {factura.pedido.map((item, index) => (
