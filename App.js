@@ -22,6 +22,7 @@ import Pedidos from './Screen/Pedidos.js';
 import DetailFactura from './Screen/DetailFactura.js';
 import FormularioActualizacionPedido from './Screen/FormularioActualizacionPedido.js';
 import CambiarIdioma from './Screen/CambiarIdioma.js';
+import Info from './Screen/Info.js';
 
 
 //Lenguajes
@@ -152,6 +153,7 @@ function CuentaStack() {
     <Stack.Navigator initialRouteName='CuentaStack'>
       <Stack.Screen name='CuentaStack' component={Cuenta} options={{ headerShown: false }}></Stack.Screen>
       <Stack.Screen name='Configuration' component={Configuration}></Stack.Screen>
+      <Stack.Screen name='Info' component={Info}></Stack.Screen>
       <Stack.Screen name='CambiarIdioma' component={CambiarIdioma}></Stack.Screen>
     </Stack.Navigator>
   );

@@ -11,12 +11,16 @@ function Configuration() {
     navigation.navigate("CambiarIdioma")
   }
 
+  const info = (tipoInformacion) => {
+    navigation.navigate("Info", {tipoInformacion:tipoInformacion})
+  }
+
   return (
     <View>
-      <TouchableOpacity>
+      <TouchableOpacity onPress={() => {info("cookies")}}>
         <Text style={styles.optionItem}><FormattedMessage id="servicios" /></Text>
       </TouchableOpacity>
-      <TouchableOpacity>
+      <TouchableOpacity onPress={() => {info("seguridad")}}>
         <Text style={styles.optionItem}><FormattedMessage id="seguridad" /></Text>
       </TouchableOpacity>
       <TouchableOpacity onPress={cambiarIdioma}>

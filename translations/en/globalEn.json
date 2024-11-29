@@ -28,5 +28,18 @@
     "tabs.deliveries": "deliveries",
     "tabs.account": "account",
     "tabs.ask":"Ask",
-    "actualizar_pedido":"Update order"
+    "actualizar_pedido":"Update order",
+    "tab_ingredientes_ingredientes":"Ingredients",
+    "tab_ingredientes_precio":"Price",
+    "tab_account_usageCookies":"Cookies usage in sistemaI",
+    "tab_account_experience":"We use cookies to improve the user experience when interacting with our application. Cookies allow us",
+    "tab_account_language":"to remember your language preferences",
+    "tab_account_monitor":"Monitor application performance and ensure smooth operation",
+    "tab_account_analyze":"Analyze application usage to implement improvements and optimizations",
+    "tab_account_commitment":"Commitment to Security in SistemaI",
+    "tab_account_encrypt":"The security of your data is our priority. We have implemented the following measures to protect your information:",
+    "tab_account_sensible":"Sensitive data is stored and transmitted using advanced encryption methods",
+    "tab_account_authorized":"Only authorized personnel can access critical information",
+    "tab_account_server":"We keep our application and servers updated to prevent vulnerabilities",
+    "tab_account_password":"We recommend using strong, unique passwords for your account."
 }

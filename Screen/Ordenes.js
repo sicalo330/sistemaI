@@ -49,10 +49,6 @@ function Ordenes() {
         await fetchData();
     };    
 
-    const cambiarSubPestana = (pestana) => {
-        setCurrentTab(pestana);
-    };
-
     const enviarFormulario = (pedido) => {
         navigation.navigate('FormularioActualizacionPedido',{pedido:pedido})
     }
@@ -64,13 +60,13 @@ function Ordenes() {
     return (
         <View style={styles.container}>
             <View style={styles.header}>
-                <TouchableOpacity style={[styles.tab,currentTab === 'proceso' && styles.activeTab]} onPress={() => cambiarSubPestana('proceso')}>
+                <TouchableOpacity style={[styles.tab,currentTab === 'proceso' && styles.activeTab]} onPress={() => {setCurrentTab('proceso')}}>
                     <Text style={styles.tabText}><FormattedMessage id="enProceso" /></Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={[styles.tab,currentTab === 'completado' && styles.activeTab]} onPress={() => cambiarSubPestana('completado')}>
+                <TouchableOpacity style={[styles.tab,currentTab === 'completado' && styles.activeTab]} onPress={() => {setCurrentTab('completado')}}>
                     <Text style={styles.tabText}><FormattedMessage id="completados" /></Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={[styles.tab,currentTab === 'cancelado' && styles.activeTab]}onPress={() => cambiarSubPestana('cancelado')}>
+                <TouchableOpacity style={[styles.tab,currentTab === 'cancelado' && styles.activeTab]}onPress={() => {setCurrentTab('cancelado')}}>
                     <Text style={styles.tabText}><FormattedMessage id="cancelados" /></Text>
                 </TouchableOpacity>
             </View>
@@ -78,12 +74,7 @@ function Ordenes() {
             <ScrollView style={styles.scrollView}>
                 {listPedido.filter(pedido => pedido.estado === currentTab).length === 0 ? (
                     <View style={styles.noDataContainer}>
-                        <LottieView
-                            source={manifest}
-                            autoPlay
-                            loop
-                            style={styles.animation}
-                        />
+                        <LottieView source={manifest} autoPlay loop style={styles.animation}/>
                     </View>
                 ) : (
                     listPedido.map((pedido, index) =>
@@ -91,44 +82,25 @@ function Ordenes() {
                             <View key={index} style={styles.pedidoContainer}>
                                 {pedido.pedido.map((producto, index) => (
                                     <View key={index} style={styles.productoContainer}>
-                                        <Text style={styles.productText}>
-                                            {producto.nombreProducto}
-                                        </Text>
-                                        <Text style={styles.productText}>
-                                            <FormattedMessage id="cantidad" />: {producto.stock}
-                                        </Text>
+                                        <Text style={styles.productText}>{producto.nombreProducto}</Text>
+                                        <Text style={styles.productText}><FormattedMessage id="cantidad" />: {producto.stock}</Text>
                                     </View>
                                 ))}
                                 <View style={styles.divider} />
                                 <View>
                                     {currentTab === "proceso" && (
                                         <View style={styles.buttonContainer}>
-                                            <TouchableOpacity
-                                                style={styles.completarButton}
-                                                onPress={() => updateEstado(pedido, "completado")}
-                                            >
+                                            <TouchableOpacity style={styles.completarButton} onPress={() => updateEstado(pedido, "completado")}>
                                                 <Icon name="check" size={16} color="#000000" />
-                                                <Text style={styles.completarButtonText}>
-                                                    <FormattedMessage id="completar" />
-                                                </Text>
+                                                <Text style={styles.completarButtonText}><FormattedMessage id="completar" /></Text>
                                             </TouchableOpacity>
-                                            <TouchableOpacity
-                                                style={styles.editarButton}
-                                                onPress={() => enviarFormulario(pedido)}
-                                            >
+                                            <TouchableOpacity style={styles.editarButton} onPress={() => enviarFormulario(pedido)}>
                                                 <Icon name="pencil" size={16} color="#000000" />
-                                                <Text style={styles.completarButtonText}>
-                                                    <FormattedMessage id="editar" />
-                                                </Text>
+                                                <Text style={styles.completarButtonText}><FormattedMessage id="editar" /></Text>
                                             </TouchableOpacity>
-                                            <TouchableOpacity
-                                                style={styles.cancelarButton}
-                                                onPress={() => updateEstado(pedido, "cancelado")}
-                                            >
+                                            <TouchableOpacity style={styles.cancelarButton} onPress={() => updateEstado(pedido, "cancelado")}>
                                                 <Icon name="trash" size={16} color="#000000" />
-                                                <Text style={styles.completarButtonText}>
-                                                    <FormattedMessage id="cancelar" />
-                                                </Text>
+                                                <Text style={styles.completarButtonText}><FormattedMessage id="cancelar" /></Text>
                                             </TouchableOpacity>
                                         </View>
                                     )}

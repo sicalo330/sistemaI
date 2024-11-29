@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { View, Text, Image, StyleSheet, FlatList } from "react-native";
 import getSingleData from "../db/getSingleData";
 import LoadingScreen from "./LoadingScreen";
+import { FormattedMessage } from "react-intl";
 
 function Detail({ route }) {
   const { product } = route.params;
@@ -24,9 +25,9 @@ function Detail({ route }) {
     <View style={styles.container}>
       <Image source={{ uri: productDetail.urlProducto }} style={styles.productImage} />
       <Text style={styles.productName}>{productDetail.nombreProducto}</Text>
-      <Text style={styles.productPrice}>Precio: ${productDetail.price}</Text>
-      <Text style={styles.productStock}>Stock: {productDetail.stock} unidades</Text>
-      <Text style={styles.sectionTitle}>Ingredientes:</Text>
+      <Text style={styles.productPrice}><FormattedMessage id="tab_ingredientes_precio" />: ${productDetail.price}</Text>
+      <Text style={styles.productStock}><FormattedMessage id="cantidad" />: {productDetail.stock}</Text>
+      <Text style={styles.sectionTitle}><FormattedMessage id="tab_ingredientes_ingredientes" />:</Text>
       <FlatList
         data={productDetail.ingredients}
         keyExtractor={(item, index) => index.toString()}

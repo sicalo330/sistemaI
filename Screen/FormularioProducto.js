@@ -30,24 +30,31 @@ function FormularioProducto() {
   }, []);
 
   const addDropdown = () => {
+    //Se inicaliza como vacío
     const newDropdown = { id: dropdowns.length + 1, selectedValue: '' };
     setDropdowns([...dropdowns, newDropdown]); // Agregar un nuevo dropdown al estado
   };
 
   const deleteDropDown = () => {
     if (dropdowns.length > 0) {
+      //El .slice hará que se exclya el último por ejemplo si hay un array de esta forma [1,2,3] el .slice(0,-1) lo volverá [1,2]
+      //El picker depende de la variable dropdowns
       setDropdowns((prevDropdowns) => prevDropdowns.slice(0, -1));
     }
   };
 
   const updateDropdownValue = (id, value) => {
+    //id y value llegaría algo así {4,carne molida}
     const updatedDropdowns = dropdowns.map((dropdown) =>
+    //Se recorre en la lista de valores que se tengan seleccionados en el picker y se hace una comparación
+    //por ejemplo si se hace click en el segundo dropdown, se hará una compración hasta llegar al id = 2 y se va a clonar el array pero se reemplazá el value anterior por el que se da
       dropdown.id === id ? { ...dropdown, selectedValue: value } : dropdown
     );
     setDropdowns(updatedDropdowns);
   };
 
   const crearProducto = async () => {
+    //Aquí se harán las validaciones de cada campo
     if (!nombreProducto.trim()) {
       alert('El nombre del producto no puede estar vacío.');
       return;
@@ -68,7 +75,6 @@ function FormularioProducto() {
       alert('Todos los ingredientes deben estar seleccionados.');
       return;
     }
-
     let ingredients = [];
     let data = {
       nombreProducto: nombreProducto,
@@ -76,12 +82,13 @@ function FormularioProducto() {
       price: price,
       stock: stock,
     };
+    //Se hace un ciclo para agregar cada producto en la lista data.ingredients
     dropdowns.forEach((element) => {
       ingredients.push({ ingredient: element.selectedValue });
     });
     data.ingredients = ingredients;
     await agregarProducto(data, 'producto');
-    navigation.navigate('Inventario', { productoCreado: true });
+    navigation.navigate('InventarioStack');
   };
 
   if (loading) {
@@ -130,18 +137,10 @@ function FormularioProducto() {
           </View>
           {dropdowns.map((dropdown) => (
             <View key={dropdown.id} style={styles.row}>
-              <Picker
-                selectedValue={dropdown.selectedValue}
-                style={styles.picker}
-                onValueChange={(value) => updateDropdownValue(dropdown.id, value)}
-              >
+              <Picker selectedValue={dropdown.selectedValue} style={styles.picker} onValueChange={(value) => updateDropdownValue(dropdown.id, value)}>
                 <Picker.Item label="Selecciona un valor" value="" />
                 {options.map((option) => (
-                  <Picker.Item
-                    key={option.id}
-                    label={option.nombre}
-                    value={option.nombre}
-                  />
+                  <Picker.Item key={option.id} label={option.nombre} value={option.nombre}/>
                 ))}
               </Picker>
             </View>

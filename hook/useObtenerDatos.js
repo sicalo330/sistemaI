@@ -5,7 +5,6 @@ import { collection, onSnapshot, query, orderBy, where, limit } from "firebase/f
 function useObtenerDatos(tabla){
     const [producto, setProducto] = useState([]);
     const [ultimoProducto, setUltimoProducto] = useState(null);
-    const [hayMasPorCargar, setHayMasPorCargar] = useState(false)
     
     useEffect(() => {
         const consulta = query(
@@ -13,13 +12,6 @@ function useObtenerDatos(tabla){
         );
 
         const unsuscribe = onSnapshot(consulta, (snapshot) => {
-            if(snapshot.docs.length > 0){
-                setUltimoProducto(snapshot.docs[snapshot.docs.length - 1])
-                setHayMasPorCargar(true)
-            }else{
-                setHayMasPorCargar(false)
-            }
-
             setProducto(snapshot.docs.map((producto) => {
                 return {...producto.data(), id:producto.id}
             }))
@@ -27,7 +19,7 @@ function useObtenerDatos(tabla){
 
         return unsuscribe
     },[])
-    return [producto, hayMasPorCargar]
+    return [producto]
 }
 
 export default useObtenerDatos

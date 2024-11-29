@@ -8,7 +8,7 @@ import { FormattedMessage, useIntl } from 'react-intl';
 
 function Historial() {
     const navigation = useNavigation()
-    const [producto, setProducto] = useState([]);
+    const [pedido, setPedido] = useState([]);
     const [lista] = useObtenerDatos('pedido');
     const [loading, setLoading] = useState(true);
 
@@ -21,15 +21,17 @@ function Historial() {
     
             // Calcular el precio total de cada pedido
             const updatedPedidos = filteredPedidos.map((element) => {
-                let pedidoTotal = 0;
+                let pedidoTotal = 0;//Es necesario volver a 0 para rehacer la suma para cada producto
                 element.pedido.forEach((pedido) => {
+                    //Por alguna razón el precio de cada producto es un string y no un entero por lo tanto es necesario convertirlo a entero
                     let precioInt = parseInt(pedido.price);
+                    //Se suma el stock multiplicado por la cantidad
                     pedidoTotal += pedido.stock * precioInt;
                 });
-                return { ...element, precioTotal: pedidoTotal };
+                return { ...element, precioTotal: pedidoTotal };//Se hace un clon del producto y se le agrega un atributo extra llamado pedido total
             });
     
-            setProducto(updatedPedidos); // Actualizar el estado con los pedidos filtrados
+            setPedido(updatedPedidos); // Actualizar el estado con los pedidos filtrados
         }
     
         Promise.all([fetchData()]).then(() => setLoading(false));
@@ -48,9 +50,9 @@ function Historial() {
     return (
         <View style={styles.mainContainer}>
             <ScrollView>
-                {producto.map((item, index) => (
+                {pedido.map((item, index) => (
                     <TouchableOpacity key={index} style={styles.container} onPress={() => detailFactura(item)}>
-                        <Text style={styles.productName}><FormattedMessage id="pedido" /> #{index + 1}</Text>
+                        <Text style={styles.productId}><FormattedMessage id="pedido" /> #{index + 1}</Text>
                         <Text style={styles.productId}>ID: {item.id.slice(0, 5)}</Text>
                         <Text style={styles.price}>Total: ${item.precioTotal}</Text>
                     </TouchableOpacity>
@@ -80,7 +82,7 @@ const styles = StyleSheet.create({
         shadowRadius: 6,
         elevation: 2,
     },
-    productName: {
+    productId: {
         fontSize: 16,
         fontWeight: '500',
         color: '#333',

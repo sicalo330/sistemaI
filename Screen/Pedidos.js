@@ -12,8 +12,6 @@ function Pedidos() {
     const [producto, setProducto] = useState([]);
     const [quantities, setQuantities] = useState([]);
     const [estado, setEstado] = useState([]);
-    const [currentTab, setCurrentTab] = useState('Pendiente')
-    const [listaProducto, setListaProducto] = useState([])
     const [listaChecked, setListaChecked] = useState([])
     const [loading, setLoading] = useState(true); // Estado de carga
 
@@ -128,97 +126,32 @@ function Pedidos() {
 
     return (
         <SafeAreaView style={styles.screenGeneral}>
-            <TouchableOpacity 
-                onPress={() => { updateEstado("proceso") }} 
-                style={{ 
-                    backgroundColor: 'orange', 
-                    padding: 10, 
-                    borderRadius: 5, 
-                    alignItems: 'center',
-                    marginVertical: 10 
-                }}
-            >
-                <Text style={{ color: 'black', fontSize: 16, fontWeight: 'bold' }}>
-                    <FormattedMessage id="boton" />
-                </Text>
+            <TouchableOpacity onPress={() => { updateEstado("proceso") }} style={styles.updateEstado}>
+                <Text style={styles.agregarPedido}><FormattedMessage id="boton" /></Text>
             </TouchableOpacity>
     
             {producto.map((item, index) => (
-                <View 
-                    key={index} 
-                    style={{ 
-                        flexDirection: 'row', 
-                        alignItems: 'center', 
-                        justifyContent: 'space-between', 
-                        backgroundColor: '#FFFFFF', 
-                        padding: 15, 
-                        marginBottom: 10, 
-                        borderRadius: 10, 
-                        shadowColor: '#000', 
-                        shadowOpacity: 0.1, 
-                        shadowOffset: { width: 0, height: 2 }, 
-                        shadowRadius: 4, 
-                        borderWidth: 1, 
-                        borderColor: '#E0E0E0' 
-                    }}
-                >
+                <View key={index} style={styles.productLoop}>
                     <View style={{ width: 150 }}>
-                        <Text style={{ color: '#424242', fontSize: 14, fontWeight: 'bold' }}>
-                            {item.nombreProducto.length > 20 
-                                ? item.nombreProducto.substring(0, 20) + "..." 
-                                : item.nombreProducto}
-                        </Text>
+                        {/*Si el nombre del producto supera los 20 caracteres se pondrán tres puntos a la derecha*/}
+                        <Text style={styles.textoProducto}>{item.nombreProducto.length > 20 ? item.nombreProducto.substring(0, 20) + "..." : item.nombreProducto}</Text>
                     </View>
     
-                    <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', padding: 10 }}>
-                        {currentTab === "Pendiente" ? (
-                            <TouchableOpacity 
-                                onPress={() => cambiarEstado(index, item)} 
-                                style={{ 
-                                    backgroundColor: 'orange', 
-                                    paddingVertical: 5, 
-                                    paddingHorizontal: 10, 
-                                    borderRadius: 5, 
-                                    alignItems: 'center',
-                                    justifyContent: 'center' 
-                                }}
-                            >
-                                <Text style={{ color: 'black', fontSize: 12, fontWeight: 'bold', marginTop: 3 }}>
-                                    <FormattedMessage id="preparar" />
-                                </Text>
-                            </TouchableOpacity>
-                        ) : null}
-    
-                        {currentTab === "proceso" ? (
-                            <Button 
-                                title="Completar" 
-                                onPress={() => updateEstado(item, "completado", index)} 
-                                color="#FF6F00"
-                            />
-                        ) : null}
+                    <View style={styles.containerPrepare}>
+                        <TouchableOpacity onPress={() => cambiarEstado(index, item)} style={styles.buttonPrepare}>
+                            <Text style={styles.textoPreparar}><FormattedMessage id="preparar" /></Text>
+                        </TouchableOpacity>
                     </View>
     
                     {estado[index] && (
-                        <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-around', padding: 5, backgroundColor: '#F4F4F4', borderRadius: 5 }}>
-                            <TouchableOpacity 
-                                onPress={() => downQuantity(index)} 
-                                style={styles.touchableStyle}
-                            >
+                        <View style={styles.plusminus}>
+                            <TouchableOpacity onPress={() => downQuantity(index)} style={styles.touchableStyle}>
                                 <Icon name="minus" size={15} color="#FF6F00" />
                             </TouchableOpacity>
-    
-                            <View 
-                                style={styles.touchableStyle}
-                            >
-                                <Text style={{ fontSize: 20, fontWeight: 'bold', color: '#424242' }}>
-                                    {quantities[index]}
-                                </Text>
+                            <View style={styles.touchableStyle}>
+                                <Text style={{ fontSize: 20, fontWeight: 'bold', color: '#424242' }}>{quantities[index]}</Text>
                             </View>
-    
-                            <TouchableOpacity 
-                                onPress={() => addQuantity(index)} 
-                                style={styles.touchableStyle}
-                            >
+                            <TouchableOpacity onPress={() => addQuantity(index)} style={styles.touchableStyle}>
                                 <Icon name="plus" size={15} color="#FF6F00" />
                             </TouchableOpacity>
                         </View>
@@ -349,6 +282,58 @@ const styles = StyleSheet.create({
         padding: 5, 
         borderWidth: 1, 
         borderColor: '#E0E0E0' 
+    },buttonPrepare:{
+        backgroundColor: 'orange', 
+        paddingVertical: 5, 
+        paddingHorizontal: 10, 
+        borderRadius: 5, 
+        alignItems: 'center',
+        justifyContent: 'center' 
+    },containerPrepare:{
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        padding: 10
+    },textoPreparar:{
+        color: 'black',
+        fontSize: 12,
+        fontWeight: 'bold',
+        marginTop: 3
+    },updateEstado:{ 
+        backgroundColor: 'orange', 
+        padding: 10, 
+        borderRadius: 5, 
+        alignItems: 'center',
+        marginVertical: 10 
+    },productLoop:{ 
+        flexDirection: 'row', 
+        alignItems: 'center', 
+        justifyContent: 'space-between', 
+        backgroundColor: '#FFFFFF', 
+        padding: 15, 
+        marginBottom: 10, 
+        borderRadius: 10, 
+        shadowColor: '#000', 
+        shadowOpacity: 0.1, 
+        shadowOffset: { width: 0, height: 2 }, 
+        shadowRadius: 4, 
+        borderWidth: 1, 
+        borderColor: '#E0E0E0' 
+    },agregarPedido:{ 
+        color: 'black',
+        fontSize: 16,
+        fontWeight: 'bold'
+    },textoProducto:{ 
+        color: '#424242', 
+        fontSize: 14, 
+        fontWeight: 'bold'
+    },plusminus:{
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-around',
+        padding: 5,
+        backgroundColor: '#F4F4F4',
+        borderRadius: 5
     }
 });
 

@@ -4,6 +4,7 @@
     "verVentas": "Ver ventas",
     "revisar": "Revisar todas las transacciones",
     "pedido": "pedido",
+    "total": "Total",
     "enProceso": "En proceso",
     "completados": "Completados",
     "cancelados": "Cancelados",
@@ -27,5 +28,18 @@
     "tabs.deliveries": "Pedidos",
     "tabs.account": "Cuenta",
     "tabs.ask":"Pedidos",
-    "actualizar_pedido":"Actualizar pedido"
+    "actualizar_pedido":"Actualizar pedido",
+    "tab_ingredientes_ingredientes":"Ingredientes",
+    "tab_ingredientes_precio":"Precio",
+    "tab_account_usageCookies":"Uso de cookies en sistemaI",
+    "tab_account_experience":"Utilizamos cookies para mejorar la experiencia del usuario al interactuar con nuestra aplicación. Las cookies nos permiten:",
+    "tab_account_language":"Recordar tus preferencias de lenguaje",
+    "tab_account_monitor":"Monitorear el rendimiento de la aplicación y garantizar un funcionamiento fluido",
+    "tab_account_analyze":"Analizar el uso de la aplicación para implementar mejoras y optimizaciones",
+    "tab_account_commitment":"Compromiso con la Seguridad en SistemaI",
+    "tab_account_encrypt":"La seguridad de tus datos es nuestra prioridad. Hemos implementado las siguientes medidas para proteger tu información:",
+    "tab_account_sensible":"Los datos sensibles se almacenan y transmiten utilizando métodos de encriptación avanzados",
+    "tab_account_authorized":"Solo personal autorizado puede acceder a información crítica",
+    "tab_account_server":"Mantenemos nuestra aplicación y servidores actualizados para prevenir vulnerabilidades",
+    "tab_account_password":"Recomendamos el uso de contraseñas seguras y únicas para tu cuenta"
 }

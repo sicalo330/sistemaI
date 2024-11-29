@@ -11,7 +11,6 @@ import { FormattedMessage } from "react-intl";
 function FormularioActualizacionPedido({ route }) {
     const navigation = useNavigation()
     const { pedido } = route.params;
-    const [estado, setEstado] = useState(pedido.estado || "proceso"); // Estado del pedido
     const [productos, setProductos] = useState(pedido.pedido || []); // Lista de productos
     const [listProducto,setListProducto] = useState([])
     const [dropdowns, setDropdowns] = useState([{ id: 1, selectedValue: '' }]);
@@ -112,9 +111,8 @@ function FormularioActualizacionPedido({ route }) {
         }
     }
 
-    // Actualizar el pedido en Firebase
+    //Actualizar el pedido en Firebase
     const updatedPedido = {
-        estado,
         pedido: productos,
     };
 
@@ -135,34 +133,27 @@ function FormularioActualizacionPedido({ route }) {
 
       {/* Selector de estado del pedido */}
       <View>
-          {dropdowns.map((dropdown) => (
-            <View key={dropdown.id} style={styles.row}>
-            <Picker
-                selectedValue={estado}
-                onValueChange={(itemValue) => { const selectedProduct = listProducto.find((product) => product.nombreProducto === itemValue);
-                    if (selectedProduct && !productos.some((p) => p.id === selectedProduct.id)) {
-                    setProductos([
-                        ...productos,
-                        {
-                        ...selectedProduct,
-                        stock: 1,
-                        },
-                    ]);
-                    }
-                }}
-                style={styles.picker}
-            >
-            <Picker.Item label="Selecciona un producto" value="" />
-            {listProducto.map((element) => (
-                <Picker.Item
-                key={element.id}
-                label={element.nombreProducto}
-                value={element.nombreProducto}
-                />
-            ))}
-            </Picker>
-            </View>
-          ))}
+        <View style={styles.row}>
+        <Picker style={styles.picker} onValueChange={(itemValue) => {
+                {/*Cuando se presione una opción, sacará el nombre del producto que corresponda con el nombre de dicha opción*/}
+                {/*Luego en el if se va a compar las id de la opción seleccionada con algúno de los productos del inventario*/}
+                const selectedProduct = listProducto.find((product) => product.nombreProducto === itemValue);
+                if (selectedProduct && !productos.some((p) => p.id === selectedProduct.id)) {
+                  {/*Al final se hace un clon de los productos que ya habían sido seleccionados pero se agrega otro pero inicializandolo con un stock de 1*/}
+                setProductos([...productos,{...selectedProduct,stock: 1}]);
+                }
+            }}>
+        <Picker.Item label="Selecciona un producto" value="" />
+        {/*Se ponen como opciones la cantidad de productos que existen en el inventario, el nombre de lo sproductos es su valor*/}
+        {listProducto.map((element) => (
+            <Picker.Item
+            key={element.id}
+            label={element.nombreProducto}
+            value={element.nombreProducto}
+            />
+        ))}
+        </Picker>
+        </View>
         </View>
 
 

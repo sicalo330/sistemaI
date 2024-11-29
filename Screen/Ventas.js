@@ -15,7 +15,6 @@ function Ventas() {
     const [pedido, setPedido] = useState([]);
     const [precio, setPrecio] = useState(0);
     const [precioPedido, setPrecioPedido] = useState(0);
-    const [precioVendido, setPrecioVendido] = useState(0);
     const [loading, setLoading] = useState(true); // Estado de carga
 
     const intl = useIntl();
@@ -40,18 +39,17 @@ function Ventas() {
     useEffect(() => {
         function loopPrecio() {
             let precioTotal = 0;
-            let precioTotalVendido = 0;
             let precioTotalPedido = 0;
     
-            // Calcular el precio total de los productos en inventario
+            //Calcular el precio total de los productos en inventario
             producto.forEach((element) => {
                 let precioInt = parseInt(element.price);
                 precioTotal += precioInt * element.stock;
             });
     
-            // Calcular el precio total de los pedidos activos
+            //Calcular el precio total de los pedidos sin el estado cancelado
             pedido.forEach((element) => {
-                if (element.estado !== "cancelado") { // Filtrar pedidos cancelados
+                if (element.estado !== "cancelado") {
                     let pedidos = element.pedido;
                     pedidos.forEach((item) => {
                         let precioInt = parseInt(item.price);
@@ -62,7 +60,6 @@ function Ventas() {
     
             setPrecio(precioTotal);
             setPrecioPedido(precioTotalPedido);
-            setPrecioVendido(precioTotalVendido);
         }
     
         if (producto.length > 0 && pedido.length > 0) {
