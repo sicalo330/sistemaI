@@ -72,18 +72,32 @@ function Pedidos() {
     
     
     
-    const updateEstado = async (nuevoEstado) => {
+    const updateEstado = async () => {
         setLoading(true)
         const pedidosSeleccionados = listaChecked.filter((item, index) => item !== 0 && quantities[index] > 0);
-
         if (pedidosSeleccionados.length === 0) {
             Alert.alert("Error", "No hay productos válidos seleccionados.");
             setLoading(false);
             return;
         }
 
-        let cantidadTotal = 0
-    
+        //¿Qué pasa si se piden 10 de un producto pero solo queda 1?
+        //Verficcar el stck antes de hacer las actualizaciones
+        for(let index = 0; index < listaChecked.length; index++){
+            const item = listaChecked[index];
+            //Si no es 0 significa que por lo menos está seleccionado
+            if(item !== 0){
+                const stockInt = parseInt(item.stock);
+                const newStock = stockInt - quantities[index];
+                //Si la diferencia entre el stock total y el stock elegido es negativo significa que ya no queda más existencia del mismo
+                if(newStock < 0){
+                    Alert.alert("Lo sentimos, pero se ha acabado la existencia del producto", item.nombreProducto)
+                    setLoading(false)
+                    return
+                }
+            }
+        }
+        //Después de verificar que las cantidades que se pidan no supere la cantidad total del inventario
         for (let index = 0; index < listaChecked.length; index++) {
             const item = listaChecked[index];
     
@@ -97,20 +111,11 @@ function Pedidos() {
             if (item !== 0) {
                 const stockInt = parseInt(item.stock);
                 const newStock = stockInt - quantities[index];
-    
-                if (newStock < 0) {  
-                    Alert.alert("El producto ha sido agotado");
-                    return;
-                }
-                //Qué pasa si carne tiene 40 en stock pero pido 50? Asegurarme de arreglar ese pequeño error de lógica
                 item.stock = quantities[index];
-                item.estado = nuevoEstado;
                 
                 //Es necesario que esté debajo porque primero se debe hacer la transición del stock original al nuevo stock
-                cantidadTotal += item.stock
-                item.cantidadTotal = cantidadTotal
                 //Actualización del producto (se pueden habilitar las siguientes líneas según lo necesites)
-                await updateData('producto',item.id, { estado: nuevoEstado, stock: newStock });
+                await updateData('producto',item.id, { stock: newStock });
                 await fetchData();
             }
         }
@@ -127,7 +132,7 @@ function Pedidos() {
 
     return (
         <SafeAreaView style={styles.screenGeneral}>
-            <TouchableOpacity onPress={() => { updateEstado("proceso") }} style={styles.updateEstado}>
+            <TouchableOpacity onPress={() => { updateEstado() }} style={styles.updateEstado}>
                 <Text style={styles.agregarPedido}><FormattedMessage id="boton" /></Text>
             </TouchableOpacity>
     
