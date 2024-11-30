@@ -4,7 +4,7 @@ import { Picker } from '@react-native-picker/picker';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { general } from './../Style/style';
 import agregarProducto from '../db/agregarProducto';
-import getIngrediente from '../db/getData';
+import getData from '../db/getData';
 import { useNavigation } from '@react-navigation/native';
 import LoadingScreen from './LoadingScreen';
 import { FormattedMessage } from 'react-intl';
@@ -21,7 +21,7 @@ function FormularioProducto() {
   const navigation = useNavigation();
 
   const fetchData = async () => {
-    const ingredientList = await getIngrediente('Ingrediente');
+    const ingredientList = await getData('Ingrediente');
     setOption(ingredientList);
   };
 
@@ -138,7 +138,7 @@ function FormularioProducto() {
           {dropdowns.map((dropdown) => (
             <View key={dropdown.id} style={styles.row}>
               <Picker selectedValue={dropdown.selectedValue} style={styles.picker} onValueChange={(value) => updateDropdownValue(dropdown.id, value)}>
-                <Picker.Item label="Selecciona un valor" value="" />
+                <Picker.Item label="Selecciona un ingrediente" value="" />
                 {options.map((option) => (
                   <Picker.Item key={option.id} label={option.nombre} value={option.nombre}/>
                 ))}

@@ -47,11 +47,14 @@ function Pedidos() {
     const cambiarEstado = (index, item) => {
         // Copiar el estado actual y alternar el valor en el índice seleccionado
         const newEstado = [...estado];
+        //Index es la posicion del producto
         newEstado[index] = !newEstado[index];
+        //Hay 6 falsos 
         setEstado(newEstado);
     
         // Crear una copia de `listaChecked` manteniendo los índices
         const newPedido = [...listaChecked];
+        //Listachecked es la lista de productos que se van a enviar
         const newQuantities = [...quantities];
     
         if (newEstado[index]) {
@@ -61,7 +64,7 @@ function Pedidos() {
             // Si `estado[index]` es `false`, asigna `null` en esa posición y reinicia la cantidad a 0
             newPedido[index] = 0;
             newQuantities[index] = 0;
-        }
+        } 
     
         setListaChecked(newPedido);
         setQuantities(newQuantities);
@@ -87,6 +90,7 @@ function Pedidos() {
             // Verificar si la cantidad es 0, pero el producto está seleccionado en `listaChecked` o `estado` es `true`
             if (quantities[index] === 0 && (item !== 0 || estado[index])) {
                 Alert.alert("Error", `La cantidad para el producto ${item.nombreProducto} es 0, pero está seleccionado.`);
+                setLoading(false);
                 return;
             }
     
@@ -116,9 +120,6 @@ function Pedidos() {
     };
     
 
-    // const actualizarEstado = (item) => {
-    //     setListaProducto(item)
-    // }
 
     if (loading){
         return <LoadingScreen />; // Uso del componente reutilizable

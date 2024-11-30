@@ -5,13 +5,13 @@ import LoadingScreen from "./LoadingScreen";
 import { FormattedMessage } from "react-intl";
 
 function Detail({ route }) {
-  const { product } = route.params;
+  const { plato } = route.params;
   const [productDetail, setProductDetail] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     async function fetchData() {
-      const listData = await getSingleData("producto", product.id);
+      const listData = await getSingleData("producto", plato);
       setProductDetail(listData);
     }
     Promise.all([fetchData()]).then(() => setLoading(false));

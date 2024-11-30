@@ -9,7 +9,7 @@ import { FormattedMessage } from "react-intl";
 // Datos simulados de inventario
 
 function Inventario() {
-  const [inventarios, setInventario] = useState([]);
+  const [producto, setProducto] = useState([]);
 
   const navigation = useNavigation()
   const [lista] = useObtenerDatos('producto')
@@ -19,7 +19,7 @@ function Inventario() {
   useEffect(() => {
     async function fetchData() {
       const listData = await getData("producto")
-      setInventario(listData)
+      setProducto(listData)
     }
     Promise.all([fetchData()]).then(() => setLoading(false));
   },[lista])
@@ -29,7 +29,7 @@ function Inventario() {
   }
 
   const handlePress = (item) => {
-    navigation.navigate('Detail',{product:item})
+    navigation.navigate('Detail',{plato:item.id})
   };
 
   if (loading){
@@ -51,7 +51,7 @@ function Inventario() {
         <Text><FormattedMessage id="boton" /></Text>
       </TouchableOpacity>
       <FlatList
-        data={inventarios}
+        data={producto}
         renderItem={renderItem}
         keyExtractor={item => item.id}
       />
