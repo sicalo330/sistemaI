@@ -21,9 +21,9 @@ function Pedidos() {
     const fetchData = async () => {
         const listProducto = await getData("producto");
         setProducto(listProducto);
-        setQuantities(new Array(listProducto.length).fill(0));
-        setEstado(new Array(listProducto.length).fill(false));
-        setListaChecked(new Array(listProducto.length).fill(0))
+        setQuantities(new Array(listProducto.length).fill(0));//Estas son las cantidad que cada producto va a manejar
+        setEstado(new Array(listProducto.length).fill(false));//Esta es la lista de estados, cuando se le hace click a prepara, el estado cambia de false a true
+        setListaChecked(new Array(listProducto.length).fill(0))//SetListaChecked es la lista de productos que se van a agregar como pedido
     };
 
     useEffect(() => {
@@ -32,11 +32,11 @@ function Pedidos() {
 
     const addQuantity = (index) => {
         const newQuantities = [...quantities];
-        newQuantities[index] += 1;
-        setQuantities(newQuantities);
+        newQuantities[index] += 1;//Se agregar un 1 por cada vez que se hace click al icono de más en la posición dada
+        setQuantities(newQuantities);//Se actualizan las cantidades
     };
 
-    const downQuantity = (index) => {
+    const downQuantity = (index) => {//Ocurre lo mismo que con addQuantity pero cuando la cantidad llega a 0, el if no permite bajar más
         const newQuantities = [...quantities];
         if (newQuantities[index] > 0) {
             newQuantities[index] -= 1;

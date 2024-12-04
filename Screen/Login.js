@@ -19,8 +19,10 @@ function Login() {
     }
 
     try {
-      const token = await login(email, password); 
-      authCtx.login(token);
+      const token = await login(email, password); //Este login tomará las credenciales dadas para buscarlo en la base de datos de firebase
+      //Si todo sale bien, se devolverá un token
+      authCtx.login(token);//Ese token va a ser usado en la función login de context(Ver carpeta context)
+      //Esto hace que el token se guarde en el asyncStorage
       navigation.navigate('Main');
     } catch (error) {
       Alert.alert('Error', 'Login failed. Please try again.');

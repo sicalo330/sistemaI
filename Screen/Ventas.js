@@ -47,7 +47,7 @@ function Ventas() {
                 precioTotal += precioInt * element.stock;
             });
     
-            //Calcular el precio total de los pedidos sin el estado cancelado
+            //Calcular el precio total de los pedidos sin el estado cancelado(Creo que pasa ahorrame el if pude usar .filter)
             pedido.forEach((element) => {
                 if (element.estado !== "cancelado") {
                     let pedidos = element.pedido;

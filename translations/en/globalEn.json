@@ -43,5 +43,11 @@
     "tab_account_server":"We keep our application and servers updated to prevent vulnerabilities",
     "tab_account_password":"We recommend using strong, unique passwords for your account.",
     "tab_account_cerrar":"Logout",
-    "login":"Welcome"
+    "login":"Welcome",
+    "tab_sales_order_nombre":"Name",
+    "tab_sales_order_estado":"State",
+    "tab_sales_order_detail":"Order detail",
+    "tab_actualizar_eliminar":"Delete",
+    "tab_actualizar_guardar":"Save changes",
+    "tab_actualizar_producto":"Product"
 }

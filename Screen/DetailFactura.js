@@ -1,23 +1,24 @@
 import React from "react";
 import { Text, View, StyleSheet, ScrollView } from "react-native";
+import { FormattedMessage } from "react-intl";
 
 function DetailFactura({ route }) {
-    const { factura } = route.params;
+    const { factura } = route.params;//Se obtienen los datos de la factura para agregarlos en la vista
     return (
         <ScrollView style={styles.container}>
             <View style={styles.header}>
-                <Text style={styles.headerText}>Detalles de la Factura</Text>
+                <Text style={styles.headerText}><FormattedMessage id="tab_sales_order_detail" /></Text>
             </View>
             <View style={styles.facturaContainer}>
                 <Text style={styles.facturaText}>ID: {factura.id}</Text>
-                <Text style={styles.facturaText}>Total: ${factura.precioTotal}</Text>
-                <Text style={styles.facturaText}>Estado: {factura.estado}</Text>
+                <Text style={styles.facturaText}><FormattedMessage id="total" />: ${factura.precioTotal}</Text>
+                <Text style={styles.facturaText}><FormattedMessage id="tab_sales_order_estado" />: {factura.estado}</Text>
             </View>
-            <Text style={styles.pedidosTitle}>Pedidos:</Text>
+            <Text style={styles.pedidosTitle}><FormattedMessage id="tabs.ask" />:</Text>
             {factura.pedido.map((item, index) => (
                 <View key={index} style={styles.pedidoContainer}>
-                    <Text style={styles.productText}>Nombre: {item.nombreProducto}</Text>
-                    <Text style={styles.productText}>Cantidad: {item.stock}</Text>
+                    <Text style={styles.productText}><FormattedMessage id="tab_sales_order_nombre" />: {item.nombreProducto}</Text>
+                    <Text style={styles.productText}><FormattedMessage id="cantidad" />: {item.stock}</Text>
                     <View style={styles.divider}></View>
                 </View>
             ))}

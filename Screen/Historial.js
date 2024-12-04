@@ -54,7 +54,7 @@ function Historial() {
                     <TouchableOpacity key={index} style={styles.container} onPress={() => detailFactura(item)}>
                         <Text style={styles.productId}><FormattedMessage id="pedido" /> #{index + 1}</Text>
                         <Text style={styles.productId}>ID: {item.id.slice(0, 5)}</Text>
-                        <Text style={styles.price}>Total: ${item.precioTotal}</Text>
+                        <Text style={styles.price}><FormattedMessage id="total" />: ${item.precioTotal}</Text>
                     </TouchableOpacity>
                 ))}
             </ScrollView>

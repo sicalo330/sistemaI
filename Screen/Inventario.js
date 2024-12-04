@@ -18,25 +18,25 @@ function Inventario() {
 
   useEffect(() => {
     async function fetchData() {
-      const listData = await getData("producto")
-      setProducto(listData)
+      const listData = await getData("producto")//Se obtienen todos los productos
+      setProducto(listData)//Los productos se agregan a useState
     }
-    Promise.all([fetchData()]).then(() => setLoading(false));
+    Promise.all([fetchData()]).then(() => setLoading(false));//Aquí se mandeja la pantalla de carga, esta se verá hasta que se carguen todos los productos
   },[lista])
 
   const agregar = () => {
-    navigation.navigate("FormularioProducto")
+    navigation.navigate("FormularioProducto")//Esto lleavará al formulario de actualización de productos para crear productos
   }
 
-  const handlePress = (item) => {
+  const handlePress = (item) => {//Aquí se mostrará los detalles de cada producto
     navigation.navigate('Detail',{plato:item.id})
   };
 
   if (loading){
-    return <LoadingScreen />; // Uso del componente reutilizable
+    return <LoadingScreen />; //Pantalla de carga
   }
 
-  const renderItem = ({ item }) => (
+  const renderItem = ({ item }) => (//Aquí se muestra la información superficial de cada producto, es decir el bloque en donde solo se muestra el nombre y la imágen
     <TouchableOpacity style={styles.itemContainer} onPress={() => handlePress(item)}>
       {/* Espacio para agregar una imagen */}
       <Image source={{ uri: item.urlProducto }} style={styles.imagen} />
@@ -47,7 +47,7 @@ function Inventario() {
   return (
     <View style={styles.container}>
       <Text style={styles.title}><FormattedMessage id="inventario_platillos" /></Text>
-      <TouchableOpacity onPress={agregar} style={styles.botonAgregar}>
+      <TouchableOpacity onPress={agregar} style={styles.botonAgregar}>{/*Al hacer click aquí se va al formulario para agregar productos*/}
         <Text><FormattedMessage id="boton" /></Text>
       </TouchableOpacity>
       <FlatList

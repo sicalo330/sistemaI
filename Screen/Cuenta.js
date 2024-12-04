@@ -10,8 +10,8 @@ import { FormattedMessage } from "react-intl";
 export default function Cuenta() {
   const navigation = useNavigation();
   const authCtx = useContext(AuthContext);
-  const decoded = jwtDecode(authCtx.token);
-  const [URL, setURL] = useState("https://cdn.pixabay.com/photo/2021/07/02/04/48/user-6380868_640.png")
+  const decoded = jwtDecode(authCtx.token);//jwtDecode decodifica el token y genera la información que venga de este para posteriormente mostrarlo en la vista
+  const [URL, setURL] = useState("https://cdn.pixabay.com/photo/2021/07/02/04/48/user-6380868_640.png")//Url de la imagen del usuario
 
   function navigate(){
     navigation.navigate('Configuration')
@@ -35,7 +35,7 @@ export default function Cuenta() {
       {/* Mostrar los datos decodificados */}
       <View style={styles.decodedContainer}>
         <Text style={styles.title}><FormattedMessage id="datos" /></Text>
-        {Object.entries(decoded).map(([key, value], index) => (
+        {Object.entries(decoded).map(([key, value], index) => (//Object.enttries convierte la estructura del token en arrays bidimensionales para poder ciclar en estos
           <Text key={index} style={styles.tokenText}>
             {key}: {typeof value === "object" ? JSON.stringify(value) : value}
           </Text>

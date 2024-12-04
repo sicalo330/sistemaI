@@ -13,18 +13,18 @@ import manifest from './../assets/manifest.json'
 function Ordenes() {
     const [listPedido, setPedido] = useState([]);
     const [productoOriginal, setProductoOriginal] = useState([]);
-    const [estado, setEstado] = useState([]);
+    // const [estado, setEstado] = useState([]);
     const [currentTab, setCurrentTab] = useState('proceso');
     const [lista] = useObtenerDatos('pedido');
     const [loading, setLoading] = useState(true); // Estado de carga
     const navigation = useNavigation();
 
     const fetchData = async () => {
-        const listP = await getData("pedido");
+        const listP = await getData("pedido");//Se obtienen todos los pedidos
         setPedido(listP);
-        const listProducto = await getData("producto")
+        const listProducto = await getData("producto")//Se obtienen todos los producto
         setProductoOriginal(listProducto)
-        setEstado(new Array(listP.length).fill(false));
+        // setEstado(new Array(listP.length).fill(false));
     };
 
     useEffect(() => {
@@ -32,10 +32,12 @@ function Ordenes() {
     }, [lista]);
 
     const updateEstado = async (item, nuevoEstado) => {
+        //Se entra a este if, significa que el pedido fue cancelado y por lo tanto las cantidades se deben devolver a cada producto
+        //Si se pidio una cantidad de 7 esos 7 se debe sumar al inventario total 
         if (nuevoEstado === "cancelado") {
             // Itera sobre el array "pedido" de "item"
             for (let i = 0; i < item.pedido.length; i++) {
-                // Compara cada id del pedido con los ids de productoOriginal
+                //Compara cada id de cada producto del pedido con los ids de productoOriginal
                 for (let j = 0; j < productoOriginal.length; j++) {
                     if (item.pedido[i].id === productoOriginal[j].id) {
                         let recuperacion = productoOriginal[j].stock + item.pedido[i].stock;
@@ -44,8 +46,10 @@ function Ordenes() {
                 }
             }
         }
-        // Lógica para otros estados
+        //Si no entra al if significa el pedido se va a completar y por lo tanto solo basta con cambiar su estado
+        //Se actualiza el estado de cada pedido
         await updateData('pedido', item.id, { estado: nuevoEstado });
+        //El tema de fetchData sería para algo similar a recargar la página
         await fetchData();
     };    
 
@@ -59,6 +63,7 @@ function Ordenes() {
 
     return (
         <View style={styles.container}>
+            {/*Más abajo se hace una condicional, si la variable currentTab es igual al estado de un pedido, este se podrá ver, de no ser así simplemente se pasará de largo*/}
             <View style={styles.header}>
                 <TouchableOpacity style={[styles.tab,currentTab === 'proceso' && styles.activeTab]} onPress={() => {setCurrentTab('proceso')}}>
                     <Text style={styles.tabText}><FormattedMessage id="enProceso" /></Text>
@@ -78,6 +83,7 @@ function Ordenes() {
                     </View>
                 ) : (
                     listPedido.map((pedido, index) =>
+                        //Si el estado de un pedido es igual a la variable currentTab, este se verá en pantalla, de no ser así significa que no se verá
                         pedido.estado === currentTab ? (
                             <View key={index} style={styles.pedidoContainer}>
                                 {pedido.pedido.map((producto, index) => (
@@ -88,7 +94,8 @@ function Ordenes() {
                                 ))}
                                 <View style={styles.divider} />
                                 <View>
-                                    {currentTab === "proceso" && (
+                                    {/*Si currentTab es igual a proceso, se podrán ver los botones para completar, cancelar o editar, si no es así simplemente no se verá*/}
+                                    {currentTab === "proceso" ? (
                                         <View style={styles.buttonContainer}>
                                             <TouchableOpacity style={styles.completarButton} onPress={() => updateEstado(pedido, "completado")}>
                                                 <Icon name="check" size={16} color="#000000" />
@@ -103,7 +110,7 @@ function Ordenes() {
                                                 <Text style={styles.completarButtonText}><FormattedMessage id="cancelar" /></Text>
                                             </TouchableOpacity>
                                         </View>
-                                    )}
+                                    ):null}
                                 </View>
                             </View>
                         ) : null

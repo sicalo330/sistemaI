@@ -43,5 +43,11 @@
     "tab_account_server":"Mantenemos nuestra aplicación y servidores actualizados para prevenir vulnerabilidades",
     "tab_account_password":"Recomendamos el uso de contraseñas seguras y únicas para tu cuenta",
     "tab_account_cerrar":"Cerrar sesión",
-    "login":"Bienvenido"
+    "login":"Bienvenido",
+    "tab_sales_order_nombre":"Nombre",
+    "tab_sales_order_estado":"Estado",
+    "tab_sales_order_detail":"Detalles de la factura",
+    "tab_actualizar_eliminar":"Eliminar",
+    "tab_actualizar_guardar":"Guardar cambios",
+    "tab_actualizar_producto":"Producto"
 }

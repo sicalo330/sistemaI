@@ -5,22 +5,17 @@ import { FormattedMessage } from 'react-intl';
 
 const CambiarIdioma = () => {
   const { setLocale } = useLanguage();
-
+  //Al hacer click en cualquiera de los botones, se llama a setLocale, esto cambiará el idioma de es a en o viceversa haciendo que los formattedMessage con su correspondiente id tengan
+  //Su equivalente en el idioma opuesto (Ver App.js)
   return (
     <View style={styles.container}>
       <Text style={styles.title}>
         <FormattedMessage id="seleccionar" />
       </Text>
-      <TouchableOpacity
-        style={[styles.button, styles.orangeButton]}
-        onPress={() => setLocale('es')}
-      >
+      <TouchableOpacity style={[styles.button, styles.orangeButton]} onPress={() => setLocale('es')}>
         <Text style={styles.buttonText}>Español</Text>
       </TouchableOpacity>
-      <TouchableOpacity
-        style={[styles.button, styles.orangeButton]}
-        onPress={() => setLocale('en')}
-      >
+      <TouchableOpacity style={[styles.button, styles.orangeButton]} onPress={() => setLocale('en')}>
         <Text style={styles.buttonText}>English</Text>
       </TouchableOpacity>
     </View>

@@ -55,23 +55,23 @@ function FormularioProducto() {
 
   const crearProducto = async () => {
     //Aquí se harán las validaciones de cada campo
-    if (!nombreProducto.trim()) {
+    if (!nombreProducto.trim()) {//El nombre del producto no puede estar vació
       alert('El nombre del producto no puede estar vacío.');
       return;
     }
-    if (!/^https?:\/\/.+/.test(url)) {
+    if (!/^https?:\/\/.+/.test(url)){//La url de una imagen debe empezar por https://
       alert('La URL no es válida. Debe empezar con http:// o https://');
       return;
     }
-    if (isNaN(price) || price <= 0) {
+    if (isNaN(price) || price <= 0){//El campo de precio no puede estar vació, en el caso de que sí tenga un número, este debe ser mayor a 0
       alert('El precio debe ser un número mayor a 0.');
       return;
     }
-    if (isNaN(stock) || stock <= 0) {
+    if (isNaN(stock) || stock <= 0){//Lo miso que con el precio
       alert('El stock debe ser un número mayor o igual a 0.');
       return;
     }
-    if (dropdowns.some((dropdown) => !dropdown.selectedValue)) {
+    if (dropdowns.some((dropdown) => !dropdown.selectedValue)){//Se debe selccionar por lo menos una opción de cada dropdown que se haya generado
       alert('Todos los ingredientes deben estar seleccionados.');
       return;
     }
@@ -139,7 +139,7 @@ function FormularioProducto() {
             <View key={dropdown.id} style={styles.row}>
               <Picker selectedValue={dropdown.selectedValue} style={styles.picker} onValueChange={(value) => updateDropdownValue(dropdown.id, value)}>
                 <Picker.Item label="Selecciona un ingrediente" value="" />
-                {options.map((option) => (
+                {options.map((option) => (//Se ciclan entre las opciones con el nombre y el valor
                   <Picker.Item key={option.id} label={option.nombre} value={option.nombre}/>
                 ))}
               </Picker>

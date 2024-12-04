@@ -37,7 +37,6 @@ function Configuration() {
       <TouchableOpacity onPress={cerrar}>
         <Text style={styles.optionItem}><FormattedMessage id="tab_account_cerrar" /></Text>
       </TouchableOpacity>
-      <Text>sldfjsdkjfs</Text>
     </View>
   );
 }

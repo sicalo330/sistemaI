@@ -64,7 +64,10 @@ function FormularioActualizacionPedido({ route }) {
   
     // Productos eliminados del pedido
     productosOriginales.forEach((productoOriginal) => {
-      if (!productosActuales.find((p) => p.id === productoOriginal.id)) {
+      if (!productosActuales.find((p) => p.id === productoOriginal.id)) { 
+        /*
+          Esto quiere decir que si un producto que estaba originalmente no se encuentra en los productos actuales significa que fue eliminado
+        */
         ajustes.push({
           id: productoOriginal.id,
           ajuste: productoOriginal.stock, // Devolver el stock eliminado
@@ -105,9 +108,9 @@ function FormularioActualizacionPedido({ route }) {
             await updateData("producto", ajuste.id, { stock: nuevoStock });
 
             // Actualizar localmente el stock global
-            setListProducto((prev) =>
-                prev.map((p) => (p.id === ajuste.id ? { ...p, stock: nuevoStock } : p))
-            );
+            // setListProducto((prev) =>
+            //     prev.map((p) => (p.id === ajuste.id ? { ...p, stock: nuevoStock } : p))
+            // );
         }
     }
 
@@ -116,6 +119,7 @@ function FormularioActualizacionPedido({ route }) {
         pedido: productos,
     };
 
+    //Aquí se actualiza definitivamente el pedido con las cantidades que se hayan escogido
     await updateData("pedido", pedido.id, updatedPedido);
     setLoading(false);
     navigation.navigate("OrdenesStack");
@@ -163,9 +167,9 @@ function FormularioActualizacionPedido({ route }) {
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
         <View style={styles.productContainer}>
-          <Text>Producto: {item.nombreProducto}</Text>
-          <Text>Precio: {item.price}</Text>
-          <Text>Cantidad: {item.stock}</Text>
+          <Text><FormattedMessage id="tab_actualizar_producto" />: {item.nombreProducto}</Text>
+          <Text><FormattedMessage id="tab_ingredientes_precio" />: {item.price}</Text>
+          <Text><FormattedMessage id="cantidad" />: {item.stock}</Text>
           <View style={styles.containerPlusMinus}>
           <TouchableOpacity onPress={() => setProductos(productos.map((prod) => prod.id === item.id && prod.stock > 1 ? { ...prod, stock: prod.stock - 1 } : prod))} style={styles.button}>
               <Icon name="minus" size={15} color="white" />
@@ -175,18 +179,15 @@ function FormularioActualizacionPedido({ route }) {
               <Icon name="plus" size={15} color="white" />
             </TouchableOpacity>
             
-            <TouchableOpacity
-                onPress={() => handleRemoveProduct(item.id)}
-                style={styles.button}
-            >
-                <Text style={styles.buttonText}>Eliminar</Text>
+            <TouchableOpacity onPress={() => handleRemoveProduct(item.id)} style={styles.button}>
+                <Text style={styles.buttonText}><FormattedMessage id="tab_actualizar_eliminar" /></Text>
             </TouchableOpacity>
           </View>
         </View>
         )}
     />
     <TouchableOpacity style={styles.saveButton} onPress={updatePedido}>
-      <Text style={styles.saveButtonText}>Guardar Cambios</Text>
+      <Text style={styles.saveButtonText}><FormattedMessage id="tab_actualizar_guardar" /></Text>
     </TouchableOpacity>
     </SafeAreaView> 
   );

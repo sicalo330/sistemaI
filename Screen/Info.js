@@ -7,6 +7,7 @@ function Info({ route }) {
 
     return (
         <View style={styles.container}>
+            {/*Cuando se hace un cambio de pantallas entre configuration e Info se manda el tipo de información que se va a mostrar*/}
             {tipoInformacion === "cookies" ? (
                 <View>
                     <Text style={styles.title}><FormattedMessage id="tab_account_usageCookies" /></Text>

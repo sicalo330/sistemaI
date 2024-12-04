@@ -5,13 +5,13 @@ import LoadingScreen from "./LoadingScreen";
 import { FormattedMessage } from "react-intl";
 
 function Detail({ route }) {
-  const { plato } = route.params;
+  const { plato } = route.params;//Se extrae la id del producto desde la ruta
   const [productDetail, setProductDetail] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     async function fetchData() {
-      const listData = await getSingleData("producto", plato);
+      const listData = await getSingleData("producto", plato);//la variable plato tiene la id del producto que se va a buscar
       setProductDetail(listData);
     }
     Promise.all([fetchData()]).then(() => setLoading(false));

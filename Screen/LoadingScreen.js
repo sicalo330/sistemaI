@@ -1,9 +1,9 @@
 import React from 'react';
-import { View, Text, ActivityIndicator, StyleSheet } from 'react-native';
+import { View, ActivityIndicator, StyleSheet } from 'react-native';
 
 function LoadingScreen(){
     return (
-        <View style={styles.loadingContainer}>
+        <View style={styles.loadingContainer}>{/*Esto es lo que se muestra en la panalla de carga*/}
             <ActivityIndicator size="large" color="#FFA726" />
         </View>
     );
