@@ -41,5 +41,7 @@
     "tab_account_sensible":"Los datos sensibles se almacenan y transmiten utilizando métodos de encriptación avanzados",
     "tab_account_authorized":"Solo personal autorizado puede acceder a información crítica",
     "tab_account_server":"Mantenemos nuestra aplicación y servidores actualizados para prevenir vulnerabilidades",
-    "tab_account_password":"Recomendamos el uso de contraseñas seguras y únicas para tu cuenta"
+    "tab_account_password":"Recomendamos el uso de contraseñas seguras y únicas para tu cuenta",
+    "tab_account_cerrar":"Cerrar sesión",
+    "login":"Bienvenido"
 }

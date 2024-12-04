@@ -1,11 +1,14 @@
-import React from 'react';
+import React,{useContext} from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { FormattedMessage } from 'react-intl';
+import { AuthContext } from '../context/auth-context';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 function Configuration() {
   const navigation = useNavigation()
+  const { logout } = useContext(AuthContext)
 
   const cambiarIdioma = () => {
     navigation.navigate("CambiarIdioma")
@@ -13,6 +16,11 @@ function Configuration() {
 
   const info = (tipoInformacion) => {
     navigation.navigate("Info", {tipoInformacion:tipoInformacion})
+  }
+
+  const cerrar = async () => {
+    await AsyncStorage.removeItem("authToken");
+    navigation.navigate("Login")
   }
 
   return (
@@ -24,8 +32,12 @@ function Configuration() {
         <Text style={styles.optionItem}><FormattedMessage id="seguridad" /></Text>
       </TouchableOpacity>
       <TouchableOpacity onPress={cambiarIdioma}>
-        <Text style={styles.optionItem}><FormattedMessage id="cambiar_idioma" /></Text>{/*El plan sería poner muchos temas*/}
+        <Text style={styles.optionItem}><FormattedMessage id="cambiar_idioma" /></Text>
       </TouchableOpacity>
+      <TouchableOpacity onPress={cerrar}>
+        <Text style={styles.optionItem}><FormattedMessage id="tab_account_cerrar" /></Text>
+      </TouchableOpacity>
+      <Text>sldfjsdkjfs</Text>
     </View>
   );
 }

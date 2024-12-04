@@ -3,6 +3,7 @@ import { Text, Button, Alert, View, SafeAreaView, TextInput, StyleSheet, Activit
 import { useNavigation } from "@react-navigation/native";
 import { AuthContext } from "../context/auth-context";
 import { login } from "../utils/auth";
+import { FormattedMessage } from "react-intl";
 
 function Login() {
   const navigation = useNavigation();
@@ -29,7 +30,7 @@ function Login() {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.innerContainer}>
-        <Text>Welcome</Text>
+        <Text><FormattedMessage id="login" /></Text>
         <TextInput
           style={styles.input}
           onChangeText={setEmail}
