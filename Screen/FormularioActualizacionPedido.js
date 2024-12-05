@@ -25,6 +25,7 @@ function FormularioActualizacionPedido({ route }) {
           setProductosOriginales(pedido.pedido);//Aquí la lista productos que conforman un pedido, este será el pedido cuyo valor será actualizado
         }
     Promise.all([fetchData()]).then(() => setLoading(false));//Simplemente se mostrará la pantalla de carga
+    //loading = true -> setLoading(false) -> loading = false
       }, []);
 
 

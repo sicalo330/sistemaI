@@ -15,6 +15,7 @@ function Detail({ route }) {
       setProductDetail(listData);
     }
     Promise.all([fetchData()]).then(() => setLoading(false));
+    //loading = true -> setLoading(false) -> loading = false
   }, []);
 
   if (loading) {

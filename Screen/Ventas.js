@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Text, TouchableOpacity, View,ActivityIndicator } from 'react-native';
+import { Text, TouchableOpacity, View } from 'react-native';
 import { StyleSheet } from "react-native";
 import { titlePrice, linkContainer } from "../Style/style";
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -58,7 +58,10 @@ function Ventas() {
     
 
     const navegarHistorial = () => {
-        navigation.navigate("Historial");
+        //Para navegar se cambia esto
+        //                         |
+        //                         v
+        navigation.navigate("Historial");//navigation es un hook que nos permite navetgar entre las rutas de la aplicación
     };
 
     // Mostrar pantalla de carga mientras `loading` esté en `true`
