@@ -23,17 +23,21 @@ function Ventas() {
 
     useEffect(() => {
         async function fetchData() {
-            const listProducto = await getData("producto");
+            const listProducto = await getData("producto");//Se obtiene todos los productos de la tabla producto
             setProducto(listProducto);
         }
 
         async function fetchPedidos() {
-            const listPedido = await getData('pedido');
+            const listPedido = await getData('pedido');//Se obtiene todos los pedidos de la tabla pedido
             setPedido(listPedido);
         }
 
         // Llamamos ambas funciones y luego apagamos el indicador de carga
-        Promise.all([fetchData(), fetchPedidos()]).then(() => setLoading(false));
+        //                                        Después
+        //                                           |
+        //                                           v
+        Promise.all([fetchData(), fetchPedidos()]).then(() => setLoading(false));//Aquí se maneja la pantalla de carga, esta se verá hasta que se carguen todos los productos
+        //loading = true -> setLoading(false) -> loading = false
     }, [lista]);
 
     useEffect(() => {
@@ -43,13 +47,13 @@ function Ventas() {
     
             //Calcular el precio total de los productos en inventario
             producto.forEach((element) => {
-                let precioInt = parseInt(element.price);
+                let precioInt = parseInt(element.price);//Por alguna razón el precio de la tabla producto siempre es string, lo que es raro ya que puse el campo como numerico
                 precioTotal += precioInt * element.stock;
             });
     
-            //Calcular el precio total de los pedidos sin el estado cancelado(Creo que pasa ahorrame el if pude usar .filter)
+            //Calcular el precio total de los pedidos sin el estado cancelado(Creo que para ahorrar el if pude usar .filter)
             pedido.forEach((element) => {
-                if (element.estado !== "cancelado") {
+                if (element.estado !== "cancelado") {//Es if evita que los pedidos en estado cancelado entren al calculo de inventarios
                     let pedidos = element.pedido;
                     pedidos.forEach((item) => {
                         let precioInt = parseInt(item.price);
@@ -69,7 +73,10 @@ function Ventas() {
     
 
     const navegarHistorial = () => {
-        navigation.navigate("Historial");
+        //Para navegar se cambia esto
+        //                         |
+        //                         v
+        navigation.navigate("Historial");//navigation es un hook que nos permite navetgar entre las rutas de la aplicación
     };
 
     // Mostrar pantalla de carga mientras `loading` esté en `true`

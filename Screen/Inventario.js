@@ -12,16 +12,19 @@ function Inventario() {
   const [producto, setProducto] = useState([]);
 
   const navigation = useNavigation()
-  const [lista] = useObtenerDatos('producto')
+  const [lista] = useObtenerDatos('producto')//Cada vez que la tabla produyctos cambia, la lista cambia, y por lo tanto se llama otra vez a useEffect
   const [loading, setLoading] = useState(true);
 
-
   useEffect(() => {
-    async function fetchData() {
+    async function fetchData(){
       const listData = await getData("producto")//Se obtienen todos los productos
       setProducto(listData)//Los productos se agregan a useState
     }
-    Promise.all([fetchData()]).then(() => setLoading(false));//Aquí se mandeja la pantalla de carga, esta se verá hasta que se carguen todos los productos
+    //                         Después
+    //                           |
+    //                           v
+    Promise.all([fetchData()]).then(() => setLoading(false));//Aquí se maneja la pantalla de carga, esta se verá hasta que se carguen todos los productos
+    //loading = true -> setLoading(false) -> loading = false
   },[lista])
 
   const agregar = () => {
@@ -32,6 +35,7 @@ function Inventario() {
     navigation.navigate('Detail',{plato:item.id})
   };
 
+  //Siempre empieza como un true
   if (loading){
     return <LoadingScreen />; //Pantalla de carga
   }
