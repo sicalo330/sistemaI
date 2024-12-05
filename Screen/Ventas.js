@@ -3,7 +3,6 @@ import { Text, TouchableOpacity, View,ActivityIndicator } from 'react-native';
 import { StyleSheet } from "react-native";
 import { titlePrice, linkContainer } from "../Style/style";
 import Icon from 'react-native-vector-icons/FontAwesome';
-import getData from "../db/getData";
 import { useNavigation } from "@react-navigation/native";
 import useObtenerDatos from "../hook/useObtenerDatos";
 import LoadingScreen from "./LoadingScreen";
@@ -11,48 +10,35 @@ import { FormattedMessage, useIntl } from 'react-intl';
 import { SafeAreaView } from "react-native-safe-area-context";
 
 function Ventas() {
-    const [producto, setProducto] = useState([]);
-    const [pedido, setPedido] = useState([]);
     const [precio, setPrecio] = useState(0);
     const [precioPedido, setPrecioPedido] = useState(0);
     const [loading, setLoading] = useState(true); // Estado de carga
 
     const intl = useIntl();
-    const [lista] = useObtenerDatos('pedido');
+    const [listaPedido] = useObtenerDatos('pedido');
+    const [listaProducto] = useObtenerDatos('producto');
     const navigation = useNavigation();
 
     useEffect(() => {
-        async function fetchData() {
-            const listProducto = await getData("producto");
-            setProducto(listProducto);
-        }
-
-        async function fetchPedidos() {
-            const listPedido = await getData('pedido');
-            setPedido(listPedido);
-        }
-
-        // Llamamos ambas funciones y luego apagamos el indicador de carga
-        Promise.all([fetchData(), fetchPedidos()]).then(() => setLoading(false));
-    }, [lista]);
-
-    useEffect(() => {
-        function loopPrecio() {
-            let precioTotal = 0;
-            let precioTotalPedido = 0;
+        function calcularPrecios() {
+            let precioTotal = 0;//Precio total es el precio del inventario
+            let precioTotalPedido = 0;//Precio total pedido es el precio de pedidos que están en estado proceso o completado
     
-            //Calcular el precio total de los productos en inventario
-            producto.forEach((element) => {
-                let precioInt = parseInt(element.price);
+            // Calcular el precio total de los productos en inventario
+            //Aprovechando que de por sí ya se está trayendo los productos actualizados por useObtenerDatos
+            //Ya no es necesario volverlos a llamar con getData
+            listaProducto.forEach((element) => {
+                let precioInt = parseInt(element.price, 10);// el ,10 es para la base decimal, js ya lo tiene por defecto
+                //Pero por seguridad, ¿Por qué no?
                 precioTotal += precioInt * element.stock;
+                //Se multiplica la cantidad de producto que existe en el invetnario con el stock y se agrega a precioTotal
             });
     
-            //Calcular el precio total de los pedidos sin el estado cancelado(Creo que pasa ahorrame el if pude usar .filter)
-            pedido.forEach((element) => {
+            // Calcular el precio total de los pedidos no cancelados
+            listaPedido.forEach((element) => {
                 if (element.estado !== "cancelado") {
-                    let pedidos = element.pedido;
-                    pedidos.forEach((item) => {
-                        let precioInt = parseInt(item.price);
+                    element.pedido.forEach((item) => {
+                        let precioInt = parseInt(item.price, 10);//Base decimal, ver comentarios de arriba
                         precioTotalPedido += precioInt * item.stock;
                     });
                 }
@@ -61,11 +47,14 @@ function Ventas() {
             setPrecio(precioTotal);
             setPrecioPedido(precioTotalPedido);
         }
-    
-        if (producto.length > 0 && pedido.length > 0) {
-            loopPrecio();
+        //Siempre y cuando haya más de un producto o un pedido se hará el calculo, en el caso de que ambos estén vacíos no vale
+        //la pena
+        if (listaProducto.length > 0 || listaPedido.length > 0) {
+            calcularPrecios();
         }
-    }, [producto, pedido]);
+        Promise.all([calcularPrecios()]).then(() => setLoading(false));
+    }, [listaProducto, listaPedido]);
+    
     
 
     const navegarHistorial = () => {
@@ -73,9 +62,10 @@ function Ventas() {
     };
 
     // Mostrar pantalla de carga mientras `loading` esté en `true`
-    if (loading){
-        return <LoadingScreen />; // Uso del componente reutilizable
+    if (loading) {
+        return <LoadingScreen />;
     }
+    
 
     // Renderizar contenido principal cuando `loading` sea `false`
     return (

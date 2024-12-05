@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Text, TouchableOpacity, View, StyleSheet, Button, Alert,SafeAreaView } from "react-native";
+import { Text, TouchableOpacity, View, StyleSheet, Alert,SafeAreaView, ScrollView } from "react-native";
 import Icon from 'react-native-vector-icons/FontAwesome';
 import getData from "../db/getData";
 import updateData from "../db/updateData";
@@ -132,6 +132,7 @@ function Pedidos() {
 
     return (
         <SafeAreaView style={styles.screenGeneral}>
+            <ScrollView>
             <TouchableOpacity onPress={() => { updateEstado() }} style={styles.updateEstado}>
                 <Text style={styles.agregarPedido}><FormattedMessage id="boton" /></Text>
             </TouchableOpacity>
@@ -164,6 +165,7 @@ function Pedidos() {
                     )}
                 </View>
             ))}
+            </ScrollView>
         </SafeAreaView>
     );
     
